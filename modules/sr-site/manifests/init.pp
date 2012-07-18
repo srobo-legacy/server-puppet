@@ -5,6 +5,9 @@ class sr-site( $git_root ) {
   # Anonymous git access
   include gitdaemon
 
+  # The bee
+  include bee
+
   include sr-site::firewall
 }
 
