@@ -30,4 +30,10 @@ class sr-site::fw_pre {
     action => "accept",
   }
 
+  firewall { "004 http":
+    proto => "tcp",
+    dport => 80,
+    action => "accept",
+  }
+
 }
