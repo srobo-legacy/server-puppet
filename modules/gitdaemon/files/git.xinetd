@@ -1,0 +1,16 @@
+# default: off
+# description: The git dæmon allows git repositories to be exported using \
+#       the git:// protocol.
+
+service git
+{
+        disable         = no
+        socket_type     = stream
+        wait            = no
+        user            = nobody
+        server          = /usr/libexec/git-core/git-daemon
+        server_args     = --base-path=/srv/git --export-all --user-path=public_git --syslog --inetd --verbose
+        log_on_failure  += USERID
+        # xinetd does not enable IPv6 by default
+        flags           = IPv6
+}
