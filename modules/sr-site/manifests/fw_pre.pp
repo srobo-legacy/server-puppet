@@ -36,4 +36,10 @@ class sr-site::fw_pre {
     action => "accept",
   }
 
+  firewall { "005 https":
+    proto => "tcp",
+    dport => 443,
+    action => "accept",
+  }
+
 }
