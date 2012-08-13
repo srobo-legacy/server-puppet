@@ -26,7 +26,7 @@ class www::httpd {
     owner => root,
     group => root,
     mode => "0400",
-    source => "puppet:///modules/www/server.crt",
+    source => "/srv/secrets/https/server.crt",
     require => Package[ "mod_ssl" ],
   }
 
@@ -35,7 +35,7 @@ class www::httpd {
     owner => root,
     group => root,
     mode => "0400",
-    source => "puppet:///modules/www/server.key",
+    source => "/srv/secrets/https/server.key",
     require => Package[ "mod_ssl" ],
   }
 
