@@ -11,6 +11,7 @@ class www::httpd {
     group => root,
     mode => "0600",
     source => "puppet:///modules/www/httpd.conf",
+    require => Package[ "httpd" ],
   }
 
   file { "ssl.conf":
@@ -19,6 +20,7 @@ class www::httpd {
     group => root,
     mode => "0600",
     source => "puppet:///modules/www/ssl.conf",
+    require => Package[ "mod_ssl" ],
   }
 
   file { "server.crt":
