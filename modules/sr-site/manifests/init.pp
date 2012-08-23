@@ -14,6 +14,8 @@ class sr-site( $git_root ) {
   include bee
 
   include sr-site::firewall
+  include sr-site::mysql
+  include sr-site::trac
 
   # Web stuff
   class { "www":

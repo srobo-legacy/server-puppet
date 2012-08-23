@@ -1,6 +1,9 @@
 
 class www::httpd {
 
+  # trac config is in ssl.conf, so we need that
+  require sr-site::trac
+
   package { [ "httpd", "mod_ssl" ]:
     ensure => latest,
   }
