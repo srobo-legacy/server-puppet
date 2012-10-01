@@ -10,3 +10,6 @@
 [submodule "modules/ldap"]
 	path = modules/ldap
 	url = git://github.com/jfryman/puppet-openldap.git
+[submodule "modules/stdlib"]
+	path = modules/stdlib
+	url = git://github.com/puppetlabs/puppetlabs-stdlib.git
