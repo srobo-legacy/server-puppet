@@ -15,6 +15,7 @@ class sr-site( $git_root ) {
 
   include sr-site::firewall
   include sr-site::mysql
+  include sr-site::openldap
   include sr-site::trac
 
   # Web stuff
