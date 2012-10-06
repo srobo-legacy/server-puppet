@@ -1,6 +1,7 @@
 
 class sr-site::openldap {
   class { 'ldap':
-    server => 'true'
+    server => 'true',
+    client => 'true',
   }
 }
