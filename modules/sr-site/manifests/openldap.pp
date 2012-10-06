@@ -8,7 +8,7 @@ class sr-site::openldap {
   ldap::define::domain { 'studentrobotics.org':
     ensure => 'present',
     basedn => 'o=sr',
-    rootdn => 'cn=Manager',
+    rootdn => 'cn=Manager', # basedn is jammed on the front of this.
     rootpw => '123456',
   }
 }
