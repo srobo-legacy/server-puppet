@@ -18,4 +18,12 @@ class sr-site::openldap {
     ssl => 'false',
     base_dn => 'o=sr',
   }
+
+  # Base SR LDAP data
+  file {"${ldap::params::lp_openldap_var_dir}/studentrobotics.org/sr_base.ldif":
+    ensure   => file,
+    owner    => $ldap::params::lp_daemon_user,
+    require  => Ldap::Client::Config['studentrobotics.org'],
+    source   => "puppet:///modules/sr-site/sr_base.ldif",
+  }
 }
