@@ -19,21 +19,23 @@ class sr-site::openldap {
     base_dn => 'o=sr',
   }
 
+  Ldapres {
+    binddn => 'cn=Manager,o=sr',
+    bindpw => '123456',
+    ldapserverhost => 'localhost',
+    ldapserverport => '389',
+    require => Class['ldap'],
+  }
+
   ldapres { "bees":
     ensure => present,
     dn => "ou=groups,o=sr",
     objectclass => 'organizationalUnit',
-    binddn => 'cn=Manager,o=sr',
-    bindpw => '123456',
-    require => Class['ldap'],
   }
 
   ldapres { "faces":
     ensure => present,
     dn => "ou=users,o=sr",
     objectclass => 'organizationalUnit',
-    binddn => 'cn=Manager,o=sr',
-    bindpw => '123456',
-    require => Class['ldap'],
   }
 }
