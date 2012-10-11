@@ -27,6 +27,20 @@ class sr-site::openldap {
     require => Class['ldap'],
   }
 
+  # Ensure that test-date from the openldap module's base ldif is removed.
+  ldapres { "ou=people,o=sr":
+    ensure => absent,
+    objectclass => 'organizationalUnit',
+    # I hope what this means is "require uid=test is absent first".
+    # Because it's fully the wrong order otherwise.
+    require => Ldapres['uid=test,ou=people,o=sr'],
+  }
+
+  ldapres { "uid=test,ou=people,o=sr":
+    ensure => absent,
+    objectclass => 'inetOrgPerson',
+  }
+
   ldapres { "bees":
     ensure => present,
     dn => "ou=groups,o=sr",
