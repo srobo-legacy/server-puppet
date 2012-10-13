@@ -3,6 +3,7 @@ class sr-site::openldap {
   class { 'ldap':
     server => 'true',
     client => 'true',
+    localloginok => 'true',
   }
 
   ldap::define::domain { 'studentrobotics.org':
