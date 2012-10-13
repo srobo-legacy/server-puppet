@@ -42,15 +42,13 @@ class sr-site::openldap {
     objectclass => 'inetOrgPerson',
   }
 
-  ldapres { "bees":
+  ldapres { "ou=groups,o=sr":
     ensure => present,
-    dn => "ou=groups,o=sr",
     objectclass => 'organizationalUnit',
   }
 
-  ldapres { "faces":
+  ldapres { "ou=users,o=sr":
     ensure => present,
-    dn => "ou=users,o=sr",
     objectclass => 'organizationalUnit',
   }
 }
