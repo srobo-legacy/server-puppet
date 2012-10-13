@@ -42,11 +42,13 @@ class sr-site::openldap {
     objectclass => 'inetOrgPerson',
   }
 
+  # Organizational unit for storing LDAP groups
   ldapres { "ou=groups,o=sr":
     ensure => present,
     objectclass => 'organizationalUnit',
   }
 
+  # Organizational unit for storing LDAP users
   ldapres { "ou=users,o=sr":
     ensure => present,
     objectclass => 'organizationalUnit',
