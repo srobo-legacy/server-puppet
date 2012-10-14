@@ -104,6 +104,16 @@ class sr-site::openldap {
     require => File['/etc/ldap.secret'],
   }
 
+  # Make nss_ldap.conf point at pam_ldap.conf. They both contain the same
+  # data in the same format, nothing is achieved by duplicating them.
+  file { '/etc/nss_ldap.conf':
+    ensure => link,
+    target => '/etc/pam_ldap.conf',
+    owner => "root",
+    group => "root",
+    mode => "0600",
+  }
+
   # Ensure that the login group exists in ldap. No configuration of its member
   # attributes, that counts as data.
   ldapres { "$logingroupdn":
