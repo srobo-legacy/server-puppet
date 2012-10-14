@@ -53,4 +53,21 @@ class sr-site::openldap {
     ensure => present,
     objectclass => 'organizationalUnit',
   }
+
+  # SR anonymous user. This is probably a misnomer: "anon" has always been able
+  # to access almost all data, everywhere. It's used by things like nscd and
+  # apache to bind to ldap and find out various things such as group membership.
+  # Essentially it's a catch-all privileged account, but crucially that can't
+  # write to anything.
+  ldapres { "uid=anon,ou=users,o=sr":
+    ensure => present,
+    objectclass => ["inetOrgPerson", "uidObject", "posixAccount"],
+    uid => "anon",
+    cn => "Anon user",
+    sn => "Anon user",
+    uidnumber => '2043',
+    gidnumber => '1999',
+    homedirectory => '/home/anon',
+    userpassword => extlookup("ldap_anon_user_ssha_pwd"),
+  }
 }
