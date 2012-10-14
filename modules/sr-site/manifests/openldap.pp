@@ -68,6 +68,6 @@ class sr-site::openldap {
     uidnumber => '2043',
     gidnumber => '1999',
     homedirectory => '/home/anon',
-    userpassword => extlookup("ldap_anon_user_ssha_pwd"),
+    userpassword => extlookup("ldap_anon_user_ssha_pw"),
   }
 }
