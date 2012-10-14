@@ -91,6 +91,7 @@ class sr-site::openldap {
   $groupdn = 'ou=groups,o=sr'
   $passwddn = 'ou=users,o=sr'
   $logingroupdn = "cn=${logingroupname},${groupdn}"
+  $logingroupattr = 'memberUid'
 
   # Configure the LDAP PAM module. This tells pam all about how we want logins
   # to the machine to occur, how to bind to the ldap server, how to lookup
@@ -120,6 +121,7 @@ class sr-site::openldap {
   # attributes, that counts as data.
   ldapres { "$logingroupdn":
     ensure => present,
+    cn => $logingroupname,
     objectclass => "posixGroup",
     gidnumber => 3046,
   }
