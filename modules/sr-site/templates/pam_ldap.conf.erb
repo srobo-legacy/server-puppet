@@ -1,3 +1,5 @@
+# Caution, this file is managed by SR/Puppet
+#
 # @(#)$Id: ldap.conf,v 1.38 2006/05/15 08:13:31 lukeh Exp $
 #
 # This is the configuration file for the LDAP nameservice
@@ -14,10 +16,10 @@
 # space. How long nss_ldap takes to failover depends on
 # whether your LDAP client library supports configurable
 # network or connect timeouts (see bind_timelimit).
-host 127.0.0.1
+host <%= serverhostname %>
 
 # The distinguished name of the search base.
-base dc=example,dc=com
+base <%= basedn %>
 
 # Another way to specify your LDAP server is to provide an
 # uri with the server name. This allows to use
@@ -33,16 +35,16 @@ base dc=example,dc=com
 
 # The distinguished name to bind to the server with.
 # Optional: default is to bind anonymously.
-#binddn cn=proxyuser,dc=example,dc=com
+binddn <%= binddn %>
 
 # The credentials to bind with. 
 # Optional: default is no credential.
-#bindpw secret
+bindpw <%= bindpw %>
 
 # The distinguished name to bind to the server with
 # if the effective user ID is root. Password is
 # stored in /etc/ldap.secret (mode 600)
-#rootbinddn cn=manager,dc=example,dc=com
+rootbinddn <%= managerdn %>
 
 # The port.
 # Optional: default is 389.
@@ -54,26 +56,26 @@ base dc=example,dc=com
 #scope base
 
 # Search timelimit
-#timelimit 30
+timelimit 30
 
 # Bind/connect timelimit
-#bind_timelimit 30
+bind_timelimit 30
 
 # Reconnect policy: hard (default) will retry connecting to
 # the software with exponential backoff, soft will fail
 # immediately.
-#bind_policy hard
+bind_policy soft
 
 # Idle timelimit; client will close connections
 # (nss_ldap only) if the server has not been contacted
 # for the number of seconds specified below.
-#idle_timelimit 3600
+idle_timelimit 3600
 
 # Filter to AND with uid=%s
 #pam_filter objectclass=account
 
 # The user ID attribute (defaults to uid)
-#pam_login_attribute uid
+pam_login_attribute uid
 
 # Search the root DSE for the password policy (works
 # with Netscape Directory Server)
@@ -96,13 +98,13 @@ base dc=example,dc=com
 #pam_check_service_attr yes
 
 # Group to enforce membership of
-#pam_groupdn cn=PAM,ou=Groups,dc=example,dc=com
+pam_groupdn <%= logingroupdn %>
 
 # Group member attribute
-#pam_member_attribute uniquemember
+pam_member_attribute <%= logingroupattr %>
 
 # Specify a minium or maximum UID number allowed
-#pam_min_uid 0
+pam_min_uid 2000
 #pam_max_uid 0
 
 # Template login attribute, default template user
@@ -145,7 +147,7 @@ base dc=example,dc=com
 
 # Use the OpenLDAP password change
 # extended operation to update the password.
-#pam_password exop
+pam_password exop
 
 # Redirect users to a URL or somesuch on password
 # changes.
@@ -161,9 +163,9 @@ base dc=example,dc=com
 # nss_base_passwd	ou=People,
 # to append the default base DN but this
 # may incur a small performance impact.
-#nss_base_passwd	ou=People,dc=example,dc=com?one
+nss_base_passwd		<%= passwddn %>
 #nss_base_shadow	ou=People,dc=example,dc=com?one
-#nss_base_group		ou=Group,dc=example,dc=com?one
+nss_base_group		<%= groupdn %>
 #nss_base_hosts		ou=Hosts,dc=example,dc=com?one
 #nss_base_services	ou=Services,dc=example,dc=com?one
 #nss_base_networks	ou=Networks,dc=example,dc=com?one
