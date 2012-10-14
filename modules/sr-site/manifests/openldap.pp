@@ -112,6 +112,7 @@ class sr-site::openldap {
     owner => "root",
     group => "root",
     mode => "0600",
+    notify => Service["nscd"],
   }
 
   # Ensure that the login group exists in ldap. No configuration of its member
