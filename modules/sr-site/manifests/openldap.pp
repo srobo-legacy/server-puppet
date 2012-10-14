@@ -10,7 +10,7 @@ class sr-site::openldap {
     ensure => 'present',
     basedn => 'o=sr',
     rootdn => 'cn=Manager', # basedn is jammed on the front of this.
-    rootpw => '123456',
+    rootpw => extlookup("ldap_manager_pw"),
   }
 
   ldap::client::config { 'studentrobotics.org':
@@ -22,7 +22,7 @@ class sr-site::openldap {
 
   Ldapres {
     binddn => 'cn=Manager,o=sr',
-    bindpw => '123456',
+    bindpw => extlookup("ldap_manager_pw"),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     require => Class['ldap'],
