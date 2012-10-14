@@ -81,8 +81,8 @@ class sr-site::openldap {
 
   $serverhostname = 'localhost'
   $basedn = 'o=sr'
-  $binddn = 'uid=anon,ou=users,o=sr'
-  $bindpw = extlookup("ldap_anon_user_pw")
+  $anonbinddn = 'uid=anon,ou=users,o=sr'
+  $anonbindpw = extlookup("ldap_anon_user_pw")
   $managerdn = 'cn=Manager,o=sr'
   $logingroupdn = 'cn=shell-users,ou=groups,o=sr'
   $logingroupattr = 'memberUid'
