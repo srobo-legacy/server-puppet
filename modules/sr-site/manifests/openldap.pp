@@ -113,6 +113,7 @@ class sr-site::openldap {
     group => "root",
     mode => "0600",
     notify => Service["nscd"],
+    require => File['/etc/pam_ldap.conf'],
   }
 
   # Ensure that the login group exists in ldap. No configuration of its member
