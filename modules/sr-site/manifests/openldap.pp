@@ -87,10 +87,10 @@ class sr-site::openldap {
   $anonbinddn = 'uid=anon,ou=users,o=sr'
   $anonbindpw = extlookup("ldap_anon_user_pw")
   $managerdn = 'cn=Manager,o=sr'
-  $logingroupdn = 'cn=shell-users,ou=groups,o=sr'
-  $logingroupattr = 'memberUid'
-  $passwddn = 'ou=users,o=sr'
+  $logingroupname = 'shell-users'
   $groupdn = 'ou=groups,o=sr'
+  $passwddn = 'ou=users,o=sr'
+  $logingroupdn = "cn=${logingroupname},${groupdn}"
 
   # Configure the LDAP PAM module. This tells pam all about how we want logins
   # to the machine to occur, how to bind to the ldap server, how to lookup
