@@ -79,6 +79,15 @@ class sr-site::openldap {
     mode => "0600",
   }
 
+  $serverhostname = 'localhost'
+  $basedn = 'o=sr'
+  $binddn = 'uid=anon,ou=users,o=sr'
+  $bindpw = extlookup("ldap_anon_user_pw")
+  $managerdn = 'cn=Manager,o=sr'
+  $logingroupdn = 'cn=shell-users,ou=groups,o=sr'
+  $logingroupattr = 'memberUid'
+  $passwddn = 'ou=users,o=sr'
+  $groupdn = 'ou=groups,o=sr'
   file { '/etc/pam_ldap.conf':
     ensure => present,
     content => template('sr-site/pam_ldap.conf.erb'),
