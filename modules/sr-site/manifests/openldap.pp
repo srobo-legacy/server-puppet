@@ -78,4 +78,13 @@ class sr-site::openldap {
     group => "root",
     mode => "0600",
   }
+
+  file { '/etc/pam_ldap.conf':
+    ensure => present,
+    content => template('sr-site/pam_ldap.conf.erb'),
+    owner => "root",
+    group => "root",
+    mode => "0600",
+    require => File['/etc/ldap.secret'],
+  }
 }
