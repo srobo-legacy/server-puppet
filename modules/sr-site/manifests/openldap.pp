@@ -103,4 +103,12 @@ class sr-site::openldap {
     mode => "0600",
     require => File['/etc/ldap.secret'],
   }
+
+  # Ensure that the login group exists in ldap. No configuration of its member
+  # attributes, that counts as data.
+  ldapres { "$logingroupdn":
+    ensure => present,
+    objectclass => "posixGroup",
+    gidnumber => 3046,
+  }
 }
