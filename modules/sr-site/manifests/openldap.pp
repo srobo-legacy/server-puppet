@@ -70,4 +70,12 @@ class sr-site::openldap {
     homedirectory => '/home/anon',
     userpassword => extlookup("ldap_anon_user_ssha_pw"),
   }
+
+  file { '/etc/ldap.secret':
+    ensure => present,
+    content => extlookup('ldap_manager_pw'),
+    owner => "root",
+    group => "root",
+    mode => "0600",
+  }
 }
