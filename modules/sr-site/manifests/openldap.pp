@@ -79,6 +79,9 @@ class sr-site::openldap {
     mode => "0600",
   }
 
+  # Put some data in variables for blowing into pam_ldap.conf via a template.
+  # These could be used to configure the rest of this class, but that would
+  # probably be pointless.
   $serverhostname = 'localhost'
   $basedn = 'o=sr'
   $anonbinddn = 'uid=anon,ou=users,o=sr'
@@ -88,6 +91,10 @@ class sr-site::openldap {
   $logingroupattr = 'memberUid'
   $passwddn = 'ou=users,o=sr'
   $groupdn = 'ou=groups,o=sr'
+
+  # Configure the LDAP PAM module. This tells pam all about how we want logins
+  # to the machine to occur, how to bind to the ldap server, how to lookup
+  # groups and so forth. It also informs the NSS server about similar facts.
   file { '/etc/pam_ldap.conf':
     ensure => present,
     content => template('sr-site/pam_ldap.conf.erb'),
