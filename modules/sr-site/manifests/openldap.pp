@@ -135,4 +135,13 @@ class sr-site::openldap {
     notify => Service["nscd"],
     require => File['/etc/pam_ldap.conf'],
   }
+
+  # Add srusers group. I have no idea what its purpose is, but that's what
+  # everyones primary unix group is.
+  ldapres { "cn=srusers,$groupdn":
+    ensure => present,
+    cn => 'srusers',
+    objectclass => "posixGroup",
+    gidnumber => 1999,
+  }
 }
