@@ -56,6 +56,28 @@ SSLCryptoDevice builtin
               Require valid-user
         </Location>
 
+        # Legacy SVN goo
+        <Location /svn>
+                DAV svn
+                SVNPath /srv/svn/sr
+                AuthType basic
+                AuthName "Student Robotics SVN"
+                AuthBasicProvider ldap
+
+                AuthzLDAPAuthoritative On
+                AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
+                AuthLDAPBindDN "uid=anon,ou=users,o=sr"
+                AuthLDAPBindPassword "<%= anonpw %>"
+
+                AuthLDAPGroupAttribute memberUid
+                AuthLDAPGroupAttributeIsDN off
+
+                Satisfy Any
+                Require valid-user
+
+                AuthzSVNAccessFile /srv/svn/sr/authfile
+        </Location>
+
 	########## SSL stuff below
 
 	# Force users to use HTTPS again in the future
