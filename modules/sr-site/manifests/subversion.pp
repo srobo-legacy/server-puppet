@@ -35,5 +35,6 @@ class sr-site::subversion {
   # Require for SVN web access.
   package { 'mod_dav_svn':
     ensure => present,
+    notify => Package['httpd'],
   }
 }
