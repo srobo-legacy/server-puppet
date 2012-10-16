@@ -22,7 +22,7 @@ class www::httpd {
     owner => root,
     group => root,
     mode => "0600",
-    source => "puppet:///modules/www/ssl.conf",
+    content => template('www/ssl.conf.erb'),
     require => Package[ "mod_ssl" ],
   }
 
