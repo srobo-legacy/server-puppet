@@ -16,3 +16,6 @@
 [submodule "modules/ldapres"]
 	path = modules/ldapres
 	url = git://git.srobo.org/~jmorse/puppet-ldapres.git
+[submodule "modules/subversion"]
+	path = modules/subversion
+	url = git://github.com/duritong/puppet-subversion.git
