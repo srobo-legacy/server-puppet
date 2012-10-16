@@ -60,17 +60,31 @@ class sr-site::git($git_root) {
     ensure => present,
   }
 
+  package { 'python-pyrss2gen.noarch':
+    ensure => present,
+    provider => rpm,
+    source => '/root/python-pyrss2gen.noarch.rpm',
+   }
+
+  file { '/root/python-pyrss2gen.noarch.rpm':
+    ensure => present,
+    owner => root,
+    mode => 400,
+    source => 'puppet:///modules/sr-site/python-pyrss2gen-1.0.0-2.2.noarch.rpm',
+    before => Package['python-pyrss2gen.noarch'],
+  }
+
   cron { 'commitrss':
     command => '/srv/git/scripts/rss',
     minute => '*/15',
     user => 'git',
-    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
+    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython','python-pyrss2gen.noarch']],
   }
 
   cron { 'pushrss':
     command => '/srv/git/scripts/pushlog-rss',
     minute => '10',
     user => 'git',
-    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
+    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython','python-pyrss2gen.noarch']],
   }
 }
