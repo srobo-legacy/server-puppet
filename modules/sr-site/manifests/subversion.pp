@@ -22,4 +22,13 @@ class sr-site::subversion {
     mode => '644',
     require => User['svn'],
   }
+
+  file { '/srv/svn/sr/authfile':
+    ensure => present,
+    source => 'puppet:///modules/sr-site/authfile',
+    owner => 'svn',
+    group => 'svn',
+    mode => '644',
+    require => Subversion::Svnrepo['sr'],
+  }
 }
