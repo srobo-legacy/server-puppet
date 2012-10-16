@@ -55,17 +55,21 @@ class sr-site::git {
     require => File['/srv/git'],
   }
 
+  package { 'GitPython':
+    ensure => present,
+  }
+
   cron { 'commitrss':
     command => '/srv/git/scripts/rss',
     minute => '*/15',
     user => 'git',
-    require => Vcsrepo['/srv/git/scripts'],
+    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
   }
 
   cron { 'pushrss':
     command => '/srv/git/scripts/pushlog-rss',
     minute => '10',
     user => 'git',
-    require => Vcsrepo['/srv/git/scripts'],
+    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
   }
 }
