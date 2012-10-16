@@ -31,4 +31,9 @@ class sr-site::subversion {
     mode => '644',
     require => Subversion::Svnrepo['sr'],
   }
+
+  # Require for SVN web access.
+  package { 'mod_dav_svn':
+    ensure => present,
+  }
 }
