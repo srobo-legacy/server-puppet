@@ -1,5 +1,6 @@
 
 class www::httpd {
+  $anonpw = extlookup("ldap_anon_user_pw")
 
   # trac config is in ssl.conf, so we need that
   require sr-site::trac
