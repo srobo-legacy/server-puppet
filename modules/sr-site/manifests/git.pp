@@ -47,4 +47,16 @@ class sr-site::git {
     group => 'git-admin',
     require => File['/srv/git'],
   }
+
+  cron { 'commitrss':
+    command => '/srv/git/scripts/rss',
+    minute => '*/15',
+    user => 'root', # uh, fixme
+  }
+
+  cron { 'pushrss':
+    command => '/srv/git/scripts/pushlog-rss',
+    minute => '10',
+    user => 'root', # Fixme
+  }
 }
