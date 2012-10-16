@@ -127,4 +127,15 @@ class sr-site::git($git_root) {
     mode => '664',
     before => Vcsrepo['/srv/git/scripts'],
   }
+
+  package { 'cgit':
+    ensure => present,
+  }
+
+  file { '/etc/cgitrc':
+    ensure => present,
+    group => 'git-admin',
+    mode => '664',
+    require => [Package['cgit'], Ldapres["cn=git-admin,${openldap::groupdn}"]],
+  }
 }
