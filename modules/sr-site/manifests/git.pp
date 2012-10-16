@@ -87,4 +87,44 @@ class sr-site::git($git_root) {
     user => 'git',
     require => [Vcsrepo['/srv/git/scripts'], Package['GitPython','python-pyrss2gen.noarch']],
   }
+
+  file { '/srv/git/commits.rss':
+    ensure => present,
+    owner => 'git',
+    group => 'srusers',
+    mode => '644',
+    before => Vcsrepo['/srv/git/scripts'],
+  }
+
+  file { '/srv/git/pushes.rss':
+    ensure => present,
+    owner => 'git',
+    group => 'srusers',
+    mode => '644',
+    before => Vcsrepo['/srv/git/scripts'],
+  }
+
+  file { '/srv/git/push-log':
+    ensure => present,
+    owner => 'root',
+    group => 'git-commit',
+    mode => '664',
+    before => Vcsrepo['/srv/git/scripts'],
+  }
+
+  file { '/srv/git/update-log':
+    ensure => present,
+    owner => 'root',
+    group => 'git-commit',
+    mode => '664',
+    before => Vcsrepo['/srv/git/scripts'],
+  }
+
+  file { '/srv/git/repolist':
+    ensure => present,
+    owner => 'root',
+    group => 'git-admin',
+    mode => '664',
+    before => Vcsrepo['/srv/git/scripts'],
+  }
 }
