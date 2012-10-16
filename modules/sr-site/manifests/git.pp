@@ -52,11 +52,13 @@ class sr-site::git {
     command => '/srv/git/scripts/rss',
     minute => '*/15',
     user => 'root', # uh, fixme
+    require => Vcsrepo['/srv/git/scripts'],
   }
 
   cron { 'pushrss':
     command => '/srv/git/scripts/pushlog-rss',
     minute => '10',
     user => 'root', # Fixme
+    require => Vcsrepo['/srv/git/scripts'],
   }
 }
