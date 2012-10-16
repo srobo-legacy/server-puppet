@@ -17,6 +17,7 @@ class sr-site( $git_root ) {
   include sr-site::mysql
   include sr-site::openldap
   include sr-site::trac
+  include sr-site::subversion
 
   # Web stuff
   class { "www":
