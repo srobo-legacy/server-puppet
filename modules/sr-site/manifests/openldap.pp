@@ -144,4 +144,16 @@ class sr-site::openldap {
     objectclass => "posixGroup",
     gidnumber => 1999,
   }
+
+  ldapres { "cn=mentors,$groupdn":
+    ensure => present,
+    cn => 'mentors',
+    objectclass => "posixGroup",
+    gidnumber => 2001,
+    # Don't enable memberuid, or puppet will try to manage it. Without memberuid
+    # all puppet will do is ensure that cn=mentors exists, without attempting
+    # to configure who's a member
+    # memberuid => blah
+  }
+
 }
