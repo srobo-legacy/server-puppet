@@ -35,4 +35,16 @@ class sr-site::git {
     mode => '02775',
     require => Ldapres["cn=git-admin,${openldap::groupdn}"],
   }
+
+  # Maintain a clone of the git admin scripts.
+  vcsrepo { '/srv/git/scripts':
+    ensure => present,
+    provider => git,
+    source => "${git_root}/scripts",
+    revision => "master",
+    force => true,
+    owner => 'root',
+    group => 'git-admin',
+    require => File['/srv/git'],
+  }
 }
