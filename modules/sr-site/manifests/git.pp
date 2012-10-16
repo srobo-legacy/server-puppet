@@ -1,4 +1,4 @@
-class sr-site::git {
+class sr-site::git($git_root) {
   # Git package is installed in the kickstart file,
 
   # Ldapres defaults,
@@ -47,7 +47,7 @@ class sr-site::git {
   vcsrepo { '/srv/git/scripts':
     ensure => present,
     provider => git,
-    source => "${::git_root}/scripts",
+    source => "${git_root}/scripts",
     revision => "master",
     force => true,
     owner => 'root',
