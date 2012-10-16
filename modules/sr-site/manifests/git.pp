@@ -33,6 +33,7 @@ class sr-site::git($git_root) {
     comment => 'Owner of git maintenence scripts and cron jobs',
     shell => '/sbin/nologin',
     gid => 'users', # Dummy group, I've no idea what it should be in.
+    home => '/'
   }
 
   file { '/srv/git':
