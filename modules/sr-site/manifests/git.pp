@@ -28,6 +28,13 @@ class sr-site::git {
     require => Class['sr-site::openldap'],
   }
 
+  user { 'git':
+    ensure => present,
+    comment => 'Owner of git maintenence scripts and cron jobs',
+    shell => '/sbin/nologin',
+    gid => 'users', # Dummy group, I've no idea what it should be in.
+  }
+
   file { '/srv/git':
     ensure => directory,
     owner => 'root',
@@ -51,14 +58,14 @@ class sr-site::git {
   cron { 'commitrss':
     command => '/srv/git/scripts/rss',
     minute => '*/15',
-    user => 'root', # uh, fixme
+    user => 'git',
     require => Vcsrepo['/srv/git/scripts'],
   }
 
   cron { 'pushrss':
     command => '/srv/git/scripts/pushlog-rss',
     minute => '10',
-    user => 'root', # Fixme
+    user => 'git',
     require => Vcsrepo['/srv/git/scripts'],
   }
 }
