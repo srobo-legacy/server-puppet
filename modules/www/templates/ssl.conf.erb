@@ -28,6 +28,11 @@ SSLCryptoDevice builtin
 		AllowOverride All
 	</Directory>
 
+	# Deny everyone userdirs, except explicitly configured accounts
+	UserDir disabled
+	# Voting user requires a public_html dir
+	UserDir enabled voting
+
         <Location /trac>
                 SetEnv PYTHON_EGG_CACHE /srv/trac/.python-eggs
 
