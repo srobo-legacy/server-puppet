@@ -29,4 +29,12 @@ class www::voting ($git_root, $web_root_dir) {
     owner => 'voting',
     group => 'users',
   }
+
+  file { '/home/voting/public_html/voting/votes':
+    ensure => directory,
+    owner => 'voting',
+    group => 'users',
+    mode => '700', # Prohibit people from seeing who voted.
+    require => Vcsrepo['/home/voting/public_html/voting'],
+  }
 }
