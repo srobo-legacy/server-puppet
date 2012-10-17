@@ -11,6 +11,14 @@ class www::voting ($git_root, $web_root_dir) {
     require => User['voting'],
   }
 
+  file { '/home/voting/public_html':
+    ensure => directory,
+    owner => 'voting',
+    group => 'users',
+    mode => '711',
+    require => [User['voting'], File['/home/voting']],
+  }
+
   user { 'voting':
     ensure => present,
     comment => 'Owner of voting record files',
