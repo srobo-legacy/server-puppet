@@ -17,4 +17,12 @@ class sr-site::login {
     mode => '440',
     source => 'puppet:///modules/sr-site/sudoers',
   }
+
+# Puppet is a gigantic piece of rubbish that can't manager unix groups >:|
+#  group { 'facebees':
+#    ensure => present,
+#    members => 'root',
+#    provider => 'groupadd',
+#    system => true,
+#  }
 }
