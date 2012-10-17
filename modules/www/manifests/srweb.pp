@@ -1,14 +1,12 @@
 
-class www::srweb ( $git_root ) {
-  $root = "/var/www/html"
-
+class www::srweb ( $git_root, $web_root_dir ) {
   package { [ "php", "php-Smarty" ]:
     ensure => latest,
     notify => Package[ "httpd" ],
   }
 
   # Maintain a git clone of the website
-  vcsrepo { "${root}":
+  vcsrepo { "${web_root_dir}":
     ensure => present,
     provider => git,
     source => "${git_root}/srweb.git",
@@ -18,21 +16,21 @@ class www::srweb ( $git_root ) {
   }
 
   # srweb needs this directory to belong to apache
-  file { "${root}/templates_compiled":
+  file { "${web_root_dir}/templates_compiled":
     ensure => directory,
     owner => "apache",
     group => "apache",
     mode => "u=rwx,g=rwxs,o=rx",
     recurse => false,
-    require => Vcsrepo[ "${root}" ],
+    require => Vcsrepo[ "${web_root_dir}" ],
   }
 
   # Set the rewrite base
   exec { "rewritebase":
     command => "sed -i .htaccess -e 's#/~chris/srweb#/#'",
     onlyif => "grep '~chris' /var/www/html/.htaccess",
-    cwd => "${root}",
-    subscribe => Vcsrepo[ "${root}" ],
+    cwd => "${web_root_dir}",
+    subscribe => Vcsrepo[ "${web_root_dir}" ],
   }
 
 }
