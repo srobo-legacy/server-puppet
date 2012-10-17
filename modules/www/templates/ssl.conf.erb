@@ -78,7 +78,8 @@ SSLCryptoDevice builtin
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 
-        <Location /voting>
+        Redirect /voting /~voting/voting/
+        <Location /~voting/voting>
                 AuthType basic
                 AuthName "Student Robotics Voting System"
                 AuthBasicProvider ldap
