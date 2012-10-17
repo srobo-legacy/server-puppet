@@ -9,4 +9,12 @@ class sr-site::login {
     notify => Service["nscd"],
     require => File['/etc/pam_ldap.conf'],
   }
+
+  file { '/etc/sudoers':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '440',
+    source => 'puppet:///modules/sr-site/sudoers',
+  }
 }
