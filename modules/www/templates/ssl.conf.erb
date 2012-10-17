@@ -101,6 +101,11 @@ SSLCryptoDevice builtin
                 Require valid-user
         </Location>
 
+	<Directory /home/voting/public_html/voting>
+		AllowOverride All
+		Options Indexes
+	</Directory>
+
         Alias /git /srv/git
         <Directory /srv/git>
                 Options Indexes
