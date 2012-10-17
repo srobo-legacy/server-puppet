@@ -118,6 +118,10 @@ SSLCryptoDevice builtin
         RewriteEngine On
         RewriteRule ^/git/$ /cgit [PT]
 
+	# Forums
+	Redirect permanent /forums /forum         
+	Alias /forum /var/www/vhosts/phpbb/phpBB  
+
 	########## SSL stuff below
 
 	# Force users to use HTTPS again in the future
