@@ -18,6 +18,7 @@ class sr-site( $git_root ) {
   include sr-site::openldap
   include sr-site::trac
   include sr-site::subversion
+  include sr-site::login
 
   class { 'sr-site::git':
     git_root => $git_root,

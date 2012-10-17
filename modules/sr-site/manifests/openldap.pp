@@ -126,16 +126,6 @@ class sr-site::openldap {
     gidnumber => 3046,
   }
 
-  file { '/etc/pam.d/sshd':
-    ensure => present,
-    source => 'puppet:///modules/sr-site/sshd',
-    owner => "root",
-    group => "root",
-    mode => "0600",
-    notify => Service["nscd"],
-    require => File['/etc/pam_ldap.conf'],
-  }
-
   # Add srusers group. I have no idea what its purpose is, but that's what
   # everyones primary unix group is.
   ldapres { "cn=srusers,$groupdn":
