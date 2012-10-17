@@ -9,4 +9,8 @@ class www( $git_root ) {
     web_root_dir => $web_root_dir,
   }
 
+  class { "www::voting":
+    git_root => $git_root,
+    web_root_dir => $web_root_dir,
+  }
 }
