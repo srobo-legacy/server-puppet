@@ -78,6 +78,18 @@ SSLCryptoDevice builtin
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 
+        Alias /git /srv/git
+        <Directory /srv/git>
+                Options Indexes
+        </Directory>
+
+        # CGit:
+        Alias /cgit-data /usr/share/cgit
+        ScriptAlias /cgit /var/www/cgi-bin/cgit
+        # Redirect /git/ index to cgit
+        RewriteEngine On
+        RewriteRule ^/git/$ /cgit [PT]
+
 	########## SSL stuff below
 
 	# Force users to use HTTPS again in the future
