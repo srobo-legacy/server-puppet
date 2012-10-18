@@ -8,6 +8,8 @@ class www::srweb ( $git_root, $web_root_dir ) {
   # Maintain a git clone of the website
   vcsrepo { "${web_root_dir}":
     ensure => present,
+    owner => 'wwwcontent',
+    group => 'www',
     provider => git,
     source => "${git_root}/srweb.git",
     revision => "master",
