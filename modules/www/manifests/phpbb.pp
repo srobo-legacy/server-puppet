@@ -33,4 +33,25 @@ class www::phpbb ( $git_root, $root_dir ) {
     mode => '640',
     content => template('www/forum_config.php.erb'),
   }
+
+  file { "${root_dir}/phpBB/files":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+  }
+
+  file { "${root_dir}/phpBB/cache":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+  }
+
+  file { "${root_dir}/phpBB/store":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+  }
 }
