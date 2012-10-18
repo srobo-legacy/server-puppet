@@ -3,6 +3,10 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_user = extlookup("phpbb_sql_user")
   $forum_pw = extlookup("phpbb_sql_pw")
 
+  package { ['php-mysql']:
+    ensure => present,
+  }
+
   vcsrepo { "${root_dir}":
     ensure => present,
     owner => 'wwwcontent',
@@ -11,7 +15,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     source => "${git_root}/sr-phpbb3.git",
     revision => "master",
     force => true,
-    require => Package[ "php" ],
+    require => Package[ "php", 'php-mysql' ],
   }
 
   mysql::db { "$forum_db_name":
