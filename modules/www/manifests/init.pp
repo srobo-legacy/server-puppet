@@ -10,13 +10,7 @@ class www( $git_root ) {
     ensure => present,
     comment => 'Owner of all/most web content',
     shell => '/sbin/nologin',
-    gid => 'www',
-    require => Group['www'],
-  }
-
-  # Group for all web content.
-  group { 'www':
-    ensure => present,
+    gid => 'apache',
   }
 
   class { "www::srweb":

@@ -6,7 +6,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   vcsrepo { "${root_dir}":
     ensure => present,
     owner => 'wwwcontent',
-    group => 'www',
+    group => 'apache',
     provider => git,
     source => "${git_root}/sr-phpbb3.git",
     revision => "master",
@@ -24,7 +24,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   file { "${root_dir}/phpBB/config.php":
     ensure => present,
     owner => 'wwwcontent',
-    group => 'www',
+    group => 'apache',
     mode => '640',
     content => template('www/forum_config.php.erb'),
   }
