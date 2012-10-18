@@ -32,6 +32,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     group => 'apache',
     mode => '640',
     content => template('www/forum_config.php.erb'),
+    require => Vcsrepo["${root_dir}"],
   }
 
   file { "${root_dir}/phpBB/files":
@@ -39,6 +40,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
+    require => Vcsrepo["${root_dir}"],
   }
 
   file { "${root_dir}/phpBB/cache":
@@ -46,6 +48,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
+    require => Vcsrepo["${root_dir}"],
   }
 
   file { "${root_dir}/phpBB/store":
@@ -53,5 +56,6 @@ class www::phpbb ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
+    require => Vcsrepo["${root_dir}"],
   }
 }
