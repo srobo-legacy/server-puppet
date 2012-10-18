@@ -20,7 +20,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
   # srweb needs this directory to belong to apache
   file { "${web_root_dir}/templates_compiled":
     ensure => directory,
-    owner => "apache",
+    owner => "wwwcontent",
     group => "apache",
     mode => "u=rwx,g=rwxs,o=rx",
     recurse => false,
