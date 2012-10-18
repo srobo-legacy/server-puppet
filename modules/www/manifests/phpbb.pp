@@ -5,6 +5,7 @@ class www::phpbb ( $git_root, $root_dir ) {
 
   package { ['php-mysql']:
     ensure => present,
+    notify => Service['httpd'],
   }
 
   vcsrepo { "${root_dir}":
