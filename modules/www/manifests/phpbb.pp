@@ -18,4 +18,11 @@ class www::phpbb ( $git_root, $root_dir ) {
     host => 'localhost',
     grant => ['all'],
   }
+
+  file { "${root_dir}/phpBB/config.php":
+    ensure => present,
+    # owner/group?
+    mode => '640',
+    content => template('www/forum_config.php.erb'),
+  }
 }
