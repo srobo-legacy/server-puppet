@@ -34,4 +34,16 @@ class www::ide ( $git_root, $root_dir ) {
     content => template('www/ide_config.ini.erb'),
     require => Vcsrepo["${root_dir}"],
   }
+
+  $ide_user = extlookup('ide_ldap_user_uid')
+  ldapres { "uid=${ide_user},ou=users,o=sr":
+    ensure => present,
+    uid => $ide_user,
+    cn => "IDE account",
+    sn => "IDE account",
+    uidnumber => 2321,
+    gidnumber => 1999, # srusers
+    homedirectory => '/home/ide',
+    userpassword => extlookup('ide_ldap_user_ssha_pw'),
+  }
 }
