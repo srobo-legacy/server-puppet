@@ -48,4 +48,28 @@ class www::piwik ( $git_root, $root_dir ) {
     mode => '2770',
     require => Vcsrepo["${root_dir}"],
   }
+
+  file { "${root_dir}/config":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+    require => Vcsrepo["${root_dir}"],
+  }
+
+  file { "${root_dir}/tmp/sessions":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+    require => Vcsrepo["${root_dir}"],
+  }
+
+  file { "${root_dir}/tmp/latest":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+    require => Vcsrepo["${root_dir}"],
+  }
 }
