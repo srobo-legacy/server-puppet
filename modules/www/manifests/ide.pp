@@ -27,6 +27,8 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   $ide_key_file = "${root_dir}/config/ide-key.key"
+  $team_status_dir = "${root_dir}/settings/team-status"
+  $team_status_imgs_dir = "${root_dir}/uploads/team-status"
   $ide_ldap_pw = extlookup('ide_ldap_user_pw')
   file { "${root_dir}/config/local.ini":
     ensure => present,
