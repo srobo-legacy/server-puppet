@@ -56,4 +56,36 @@ class www::ide ( $git_root, $root_dir ) {
     homedirectory => '/home/ide',
     userpassword => extlookup('ide_ldap_user_ssha_pw'),
   }
+
+  file { "${root_dir}/zips":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Vcsrepo["${root_dir}"],
+  }
+
+  file { "${root_dir}/settings":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Vcsrepo["${root_dir}"],
+  }
+
+  file { "${root_dir}/repos":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Vcsrepo["${root_dir}"],
+  }
+
+  file { "${root_dir}/notifications":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Vcsrepo["${root_dir}"],
+  }
 }
