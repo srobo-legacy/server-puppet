@@ -41,6 +41,11 @@ class www::ide ( $git_root, $root_dir ) {
 
   $ide_user = extlookup('ide_ldap_user_uid')
   ldapres { "uid=${ide_user},ou=users,o=sr":
+    binddn => 'cn=Manager,o=sr',
+    bindpw => extlookup("ldap_manager_pw"),
+    ldapserverhost => 'localhost',
+    ldapserverport => '389',
+    require => Class['ldap'],
     ensure => present,
     uid => $ide_user,
     cn => "IDE account",
