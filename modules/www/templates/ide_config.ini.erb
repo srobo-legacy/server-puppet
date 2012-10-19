@@ -1,0 +1,21 @@
+auth_module = ldap
+
+ldap.ideuser.password = "<%= ide_ldap_pw %>"
+ldap.host = localhost
+ldap.team.prefix = "team"
+ldap.admin_group = "ide-admin"
+
+pyenv_zip = "<%= ide_pyenv_zip %>"
+
+fastwrap_script_path = <%= ide_fastrap_script %>
+fastwrap_dir_path = <%= ide_fastrap_dir %>
+
+log_level = LOG_NOTICE
+log.level = LOG_NOTICE
+
+keyfile = <%= ide_key_file %>
+
+team.status_dir = <%= team_status_dir %>
+team.status_images.dir = <%= team_status_imgs_dir %>
+
+announce.enabled = true

@@ -24,4 +24,12 @@ class www::ide ( $git_root, $root_dir ) {
     mode => '640',
     content => extlookup('ide_cookie_key'),
   }
+
+  file { "${root_dir}/config/local.ini":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '640',
+    content => template('www/ide_config.ini.erb'),
+  }
 }
