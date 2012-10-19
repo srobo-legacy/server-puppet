@@ -1,4 +1,9 @@
 class www::piwik ( $git_root, $root_dir ) {
+  package { ['php-gd']:
+    ensure => present,
+    notify => Service['httpd'],
+  }
+
   vcsrepo { "${root_dir}":
     ensure => present,
     owner => 'wwwcontent',
@@ -7,6 +12,7 @@ class www::piwik ( $git_root, $root_dir ) {
     source => 'git://github.com/piwik/piwik.git',
     revision => '1.8.4',
     force => true,
+    require => Package['php-gd'],
   }
 
   file { "${root_dir}/tmp":
