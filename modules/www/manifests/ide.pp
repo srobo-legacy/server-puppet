@@ -1,5 +1,5 @@
 class www::ide ( $git_root, $root_dir ) {
-  package { ['pylint', 'php-cli', 'java-1.7.0-openjdk', 'ant']:
+  package { ['pylint', 'php-cli', 'java-1.7.0-openjdk', 'ant', 'php-ldap']:
     ensure => present,
     before => Vcsrepo["${root_dir}"],
   }
