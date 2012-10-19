@@ -34,6 +34,6 @@ class www( $git_root ) {
   class { 'www::ide':
     git_root => $git_root,
     root_dir => '/var/www/html/ide',
-    require => User['wwwcontent'],
+    require => [User['wwwcontent'], Class['srweb']],
   }
 }
