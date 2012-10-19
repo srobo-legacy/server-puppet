@@ -23,6 +23,7 @@ class www::ide ( $git_root, $root_dir ) {
     group => 'apache',
     mode => '640',
     content => extlookup('ide_cookie_key'),
+    require => Vcsrepo["${root_dir}"],
   }
 
   file { "${root_dir}/config/local.ini":
@@ -31,5 +32,6 @@ class www::ide ( $git_root, $root_dir ) {
     group => 'apache',
     mode => '640',
     content => template('www/ide_config.ini.erb'),
+    require => Vcsrepo["${root_dir}"],
   }
 }
