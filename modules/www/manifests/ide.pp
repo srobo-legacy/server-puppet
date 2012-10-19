@@ -47,6 +47,7 @@ class www::ide ( $git_root, $root_dir ) {
     ldapserverport => '389',
     require => Class['ldap'],
     ensure => present,
+    objectclass => ["inetOrgPerson", "uidObject", "posixAccount"],
     uid => $ide_user,
     cn => "IDE account",
     sn => "IDE account",
