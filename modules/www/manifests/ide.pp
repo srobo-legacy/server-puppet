@@ -26,6 +26,7 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  $ide_ldap_pw = extlookup('ide_ldap_user_pw')
   file { "${root_dir}/config/local.ini":
     ensure => present,
     owner => 'wwwcontent',
