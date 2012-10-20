@@ -9,7 +9,7 @@ class www( $git_root ) {
   user { 'wwwcontent':
     ensure => present,
     comment => 'Owner of all/most web content',
-    shell => '/sbin/nologin',
+    shell => '/bin/sh',
     gid => 'apache',
   }
 
