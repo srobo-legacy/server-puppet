@@ -41,4 +41,11 @@ class www::srweb ( $git_root, $web_root_dir ) {
     subscribe => Vcsrepo[ "${web_root_dir}" ],
   }
 
+  # Maintain existance and permissions on the 404log.
+  file { "${web_root_dir}/404log":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '664',
+  }
 }
