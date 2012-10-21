@@ -1,4 +1,8 @@
 class www::userman ( $root_dir, $git_root ) {
+  package { "mod_wsgi":
+    ensure => present,
+  }
+
   vcsrepo { "${root_dir}":
     ensure => present,
     user => 'wwwcontent',
