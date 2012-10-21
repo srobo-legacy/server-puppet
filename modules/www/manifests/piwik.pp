@@ -14,6 +14,15 @@ class www::piwik ( $git_root, $root_dir ) {
     require => Package['php-gd', 'php-mysql'],
   }
 
+  $piwik_user = extlookup('piwik_sql_user')
+  $piwik_pw = extlookup('piwik_sql_pw')
+  mysql::db { 'piwik':
+    user => $piwik_user,
+    password => $piwik_pw,
+    host => 'localhost',
+    grant => ['all'],
+  }
+
   file { "${root_dir}/tmp":
     ensure => directory,
     owner => 'wwwcontent',
