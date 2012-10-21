@@ -5,6 +5,13 @@ class www::srweb ( $git_root, $web_root_dir ) {
     notify => Package[ "httpd" ],
   }
 
+  service { 'memcached':
+    enable => 'true',
+    ensure => 'running',
+    hasrestart => 'true',
+    hasstatus => 'true',
+  }
+
   # Maintain a git clone of the website
   vcsrepo { "${web_root_dir}":
     ensure => present,
