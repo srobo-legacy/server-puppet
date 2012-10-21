@@ -11,7 +11,7 @@ class www::piwik ( $git_root, $root_dir ) {
     source => 'git://github.com/piwik/piwik.git',
     revision => '1.8.4',
     force => true,
-    require => Package['php-gd'],
+    require => Package['php-gd', 'php-mysql'],
   }
 
   file { "${root_dir}/tmp":
