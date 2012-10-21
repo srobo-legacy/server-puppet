@@ -6,8 +6,7 @@ class www::piwik ( $git_root, $root_dir ) {
 
   vcsrepo { "${root_dir}":
     ensure => present,
-    owner => 'wwwcontent',
-    group => 'apache',
+    user => 'wwwcontent',
     provider => git,
     source => 'git://github.com/piwik/piwik.git',
     revision => '1.8.4',
