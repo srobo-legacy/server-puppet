@@ -1,5 +1,5 @@
 class www::userman ( $root_dir, $git_root ) {
-  package { "mod_wsgi":
+  package { ['mod_wsgi', 'python-flask', 'python-ldap']:
     ensure => present,
   }
 
