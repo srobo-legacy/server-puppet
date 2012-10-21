@@ -1,6 +1,6 @@
 
 class www::srweb ( $git_root, $web_root_dir ) {
-  package { [ "php", "php-Smarty" ]:
+  package { [ "php", "php-Smarty", "memcached"]:
     ensure => latest,
     notify => Package[ "httpd" ],
   }
