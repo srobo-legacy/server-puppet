@@ -13,8 +13,7 @@ class www::ide ( $git_root, $root_dir ) {
     source => "${git_root}/cyanide.git",
     revision => "master",
     force => true,
-    owner => 'wwwcontent',
-    group => 'apache',
+    user =>'wwwcontent',
     require => Class['srweb'],
   }
 
