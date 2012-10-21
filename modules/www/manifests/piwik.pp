@@ -23,6 +23,18 @@ class www::piwik ( $git_root, $root_dir ) {
     grant => ['all'],
   }
 
+  $piwik_admin_user = extlookup('piwik_admin_user')
+  $piwik_admin_md5_pw = extlookup('piwik_admin_md5_pw')
+  $piwik_admin_email = extlookup('piwik_admin_email')
+  file { "${root_dir}/config/config.ini.php":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '640',
+    content => template('www/piwik_config.ini.php.erb'),
+    before => Mysql::Db['piwik'],
+  }
+
   file { "${root_dir}/tmp":
     ensure => directory,
     owner => 'wwwcontent',
