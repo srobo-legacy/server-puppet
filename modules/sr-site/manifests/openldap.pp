@@ -156,5 +156,6 @@ class sr-site::openldap {
   exec { 'ldap-groups-flushed':
     command => '/sbin/nscd -i group',
     require => Class['ldap'],
+    refreshonly => true,
   }
 }
