@@ -16,7 +16,7 @@ class sr-site::git($git_root) {
     objectclass => 'posixGroup',
     gidnumber => '3076',
     # Don't configure memberuid
-    require => Class['sr-site::openldap'],
+    notify => Exec['ldap-groups-flushed'],
   }
 
   ldapres {"cn=git-commit,${openldap::groupdn}":
@@ -25,7 +25,7 @@ class sr-site::git($git_root) {
     objectclass => 'posixGroup',
     gidnumber => '3075',
     # Don't configure memberuid
-    require => Class['sr-site::openldap'],
+    notify => Exec['ldap-groups-flushed'],
   }
 
   user { 'git':

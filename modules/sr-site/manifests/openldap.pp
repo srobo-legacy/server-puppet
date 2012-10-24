@@ -124,6 +124,7 @@ class sr-site::openldap {
     cn => $logingroupname,
     objectclass => "posixGroup",
     gidnumber => 3046,
+    notify => Exec['ldap-groups-flushed'],
   }
 
   # Add srusers group. I have no idea what its purpose is, but that's what
@@ -133,6 +134,7 @@ class sr-site::openldap {
     cn => 'srusers',
     objectclass => "posixGroup",
     gidnumber => 1999,
+    notify => Exec['ldap-groups-flushed'],
   }
 
   ldapres { "cn=mentors,$groupdn":
@@ -144,6 +146,7 @@ class sr-site::openldap {
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
     # memberuid => blah
+    notify => Exec['ldap-groups-flushed'],
   }
 
   # A command to flush ldap groups. The idea here is that we flush/restart nscd
