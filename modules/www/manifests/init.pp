@@ -11,7 +11,7 @@ class www( $git_root ) {
     comment => 'Owner of all/most web content',
     shell => '/bin/sh',
     gid => 'apache',
-    require => Service['httpd'],
+    require => Package['httpd'],
   }
 
   class { "www::srweb":
