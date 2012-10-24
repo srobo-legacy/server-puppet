@@ -154,7 +154,7 @@ class sr-site::openldap {
   # cached data is cleared. Plus, resources that depend on an ldap group existing
   # can now depend on this happening.
   exec { 'ldap-groups-flushed':
-    command => 'nscd -i group',
+    command => '/sbin/nscd -i group',
     require => Class['ldap'],
   }
 }
