@@ -41,7 +41,7 @@ class sr-site::git($git_root) {
     owner => 'root',
     group => 'git-admin',
     mode => '02775',
-    require => Ldapres["cn=git-admin,${openldap::groupdn}"],
+    require => Exec['ldap-groups-flushed'],
   }
 
   # Maintain a clone of the git admin scripts.
@@ -53,7 +53,7 @@ class sr-site::git($git_root) {
     force => true,
     owner => 'root',
     group => 'git-admin',
-    require => File['/srv/git'],
+    require => [File['/srv/git'], Exec['ldap-groups-flushed']],
   }
 
   package { 'GitPython':
@@ -126,6 +126,7 @@ class sr-site::git($git_root) {
     group => 'git-admin',
     mode => '664',
     before => Vcsrepo['/srv/git/scripts'],
+    require => Exec['ldap-groups-flushed'],
   }
 
   package { 'cgit':
@@ -136,7 +137,7 @@ class sr-site::git($git_root) {
     ensure => present,
     group => 'git-admin',
     mode => '664',
-    require => [Package['cgit'], Ldapres["cn=git-admin,${openldap::groupdn}"]],
+    require => [Package['cgit'], Exec['ldap-groups-flushed']],
   }
 
   package { ['perl', 'perl-RPC-XML']:
