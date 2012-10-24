@@ -9,6 +9,15 @@ class www::httpd {
     ensure => latest,
   }
 
+  # Ensure /var/www belongs to wwwcontent, allowing vcsrepos to be cloned
+  # into it.
+  file { '/var/www':
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '755',
+  }
+
   file { "httpd.conf":
     path => "/etc/httpd/conf/httpd.conf",
     owner => root,

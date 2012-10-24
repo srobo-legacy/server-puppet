@@ -18,13 +18,6 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Package[ "php", 'php-mysql' ],
   }
 
-  file { "${root_dir}":
-    ensure => directory,
-    owner => 'wwwcontent',
-    group => 'apache',
-    mode => '755',
-  }
-
   mysql::db { "$forum_db_name":
     user => $forum_user,
     password => $forum_pw,
