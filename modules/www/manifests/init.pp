@@ -28,7 +28,7 @@ class www( $git_root ) {
 
   class { 'www::phpbb':
     git_root => $git_root,
-    root_dir => '/var/www/vhosts/phpbb',
+    root_dir => '/var/www/phpbb',
     require => User['wwwcontent'],
   }
 
