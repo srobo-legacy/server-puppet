@@ -20,7 +20,7 @@ SSLRandomSeed connect builtin
 SSLCryptoDevice builtin
 
 <VirtualHost *:443>
-	ServerName www.studentrobotics.org:443
+	ServerName <%= ssl_hostspec %>
 	DocumentRoot /var/www/html
 
 	<Directory "/var/www/html">
