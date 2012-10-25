@@ -35,6 +35,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     source => "puppet:///modules/www/nemesis.wsgi"
   }
 
+  $ldap_manager_pw = extlookup('ldap_manager_pw')
   file { "${root_dir}/nemesis/userman/sr/config.ini":
     ensure => present,
     content => template('www/nemesis_conf.ini.erb'),
