@@ -21,6 +21,12 @@ class www::nemesis ( $git_root, $root_dir ) {
     user => "wwwcontent"
   }
 
+  file { "${root_dir}/nemesis/db/nemesis.sqlite":
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '660',
+  }
+
   file { "${root_dir}/nemesis/nemesis.wsgi":
     ensure => present,
     owner => 'wwwcontent',
