@@ -26,6 +26,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '660',
+    require => Exec["${root_dir}/nemesis/make_db.sh"],
   }
 
   file { "${root_dir}/nemesis/db":
@@ -33,6 +34,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '660',
+    require => Exec["${root_dir}/nemesis/make_db.sh"],
   }
 
   file { "${root_dir}/nemesis/nemesis.wsgi":
