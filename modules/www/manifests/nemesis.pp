@@ -11,7 +11,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     source => "https://github.com/samphippen/nemesis.git",
     revision => "master",
     force => true,
-    owner => 'wwwcontent'
+    owner => 'wwwcontent',
+    group => 'apache',
   }
 
   exec { "${root_dir}/nemesis/make_db.sh":
