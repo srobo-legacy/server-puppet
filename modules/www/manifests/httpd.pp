@@ -23,7 +23,7 @@ class www::httpd {
     owner => root,
     group => root,
     mode => "0600",
-    source => "puppet:///modules/www/httpd.conf",
+    content => template('www/httpd.conf.erb'),
     require => Package[ "httpd" ],
   }
 
