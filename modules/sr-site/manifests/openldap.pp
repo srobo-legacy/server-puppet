@@ -158,4 +158,13 @@ class sr-site::openldap {
     require => Class['ldap'],
     refreshonly => true,
   }
+
+  file { "${ldap::params::lp_tmp_dir}/acl.d/studentrobotics.org-myeyes.conf":
+    ensure => present,
+    owner => 'ldap',
+    group => 'ldap',
+    mode => '440',
+    source => 'puppet:///modules/sr-site/ldap_acl.conf',
+    notify => Class['ldap::server::rebuild'],
+  }
 }
