@@ -28,6 +28,13 @@ class www::nemesis ( $git_root, $root_dir ) {
     mode => '660',
   }
 
+  file { "${root_dir}/nemesis/db":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '660',
+  }
+
   file { "${root_dir}/nemesis/nemesis.wsgi":
     ensure => present,
     owner => 'wwwcontent',
