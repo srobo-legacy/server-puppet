@@ -10,6 +10,16 @@ class sr-site::login {
     require => File['/etc/pam_ldap.conf'],
   }
 
+  file { '/etc/pam.d/sr-auth':
+    ensure => present,
+    source => 'puppet:///modules/sr-site/sr-auth',
+    owner => "root",
+    group => "root",
+    mode => "0600",
+    notify => Service["nscd"],
+    require => File['/etc/pam_ldap.conf'],
+  }
+
   file { '/etc/sudoers':
     ensure => present,
     owner => 'root',
