@@ -37,7 +37,7 @@ class www::nemesis ( $git_root, $root_dir ) {
 
   file { "${root_dir}/nemesis/userman/sr/config.ini":
     ensure => present,
-    content => template('www/nemesis_conf.ini.erb')
+    content => template('www/nemesis_conf.ini.erb'),
     owner => 'wwwcontent',
     group => 'apache',
     mode => '440',
