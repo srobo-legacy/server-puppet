@@ -49,4 +49,9 @@ class www( $git_root ) {
     root_dir => '/var/www/html/userman',
     require => [User['wwwcontent'], Class['srweb']],
   }
+
+  class { 'www::nemesis':
+    git_root => $git_root,
+    root_dir => '/srv/nemesis'
+  }
 }
