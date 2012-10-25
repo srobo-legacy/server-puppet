@@ -19,7 +19,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     cwd => "${root_dir}/nemesis",
     creates => "${root_dir}/nemesis/db/nemesis.sqlite",
     path => ["/usr/bin"],
-    user => "wwwcontent"
+    user => "wwwcontent",
+    require => Vcsrepo["${root_dir}"],
   }
 
   file { "${root_dir}/nemesis/db/nemesis.sqlite":
@@ -42,7 +43,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '644',
-    source => "puppet:///modules/www/nemesis.wsgi"
+    source => "puppet:///modules/www/nemesis.wsgi",
+    require => Vcsrepo["${root_dir}"],
   }
 
   $ldap_manager_pw = extlookup('ldap_manager_pw')
@@ -52,5 +54,6 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '440',
+    require => Vcsrepo["${root_dir}"],
   }
 }
