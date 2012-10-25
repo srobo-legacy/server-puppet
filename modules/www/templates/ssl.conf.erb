@@ -122,6 +122,12 @@ SSLCryptoDevice builtin
 	Redirect permanent /forums /forum         
 	Alias /forum /var/www/phpbb/phpBB
 
+        WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
+        <Directory /srv/nemesis/nemesis>
+            Order deny,allow
+            Allow from all
+        </Directory>
+
 	########## SSL stuff below
 
 	# Force users to use HTTPS again in the future
