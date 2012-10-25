@@ -22,6 +22,10 @@ class www::nemesis ( $git_root, $root_dir ) {
   }
 
   file { "${root_dir}/nemesis/nemesis.wsgi":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '644',
     source => "puppet:///modules/www/nemesis.wsgi"
   }
 
