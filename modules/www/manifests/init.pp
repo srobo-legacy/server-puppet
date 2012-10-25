@@ -52,6 +52,7 @@ class www( $git_root ) {
 
   class { 'www::nemesis':
     git_root => $git_root,
-    root_dir => '/srv/nemesis'
+    root_dir => '/srv/nemesis',
+    require => User['wwwcontent'],
   }
 }
