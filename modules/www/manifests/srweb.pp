@@ -48,4 +48,13 @@ class www::srweb ( $git_root, $web_root_dir ) {
     group => 'apache',
     mode => '664',
   }
+
+  # Configure php
+  file { '/etc/php.ini':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    source => 'puppet:///modules/www/php.ini',
+  }
 }
