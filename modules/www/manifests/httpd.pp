@@ -39,6 +39,7 @@ class www::httpd {
     mode => "0600",
     content => template('www/ssl.conf.erb'),
     require => Package[ "mod_ssl" ],
+    notify => Service['httpd'],
   }
 
   file { "server.crt":
