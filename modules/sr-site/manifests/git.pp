@@ -49,7 +49,7 @@ class sr-site::git($git_root) {
     ensure => present,
     provider => git,
     source => "${git_root}/scripts",
-    revision => "master",
+    revision => "origin/master",
     force => true,
     owner => 'root',
     group => 'git-admin',

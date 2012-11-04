@@ -9,7 +9,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     ensure => present,
     provider => git,
     source => "https://github.com/samphippen/nemesis.git",
-    revision => "master",
+    revision => "origin/master",
     force => true,
     owner => 'wwwcontent',
     group => 'apache',
