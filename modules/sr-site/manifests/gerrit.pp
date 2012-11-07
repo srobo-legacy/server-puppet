@@ -29,6 +29,20 @@ class sr-site::gerrit {
     require => Exec['install-gerrit'],
   }
 
+  file { '/etc/rc3.d/S90gerrit':
+    ensure => link,
+    target => '/etc/init.d/gerrit',
+    owner => root,
+    group => root,
+  }
+
+  file { '/etc/rc3.d/K90gerrit':
+    ensure => link,
+    target => '/etc/init.d/gerrit',
+    owner => root,
+    group => root,
+  }
+
   $ssl_site_url = extlookup('ssl_site_url')
   $ldap_manager_pw = extlookup('ldap_manager_pw')
   file { '/home/gerrit/srdata/etc/gerrit.config':
