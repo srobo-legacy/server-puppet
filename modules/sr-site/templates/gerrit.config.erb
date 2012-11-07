@@ -6,7 +6,7 @@
 	httpHeader = X-Proxy-REMOTE-USER
 [ldap]
         server = ldap://localhost
-        username = <%= ldap_manager_pw %>
+        username = cn=Manager,o=sr
         accountBase = ou=users,o=sr
         groupBase = ou=groups,o=sr
         accountFullName = ${cn} ${sn}
