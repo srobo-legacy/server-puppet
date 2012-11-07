@@ -117,10 +117,19 @@ class sr-site::gerrit {
     require => Exec['install-gerrit'],
   }
 
+  exec { 'install-gerrit-ssh-goo':
+    command => 'curl -L http://www.bouncycastle.org/download/bcprov-jdk16-144.jar > /home/gerrit/srdata/lib/tmpbcdownload; echo "76e37f4f7910c5759be87302f7c4d067  /home/gerrit/srdata/lib/tmpbcdownload" | md5sum -c; if test $? = 1; then exit 1; fi; mv /home/gerrit/srdata/lib/tmpbcdownload /home/gerrit/srdata/lib/bcprov-jdk16-144.jar',
+    creates => '/home/gerrit/srdata/lib/bcprov-jdk16-144.jar',
+    user => 'gerrit',
+    require => Exec['install-gerrit'],
+  }
+
+
   service { 'gerrit':
     ensure => running,
     require => [
       Exec['install-gerrit-mysql-connector'],
+      Exec['install-gerrit-ssh-goo'],
       Exec['install-gerrit'],
       Exec['install-gerrit-service'],
       Mysql::Db['reviewdb'],
