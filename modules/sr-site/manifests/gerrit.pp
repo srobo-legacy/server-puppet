@@ -43,6 +43,13 @@ class sr-site::gerrit {
     group => root,
   }
 
+  file { '/etc/default/gerritcodereview':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    source => 'puppet:///modules/sr-site/gerritcodereview',
+  }
+
   $ssl_site_url = extlookup('ssl_site_url')
   $ldap_manager_pw = extlookup('ldap_manager_pw')
   file { '/home/gerrit/srdata/etc/gerrit.config':

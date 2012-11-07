@@ -1,0 +1,2 @@
+GERRIT_SITE=/home/gerrit/srdata
+GERRIT_WAR=/home/gerrit/gerrit-full-2.5.war
