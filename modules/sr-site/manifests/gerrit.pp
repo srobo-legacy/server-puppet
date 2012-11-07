@@ -71,6 +71,38 @@ class sr-site::gerrit {
     require => Exec['install-gerrit'],
   }
 
+  file { '/home/gerrit/srdata/etc/ssh_host_dsa_key':
+    ensure => present,
+    owner => 'gerrit',
+    group => 'users',
+    mode => '600',
+    source => '/srv/secrets/gerrit/ssh_host_dsa_key',
+  }
+
+  file { '/home/gerrit/srdata/etc/ssh_host_dsa_key.pub':
+    ensure => present,
+    owner => 'gerrit',
+    group => 'users',
+    mode => '600',
+    source => '/srv/secrets/gerrit/ssh_host_dsa_key',
+  }
+
+  file { '/home/gerrit/srdata/etc/ssh_host_rsa_key':
+    ensure => present,
+    owner => 'gerrit',
+    group => 'users',
+    mode => '600',
+    source => '/srv/secrets/gerrit/ssh_host_rsa_key',
+  }
+
+  file { '/home/gerrit/srdata/etc/ssh_host_rsa_key.pub':
+    ensure => present,
+    owner => 'gerrit',
+    group => 'users',
+    mode => '600',
+    source => '/srv/secrets/gerrit/ssh_host_rsa_key.pub',
+  }
+
   mysql::db { 'reviewdb':
     user => 'gerrit',
     password => "$gerrit_db_pw",
@@ -95,6 +127,10 @@ class sr-site::gerrit {
       File['/etc/default/gerritcodereview'],
       File['/home/gerrit/srdata/etc/gerrit.config'],
       File['/home/gerrit/srdata/etc/secure.config'],
+      File['/home/gerrit/srdata/etc/ssh_host_dsa_key'],
+      File['/home/gerrit/srdata/etc/ssh_host_dsa_key.pub'],
+      File['/home/gerrit/srdata/etc/ssh_host_rsa_key'],
+      File['/home/gerrit/srdata/etc/ssh_host_rsa_key.pub'],
     ],
   }
 }
