@@ -39,4 +39,11 @@ class sr-site::gerrit {
     mode => '600',
     content => template('sr-site/secure.config.erb'),
   }
+
+  mysql::db { 'reviewdb':
+    user => 'gerrit',
+    password => "$gerrit_db_pw",
+    host => "localhost",
+    grant => ["all"],
+  }
 }
