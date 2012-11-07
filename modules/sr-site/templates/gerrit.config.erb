@@ -1,0 +1,30 @@
+[gerrit]
+	basePath = git
+	canonicalWebUrl = <%= ssl_site_url %>gerrit/
+[auth]
+	type = HTTP_LDAP
+	httpHeader = X-Proxy-REMOTE-USER
+[ldap]
+        server = ldap://localhost
+        username = <%= ldap_manager_pw %>
+        accountBase = ou=users,o=sr
+        groupBase = ou=groups,o=sr
+        accountFullName = ${cn} ${sn}
+        accountEmailAddress = ${mail}
+        accountSshUserName = uid
+[sendemail]
+	smtpServer = localhost
+[container]
+	user = gerrit
+	javaHome = /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.9/jre
+[sshd]
+	listenAddress = *:29418
+[httpd]
+	listenUrl = proxy-https://*:8081/gerrit
+[cache]
+	directory = cache
+[database]
+	type = MYSQL
+	hostname = localhost
+	database = <%= gerrit_db_name %>
+	username = gerrit
