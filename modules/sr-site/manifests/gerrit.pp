@@ -30,6 +30,20 @@ class sr-site::gerrit {
     creates => '/home/gerrit/srdata',
   }
 
+  file { '/usr/local/bin/sr-fix-gerrit-admin-guid.sh':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    source => 'puppet:///modules/sr-site/sr-fix-gerrit-admin-guid.sh',
+  }
+
+  exec { 'fix-gerrit-admin-guid':
+    command => '/usr/local/bin/sr-fix-gerrit-admin-guid.sh',
+    user => 'gerrit',
+    notify => Service['gerrit'],
+    require => Exec['install-gerrit'],
+  }
+
   exec { 'install-gerrit-service':
     command => 'cp /home/gerrit/srdata/bin/gerrit.sh /etc/init.d/gerrit',
     creates => '/etc/init.d/gerrit',
