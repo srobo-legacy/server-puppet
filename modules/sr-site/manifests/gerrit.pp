@@ -31,4 +31,12 @@ class sr-site::gerrit {
     mode => '644',
     content => template('sr-site/gerrit.config.erb'),
   }
+
+  $gerrit_db_pw = extlookup('gerrit_db_pw')
+  file { '/home/gerrit/srdata/etc/secure.config':
+    owner => 'gerrit',
+    group => 'users',
+    mode => '600',
+    content => template('sr-site/secure.config.erb'),
+  }
 }
