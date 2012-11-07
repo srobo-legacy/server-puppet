@@ -2,8 +2,7 @@
 	basePath = git
 	canonicalWebUrl = <%= ssl_site_url %>gerrit/
 [auth]
-	type = HTTP_LDAP
-	httpHeader = X-Proxy-REMOTE-USER
+	type = LDAP
 [ldap]
         server = ldap://localhost
         username = cn=Manager,o=sr
