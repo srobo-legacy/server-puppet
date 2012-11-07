@@ -23,6 +23,12 @@ class sr-site::gerrit {
     creates => '/home/gerrit/srdata',
   }
 
+  exec { 'install-gerrit-service':
+    command => 'cp /home/gerrit/srdata/bin/gerrit.sh /etc/init.d/gerrit',
+    creates => '/etc/init.d/gerrit',
+    require => Exec['install-gerrit'],
+  }
+
   $ssl_site_url = extlookup('ssl_site_url')
   $ldap_manager_pw = extlookup('ldap_manager_pw')
   file { '/home/gerrit/srdata/etc/gerrit.config':
