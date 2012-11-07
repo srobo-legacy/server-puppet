@@ -12,4 +12,14 @@ class sr-site::gerrit {
     user => 'gerrit',
     require => User['gerrit'],
   }
+
+  # In a coup for usability, gerrit will perform a default install if it's
+  # not attached to an interactive terminal when run. We can then configure
+  # config files by other means!
+  exec { 'install-gerrit':
+    require => [Exec['download-gerrit'], Package['java-1.7.0-openjdk']],
+    user => 'gerrit',
+    command => 'java -jar /home/gerrit/gerrit-full-2.5.war init -d /home/gerrit/srdata',
+    creates => '/home/gerrit/srdata',
+  }
 }
