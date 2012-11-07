@@ -42,4 +42,16 @@ class sr-site::fw_pre {
     action => "accept",
   }
 
+  firewall { "006 gerrit-http":
+    proto => "tcp",
+    dport => "8081",
+    action => "accept",
+    source => "127.0.0.1", # Limit to only apache reverse-proxying.
+  }
+
+  firewall { "007 gerrit-sshd":
+    proto => "tcp",
+    dport => "29418",
+    action => "accept",
+  }
 }
