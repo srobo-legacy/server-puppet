@@ -30,6 +30,7 @@ class sr-site::gerrit {
     group => 'users',
     mode => '644',
     content => template('sr-site/gerrit.config.erb'),
+    require => Exec['install-gerrit'],
   }
 
   $gerrit_db_pw = extlookup('gerrit_db_pw')
@@ -38,6 +39,7 @@ class sr-site::gerrit {
     group => 'users',
     mode => '600',
     content => template('sr-site/secure.config.erb'),
+    require => Exec['install-gerrit'],
   }
 
   mysql::db { 'reviewdb':
