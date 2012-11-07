@@ -1,0 +1,2 @@
+class sr-site::gerrit {
+}
