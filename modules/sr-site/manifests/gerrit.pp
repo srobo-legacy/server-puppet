@@ -59,6 +59,7 @@ class sr-site::gerrit {
     mode => '644',
     content => template('sr-site/gerrit.config.erb'),
     require => Exec['install-gerrit'],
+    notify => Service['gerrit'],
   }
 
   $gerrit_db_pw = extlookup('gerrit_db_pw')
@@ -69,6 +70,7 @@ class sr-site::gerrit {
     mode => '600',
     content => template('sr-site/secure.config.erb'),
     require => Exec['install-gerrit'],
+    notify => Service['gerrit'],
   }
 
   file { '/home/gerrit/srdata/etc/ssh_host_dsa_key':
@@ -77,6 +79,8 @@ class sr-site::gerrit {
     group => 'users',
     mode => '600',
     source => '/srv/secrets/gerrit/ssh_host_dsa_key',
+    require => Exec['install-gerrit'],
+    notify => Service['gerrit'],
   }
 
   file { '/home/gerrit/srdata/etc/ssh_host_dsa_key.pub':
@@ -85,6 +89,8 @@ class sr-site::gerrit {
     group => 'users',
     mode => '600',
     source => '/srv/secrets/gerrit/ssh_host_dsa_key',
+    require => Exec['install-gerrit'],
+    notify => Service['gerrit'],
   }
 
   file { '/home/gerrit/srdata/etc/ssh_host_rsa_key':
@@ -93,6 +99,8 @@ class sr-site::gerrit {
     group => 'users',
     mode => '600',
     source => '/srv/secrets/gerrit/ssh_host_rsa_key',
+    require => Exec['install-gerrit'],
+    notify => Service['gerrit'],
   }
 
   file { '/home/gerrit/srdata/etc/ssh_host_rsa_key.pub':
@@ -101,6 +109,8 @@ class sr-site::gerrit {
     group => 'users',
     mode => '600',
     source => '/srv/secrets/gerrit/ssh_host_rsa_key.pub',
+    require => Exec['install-gerrit'],
+    notify => Service['gerrit'],
   }
 
   mysql::db { 'reviewdb':
