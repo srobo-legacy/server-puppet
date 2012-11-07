@@ -113,6 +113,10 @@ class sr-site::gerrit {
     notify => Service['gerrit'],
   }
 
+  file { '/home/gerrit/srdata/etc/ssh_host_key':
+    ensure => absent,
+  }
+
   mysql::db { 'reviewdb':
     user => 'gerrit',
     password => "$gerrit_db_pw",
@@ -150,6 +154,7 @@ class sr-site::gerrit {
       File['/home/gerrit/srdata/etc/ssh_host_dsa_key.pub'],
       File['/home/gerrit/srdata/etc/ssh_host_rsa_key'],
       File['/home/gerrit/srdata/etc/ssh_host_rsa_key.pub'],
+      File['/home/gerrit/srdata/etc/ssh_host_key'],
     ],
   }
 }
