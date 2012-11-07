@@ -84,4 +84,17 @@ class sr-site::gerrit {
     user => 'gerrit',
     require => Exec['install-gerrit'],
   }
+
+  service { 'gerrit':
+    ensure => running,
+    require => [
+      Exec['install-gerrit-mysql-connector'],
+      Exec['install-gerrit'],
+      Exec['install-gerrit-service'],
+      Mysql::Db['reviewdb'],
+      File['/etc/default/gerritcodereview'],
+      File['/home/gerrit/srdata/etc/gerrit.config'],
+      File['/home/gerrit/srdata/etc/secure.config'],
+    ],
+  }
 }
