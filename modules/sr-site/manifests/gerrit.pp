@@ -77,4 +77,10 @@ class sr-site::gerrit {
     host => "localhost",
     grant => ["all"],
   }
+
+  exec { 'install-gerrit-mysql-connector':
+    command => 'curl http://repo2.maven.org/maven2/mysql/mysql-connector-java/5.1.10/mysql-connector-java-5.1.10.jar > /home/gerrit/srdata/lib/tmpdownload; echo "517e19ba790cceee31148c30a887155e  /home/gerrit/srdata/lib/tmpdownload" | md5sum -c; if test $? = 1; then exit 1; fi; mv /home/gerrit/srdata/lib/tmpdownload /home/gerrit/srdata/lib/mysql-connector-java-5.1.10.jar',
+    creates => '/home/gerrit/srdata/lib/mysql-connector-java-5.1.10.jar',
+    user => 'gerrit',
+  }
 }
