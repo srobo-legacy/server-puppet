@@ -6,11 +6,18 @@ class sr-site::gerrit {
     gid => 'users',
   }
 
+  file { '/home/gerrit':
+    ensure => directory,
+    owner => "gerrit",
+    group => "users",
+    require => User['gerrit'],
+  }
+
   exec { 'download-gerrit':
     command => 'curl http://gerrit.googlecode.com/files/gerrit-full-2.5.war > /home/gerrit/gerrit-full-2.5.war',
     creates => '/home/gerrit/gerrit-full-2.5.war',
     user => 'gerrit',
-    require => User['gerrit'],
+    require => File['/home/gerrit'],
   }
 
   # In a coup for usability, gerrit will perform a default install if it's
