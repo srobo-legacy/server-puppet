@@ -19,7 +19,7 @@ class sr-site::gerrit {
   exec { 'install-gerrit':
     require => [Exec['download-gerrit'], Package['java-1.7.0-openjdk']],
     user => 'gerrit',
-    command => 'java -jar /home/gerrit/gerrit-full-2.5.war init -d /home/gerrit/srdata',
+    command => 'java -jar /home/gerrit/gerrit-full-2.5.war init --no-auto-start -d /home/gerrit/srdata',
     creates => '/home/gerrit/srdata',
   }
 
