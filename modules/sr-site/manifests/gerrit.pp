@@ -22,4 +22,11 @@ class sr-site::gerrit {
     command => 'java -jar /home/gerrit/gerrit-full-2.5.war init -d /home/gerrit/srdata',
     creates => '/home/gerrit/srdata',
   }
+
+  file { '/home/gerrit/srdata/etc/gerrit.config':
+    owner => 'gerrit',
+    group => 'users',
+    mode => '644',
+    content => template('sr-site/gerrit.config.erb'),
+  }
 }
