@@ -88,4 +88,28 @@ class www::ide ( $git_root, $root_dir ) {
     mode => '2777',
     require => Vcsrepo["${root_dir}"],
   }
+
+  file { "${root_dir}/repos/conf":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '744',
+    source => 'puppet:///modules/www/conf',
+  }
+
+  file { "${root_dir}/repos/fsck":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '744',
+    source => 'puppet:///modules/www/fsck',
+  }
+
+  file { "${root_dir}/repos/repack":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '744',
+    source => 'puppet:///modules/www/repack',
+  }
 }
