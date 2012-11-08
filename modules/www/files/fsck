@@ -1,0 +1,10 @@
+#!/bin/sh
+
+REPOS=/var/www/html/ide/repos
+
+find $REPOS -type d -name '*.git' | while read gdir
+do
+    cd "$gdir"
+    echo "$gdir"
+    git fsck
+done
