@@ -60,6 +60,17 @@ class www::httpd {
     require => Package[ "mod_ssl" ],
   }
 
+  if $devmode == "0" {
+    file { "cert_chain":
+      path => "/etc/pki/tls/certs/gd_bundle.crt",
+      owner => 'root',
+      group => 'root',
+      mode => '0400',
+      source => '/srv/secrets/https/gd_bundle.crt',
+      require => Package[ "mod_ssl" ],
+    }
+  }
+
   service { "httpd":
     enable => true,
     ensure => running,
