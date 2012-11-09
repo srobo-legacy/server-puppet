@@ -28,6 +28,14 @@ class sr-site::login {
     source => 'puppet:///modules/sr-site/sudoers',
   }
 
+  file { '/etc/ssh/sshd_config':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '600',
+    content => template('sr-site/sshd_config.erb'),
+  }
+
 # Puppet is a gigantic piece of rubbish that can't manager unix groups >:|
 #  group { 'facebees':
 #    ensure => present,
