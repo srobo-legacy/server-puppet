@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 cd /home/gerrit
 git clone /home/gerrit/srdata/git/All-Projects.git/
