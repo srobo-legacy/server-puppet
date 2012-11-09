@@ -34,6 +34,7 @@ class sr-site::login {
     group => 'root',
     mode => '600',
     content => template('sr-site/sshd_config.erb'),
+    notify => Service['sshd'],
   }
 
 # Puppet is a gigantic piece of rubbish that can't manager unix groups >:|
