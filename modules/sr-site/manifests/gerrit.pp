@@ -177,5 +177,7 @@ class sr-site::gerrit {
       File['/home/gerrit/srdata/etc/ssh_host_rsa_key.pub'],
       File['/home/gerrit/srdata/etc/ssh_host_key'],
     ],
+
+    status => 'service gerrit check',
   }
 }
