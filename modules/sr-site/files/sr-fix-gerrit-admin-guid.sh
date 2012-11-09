@@ -13,4 +13,4 @@ cd /home/gerrit
 rm -rf All-Projects
 
 # Indicate that we've run successfully
-touch /home/gerrit/srsite/srdata/git/All-Projects.git/.srguidfixed
+touch /home/gerrit/srdata/git/All-Projects.git/.srguidfixed
