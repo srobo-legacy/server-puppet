@@ -11,3 +11,6 @@ git push origin sr_guid_patch_branch
 git show-ref refs/heads/sr_guid_patch_branch | awk '{print $1}' > /home/gerrit/srdata/git/All-Projects.git/refs/meta/config
 cd /home/gerrit
 rm -rf All-Projects
+
+# Indicate that we've run successfully
+touch /home/gerrit/srsite/srdata/git/All-Projects.git/.srguidfixed

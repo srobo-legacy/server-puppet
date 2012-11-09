@@ -40,6 +40,7 @@ class sr-site::gerrit {
   exec { 'fix-gerrit-admin-guid':
     command => '/usr/local/bin/sr-fix-gerrit-admin-guid.sh',
     user => 'gerrit',
+    creates => '/home/gerrit/srsite/srdata/git/All-Projects.git/.srguidfixed',
     notify => Service['gerrit'],
     require => Exec['install-gerrit'],
   }
