@@ -37,6 +37,10 @@ class sr-site::login {
     notify => Service['sshd'],
   }
 
+  service { 'sshd':
+    ensure => running,
+  }
+
 # Puppet is a gigantic piece of rubbish that can't manager unix groups >:|
 #  group { 'facebees':
 #    ensure => present,
