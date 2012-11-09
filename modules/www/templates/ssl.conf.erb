@@ -154,8 +154,10 @@ SSLCryptoDevice builtin
 	#   Server Private Key:
 	SSLCertificateKeyFile /etc/pki/tls/private/server.key
 
+        <% if devmode == "0" then -%>
 	#   Server Certificate Chain:
-	#SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle.crt
+	SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle.crt
+        <% end -%>
 
 	<Files ~ "\.(cgi|shtml|phtml|php3?)$">
     		SSLOptions +StdEnvVars
