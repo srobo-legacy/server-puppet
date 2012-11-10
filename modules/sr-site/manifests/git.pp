@@ -38,10 +38,10 @@ class sr-site::git($git_root) {
 
   file { '/srv/git':
     ensure => directory,
-    owner => 'root',
-    group => 'git-admin',
-    mode => '02775',
-    require => Exec['ldap-groups-flushed'],
+    owner => 'gerrit',
+    group => 'users',
+    mode => '0755',
+    require => User['gerrit'],
   }
 
   # Maintain a clone of the git admin scripts.
