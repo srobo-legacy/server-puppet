@@ -135,7 +135,7 @@ class sr-site::git($git_root) {
 
   file { '/etc/cgitrc':
     ensure => present,
-    owner => 'git'
+    owner => 'git',
     group => 'root',
     mode => '644',
     require => [Package['cgit'], Exec['ldap-groups-flushed']],
