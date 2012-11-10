@@ -25,4 +25,19 @@ class sr-site::pipebot ( $git_root ) {
     group => 'users',
     require => File['/home/pipebot'],
   }
+
+  # Also, some systemd goo.
+  file { '/etc/systemd/system/pipebot.service':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    source => 'puppet:///modules/sr-site/pipebot.service',
+  }
+
+  file { '/etc/systemd/system/multi-user.target.wants/pipebot.service':
+    ensure => link,
+    target => '/etc/systemd/system/pipebot.service',
+    require => File['/etc/systemd/system/pipebot.service'],
+  }
 }

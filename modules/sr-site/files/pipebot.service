@@ -1,0 +1,12 @@
+[Unit]
+Description=Pipe from /tmp/hash-srobo to #srobo
+
+[Service]
+User=pipebot
+Group=users
+ExecStart=/home/pipebot/pipebot/pipebot
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
