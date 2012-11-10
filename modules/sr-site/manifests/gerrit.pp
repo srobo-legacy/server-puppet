@@ -45,6 +45,16 @@ class sr-site::gerrit {
     notify => Service['gerrit'],
   }
 
+  file { '/home/gerrit/srdata/etc/mail':
+    ensure => directory,
+    recurse => true,
+    source => 'puppet:///modules/sr-site/gerritmail',
+    owner => 'gerrit',
+    group => 'users',
+    mode => '444',
+    require => Exec['install-gerrit'],
+  }
+
   exec { 'install-gerrit-service':
     command => 'cp /home/gerrit/srdata/bin/gerrit.sh /etc/init.d/gerrit',
     creates => '/etc/init.d/gerrit',
