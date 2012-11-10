@@ -13,6 +13,11 @@ class sr-site::backup ( $git_root ) {
   # FIXME: find a way of extracting all mysql dbs from puppet?
   $list_of_dbs = 'phpbb_sr2013,piwik,trac'
   $ide_loc = $www::ide::root_dir
+
+  # Danger Will Robinson: All backup keys must also be (locally) signed by the
+  # root user. Failure to do this will make backup fail.
+  $backup_crypt_keys = extlookup('backup_keys')
+
   file { '/srv/backup/backup.ini':
     ensure => present,
     owner => 'root',
