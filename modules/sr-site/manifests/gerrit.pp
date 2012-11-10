@@ -39,6 +39,12 @@ class sr-site::gerrit {
     require => Exec['install-gerrit'],
   }
 
+  file { '/srv/git/All-Projects.git':
+    ensure => link,
+    target => '/home/gerrit/srdata/git/All-Projects.git',
+    notify => Service['gerrit'],
+  }
+
   exec { 'install-gerrit-service':
     command => 'cp /home/gerrit/srdata/bin/gerrit.sh /etc/init.d/gerrit',
     creates => '/etc/init.d/gerrit',
