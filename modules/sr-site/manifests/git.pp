@@ -36,6 +36,14 @@ class sr-site::git($git_root) {
     home => '/'
   }
 
+  cron { 'cgit-reconf':
+    command => '/srv/git/scripts/cgit-reconf',
+    hour => '*/4',
+    minute => '13',
+    user => 'git',
+    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
+  }
+
   file { '/srv/git':
     ensure => directory,
     owner => 'gerrit',
