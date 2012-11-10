@@ -40,4 +40,8 @@ class sr-site::backup ( $git_root ) {
     source => '/srv/secrets/backup_ssh_keys',
     require => File['/home/backup/.ssh'],
   }
+
+  package { 'gnupg':
+    ensure => present,
+  }
 }
