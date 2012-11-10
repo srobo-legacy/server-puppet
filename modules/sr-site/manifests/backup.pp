@@ -18,7 +18,7 @@ class sr-site::backup ( $git_root ) {
   }
 
   file { '/home/backup':
-    ensure => present,
+    ensure => directory,
     owner => 'backup',
     group => 'users',
     mode => '700',
