@@ -40,4 +40,17 @@ class sr-site::pipebot ( $git_root ) {
     target => '/etc/systemd/system/pipebot.service',
     require => File['/etc/systemd/system/pipebot.service'],
   }
+
+  # systemd has to be reloaded before picking this up,
+  exec { 'pipebot-systemd-load':
+    provider => 'shell',
+    command => 'systemctl daemon-reload',
+    onlyif => 'systemctl --all | grep pipebot; if test $? = 0; then exit 1; fi; exit 0',
+    require => File['/etc/systemd/system/multi-user.target.wants/pipebot.service'],
+  }
+
+  service { 'pipebot':
+    ensure => running,
+    require => Exec['pipebot-systemd-load'],
+  }
 }
