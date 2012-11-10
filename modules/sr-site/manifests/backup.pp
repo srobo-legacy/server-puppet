@@ -9,4 +9,19 @@ class sr-site::backup ( $git_root ) {
                           # end up be run as root by cron
     force => 'true',
   }
+
+  user { 'backup':
+    ensure => present,
+    comment => "Backup operations user",
+    shell => '/bin/bash',
+    gid => 'users',
+  }
+
+  file { '/home/backup':
+    ensure => present,
+    owner => 'backup',
+    group => 'users',
+    mode => '700',
+    require => User['backup'],
+  }
 }
