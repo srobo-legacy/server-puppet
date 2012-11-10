@@ -111,3 +111,7 @@ Defaults:backup    !requiretty
 #   it can operate on type of data to back up
 #   it can only write to stdout (lest backup be able to clobber any file)
 backup          ALL = (root) NOPASSWD: /srv/backup/backup.py -e *
+
+# Allow backup to run `rsync -av` to back up git, without overwriting anything
+# on the server.
+backup          ALL = (root) NOPASSWD: /bin/rsync --server --sender -logDtprze.iLsf . /srv/git
