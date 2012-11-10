@@ -33,4 +33,8 @@ class sr-site( $git_root ) {
   class { "backup":
     git_root => $git_root,
   }
+
+  class { "pipebot":
+    git_root => $git_root,
+  }
 }
