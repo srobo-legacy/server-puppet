@@ -102,3 +102,9 @@ Cmnd_Alias	IDE_ADJUST_PERMS = /var/www/html/ide/adjust-perms
 
 %www-admins	ALL = (root) NOPASSWD: WWW_ADJUST_PERMS
 %www-admins	ALL = (root) NOPASSWD: IDE_ADJUST_PERMS
+
+# Allow backup user to run the backup script with the following config:
+#   it can only be run with the -e, encrypted option
+#   it can operate on type of data to back up
+#   it can only write to stdout (lest backup be able to clobber any file)
+backup          ALL = (root) NOPASSWD: /srv/backup/backup.py -e *
