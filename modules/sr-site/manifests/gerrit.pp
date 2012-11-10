@@ -30,17 +30,11 @@ class sr-site::gerrit {
     creates => '/home/gerrit/srdata',
   }
 
-  file { '/usr/local/bin/sr-fix-gerrit-admin-guid.sh':
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    source => 'puppet:///modules/sr-site/sr-fix-gerrit-admin-guid.sh',
-  }
-
-  exec { 'fix-gerrit-admin-guid':
-    command => '/usr/local/bin/sr-fix-gerrit-admin-guid.sh',
+  exec { 'install-gerrit-all-projs':
+    command => 'tar -xf /srv/secrets/gerrit/all_projs.tgz -C /home/gerrit/srdata/git; touch /home/gerrit/srdata/git/All-Projects.git/.srinstalled',
+    provider => 'shell',
     user => 'gerrit',
-    creates => '/home/gerrit/srdata/git/All-Projects.git/.srguidfixed',
+    creates => '/home/gerrit/srdata/git/All-Projects.git/.srinstalled',
     notify => Service['gerrit'],
     require => Exec['install-gerrit'],
   }
