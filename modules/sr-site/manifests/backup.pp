@@ -10,6 +10,17 @@ class sr-site::backup ( $git_root ) {
     force => 'true',
   }
 
+  # FIXME: find a way of extracting all mysql dbs from puppet?
+  $list_of_dbs = 'phpbb_sr2013,piwik,trac'
+  $ide_loc = $www::ide::root_dir
+  file { '/srv/backup/backup.ini':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '400',
+    content => template('sr-site/backup.ini.erb')
+  }
+
   user { 'backup':
     ensure => present,
     comment => "Backup operations user",
