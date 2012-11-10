@@ -2,31 +2,31 @@ class sr-site::git($git_root) {
   # Git package is installed in the kickstart file,
 
   # Ldapres defaults,
-  Ldapres {
-    binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup("ldap_manager_pw"),
-    ldapserverhost => 'localhost',
-    ldapserverport => '389',
-    require => Class['ldap'],
-  }
+#  Ldapres {
+#    binddn => 'cn=Manager,o=sr',
+#    bindpw => extlookup("ldap_manager_pw"),
+#    ldapserverhost => 'localhost',
+#    ldapserverport => '389',
+#    require => Class['ldap'],
+#  }
 
-  ldapres {"cn=git-admin,${openldap::groupdn}":
-    ensure => present,
-    cn => 'git-admin',
-    objectclass => 'posixGroup',
-    gidnumber => '3076',
-    # Don't configure memberuid
-    notify => Exec['ldap-groups-flushed'],
-  }
+#  ldapres {"cn=git-admin,${openldap::groupdn}":
+#    ensure => present,
+#    cn => 'git-admin',
+#    objectclass => 'posixGroup',
+#    gidnumber => '3076',
+#    # Don't configure memberuid
+#    notify => Exec['ldap-groups-flushed'],
+#  }
 
-  ldapres {"cn=git-commit,${openldap::groupdn}":
-    ensure => present,
-    cn => 'git-commit',
-    objectclass => 'posixGroup',
-    gidnumber => '3075',
-    # Don't configure memberuid
-    notify => Exec['ldap-groups-flushed'],
-  }
+#  ldapres {"cn=git-commit,${openldap::groupdn}":
+#    ensure => present,
+#    cn => 'git-commit',
+#    objectclass => 'posixGroup',
+#    gidnumber => '3075',
+#    # Don't configure memberuid
+#    notify => Exec['ldap-groups-flushed'],
+#  }
 
   user { 'git':
     ensure => present,
@@ -52,7 +52,7 @@ class sr-site::git($git_root) {
     revision => "origin/master",
     force => true,
     owner => 'root',
-    group => 'git-admin',
+    group => 'root',
     require => [File['/srv/git'], Exec['ldap-groups-flushed']],
   }
 
@@ -135,8 +135,9 @@ class sr-site::git($git_root) {
 
   file { '/etc/cgitrc':
     ensure => present,
-    group => 'git-admin',
-    mode => '664',
+    owner => 'git'
+    group => 'root',
+    mode => '644',
     require => [Package['cgit'], Exec['ldap-groups-flushed']],
   }
 
