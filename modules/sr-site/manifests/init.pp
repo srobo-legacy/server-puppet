@@ -34,6 +34,3 @@ class sr-site( $git_root ) {
     git_root => $git_root,
   }
 }
-
-
-
