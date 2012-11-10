@@ -24,4 +24,13 @@ class sr-site::backup ( $git_root ) {
     mode => '700',
     require => User['backup'],
   }
+
+  file { '/home/backup/.ssh/authorized_keys':
+    ensure => present,
+    owner => 'backup',
+    group => 'users',
+    mode => '600',
+    source => '/srv/secrets/backup_ssh_keys',
+    require => File['/home/backup'],
+  }
 }
