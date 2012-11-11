@@ -114,7 +114,14 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   exec { 'ide_copy':
-    command => "cp -r /srv/secrets/ide/notifications/* ${root_dir}/notifications; if test $? != 0; then exit 1; fi; cp -r /srv/secrets/ide/repos/* ${root_dir}/repos; if test $? != 0; then exit 1; fi; chown -R apache.apache ${root_dir}/repos/*; chown -R apache.apache ${root_dir}/notifications/*; touch /usr/local/var/sr/ide_installed",
+    command =>
+         "cp -r /srv/secrets/ide/notifications/* ${root_dir}/notifications;\
+          if test $? != 0; then exit 1; fi;\
+          cp -r /srv/secrets/ide/repos/* ${root_dir}/repos;\
+          if test $? != 0; then exit 1; fi;\
+          chown -R apache.apache ${root_dir}/repos/*;\
+          chown -R apache.apache ${root_dir}/notifications/*;\
+          touch /usr/local/var/sr/ide_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/ide_installed',
     require => [File["${root_dir}/notifications"],File["${root_dir}/repos"]],
