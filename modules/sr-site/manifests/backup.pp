@@ -53,7 +53,7 @@ class sr-site::backup ( $git_root ) {
     owner => 'backup',
     group => 'users',
     mode => '600',
-    source => '/srv/secrets/backup_ssh_keys',
+    source => '/srv/secrets/login/backups_ssh_keys',
     require => File['/home/backup/.ssh'],
   }
 
