@@ -125,6 +125,7 @@ class sr-site::openldap {
     objectclass => "posixGroup",
     gidnumber => 3046,
     notify => Exec['ldap-groups-flushed'],
+    require => Ldapres["$groupdn"],
   }
 
   # Add srusers group. I have no idea what its purpose is, but that's what
@@ -135,6 +136,7 @@ class sr-site::openldap {
     objectclass => "posixGroup",
     gidnumber => 1999,
     notify => Exec['ldap-groups-flushed'],
+    require => Ldapres["$groupdn"],
   }
 
   ldapres { "cn=mentors,$groupdn":
@@ -147,6 +149,7 @@ class sr-site::openldap {
     # to configure who's a member
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],
+    require => Ldapres["$groupdn"],
   }
 
   # A command to flush ldap groups. The idea here is that we flush/restart nscd
