@@ -174,6 +174,6 @@ class sr-site::openldap {
     creates => '/usr/local/var/sr/ldap_installed',
 
     # Synchronise against all relevant ldap groups and users being added,
-    require => Exec['ldap-groups-flushed'],
+    require => [Exec['ldap-groups-flushed'], File['/etc/ldap.secret']],
   }
 }
