@@ -6,7 +6,23 @@ class sr-site( $git_root ) {
   Exec {
     path => [ "/usr/bin" ],
   }
-  
+
+  # Installed flags for various flavours of data
+  file { '/usr/local/var':
+    ensure => directory,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+  }
+
+  file { '/usr/local/var/sr':
+    ensure => directory,
+    owner => 'root',
+    group => 'root',
+    mode => '700',
+    require => File['/usr/local/var'],
+  }
+
   # Anonymous git access
   include gitdaemon
 
