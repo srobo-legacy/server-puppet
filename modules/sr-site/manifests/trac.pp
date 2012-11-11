@@ -25,8 +25,11 @@ class sr-site::trac {
     host => "localhost",
     grant => ["all"],
 
-    # trac requires that the database's character set is utf8
-    charset => "utf8",
+    # trac requires that the database's character set is utf8. This is achieved
+    # by the SQL in '/tmp/trac.init', configure the charset here so that puppet
+    # doesn't whip back and forth setting it to utf8 then utf8_bin. (There
+    # doesn't appear to be a way in this module to set the 'COLLATE' option).
+    charset => 'utf8_bin',
 
     sql => "/tmp/trac.init",
     require => File["/tmp/trac.init"],
