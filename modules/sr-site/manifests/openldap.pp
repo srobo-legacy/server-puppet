@@ -167,4 +167,13 @@ class sr-site::openldap {
     source => 'puppet:///modules/sr-site/ldap_acl.conf',
     notify => Class['ldap::server::rebuild'],
   }
+
+  exec { 'pop_ldap':
+    command => "ldapadd -D cn=Manager,o=sr -y /etc/ldap.secret -x -h localhost -f /srv/secrets/ldap/nemesis_dummy_data.ldif; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/ldap_installed",
+    provider => 'shell',
+    creates => '/usr/local/var/sr/ldap_installed',
+
+    # Synchronise against all relevant ldap groups and users being added,
+    require => Exec['ldap-groups-flushed'],
+  }
 }
