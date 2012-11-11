@@ -24,7 +24,7 @@ class www::piwik ( $git_root, $root_dir ) {
   }
 
   exec { 'pop_piwik_db':
-    command => "mysql -u ${piwik_user} --password='${piwik_pw}' piwik < /srv/secrets/piwik/defaultdata.mysql; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/piwik_installed",
+    command => "mysql -u ${piwik_user} --password='${piwik_pw}' piwik < /srv/secrets/mysql/piwik.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/piwik_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/piwik_installed',
     require => Mysql::Db["piwik"],

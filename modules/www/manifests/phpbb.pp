@@ -26,7 +26,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   }
 
   exec { 'pop_forum_db':
-    command => "mysql -u ${forum_user} --password='${forum_pw}' ${forum_db_name} < /srv/secrets/forum/forum_init_config.mysql; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/forum_installed",
+    command => "mysql -u ${forum_user} --password='${forum_pw}' ${forum_db_name} < /srv/secrets/mysql/phpbb.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/forum_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/forum_installed',
     require => Mysql::Db["${forum_db_name}"],
