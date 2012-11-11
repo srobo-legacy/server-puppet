@@ -119,8 +119,11 @@ class www::ide ( $git_root, $root_dir ) {
           if test $? != 0; then exit 1; fi;\
           cp -r /srv/secrets/ide/repos/* ${root_dir}/repos;\
           if test $? != 0; then exit 1; fi;\
+          cp -r /srv/secrets/ide/settings/* ${root_dir}/settings;\
+          if test $? != 0; then exit 1; fi;\
           chown -R apache.apache ${root_dir}/repos/*;\
           chown -R apache.apache ${root_dir}/notifications/*;\
+          chown -R apache.apache ${root_dir}/settings/*;\
           touch /usr/local/var/sr/ide_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/ide_installed',
