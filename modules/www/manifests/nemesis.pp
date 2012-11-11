@@ -13,6 +13,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     force => true,
     owner => 'wwwcontent',
     group => 'apache',
+    notify => Service['httpd'],
   }
 
   exec { "${root_dir}/nemesis/make_db.sh":
