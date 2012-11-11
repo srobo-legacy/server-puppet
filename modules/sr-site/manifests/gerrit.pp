@@ -156,6 +156,14 @@ class sr-site::gerrit {
     grant => ["all"],
   }
 
+  exec { "pop_gerrit_db":
+    command => "mysql -u gerrit --password='${gerrit_db_pw}' reviewdb < /srv/secrets/gerrit/initdbdata; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/gerrit_installed",
+    provider => 'shell',
+    creates => '/usr/local/var/sr/gerrit_installed',
+    require => Mysql::Db["reviewdb"],
+    notify => Service['gerrit'],
+  }
+
   exec { 'install-gerrit-mysql-connector':
     command => 'curl http://repo2.maven.org/maven2/mysql/mysql-connector-java/5.1.10/mysql-connector-java-5.1.10.jar > /home/gerrit/srdata/lib/tmpdownload; echo "517e19ba790cceee31148c30a887155e  /home/gerrit/srdata/lib/tmpdownload" | md5sum -c; if test $? = 1; then exit 1; fi; mv /home/gerrit/srdata/lib/tmpdownload /home/gerrit/srdata/lib/mysql-connector-java-5.1.10.jar',
     creates => '/home/gerrit/srdata/lib/mysql-connector-java-5.1.10.jar',
