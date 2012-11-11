@@ -151,8 +151,8 @@ class sr-site::openldap {
 
   # A command to flush ldap groups. The idea here is that we flush/restart nscd
   # after any modifications have been made to ldap group records. That way, any
-  # cached data is cleared. Plus, resources that depend on an ldap group existing
-  # can now depend on this happening.
+  # cached data is cleared. Plus, resources that depend on an ldap group
+  # existing can now depend on this happening.
   exec { 'ldap-groups-flushed':
     command => '/sbin/nscd -i group',
     require => Class['ldap'],
