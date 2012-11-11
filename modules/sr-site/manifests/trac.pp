@@ -54,5 +54,4 @@ class sr-site::trac {
     checksum => none,
     mode => "0664",
   }
-
 }
