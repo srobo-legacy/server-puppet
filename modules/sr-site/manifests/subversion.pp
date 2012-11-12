@@ -32,7 +32,7 @@ class sr-site::subversion {
                 touch /usr/local/var/sr/svn_installed',
     provider => 'shell',
     creates => '/usr/local/var/sr/svn_installed',
-    require => File['/usr/local/var/sr'],
+    require => [File['/usr/local/var/sr'],Subversion::Svnrepo['sr']],
   }
 
   file { '/srv/svn/sr/authfile':
