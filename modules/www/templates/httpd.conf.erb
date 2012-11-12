@@ -913,3 +913,9 @@ NameVirtualHost *:80
 	# Redirect non-https visitors to https
 	Redirect / https://<%= www_canonical_hostname %>
 </VirtualHost>
+
+<VirtualHost *:80>
+        ServerName trac.<%= www_base_hostname %>
+        ServerAlias trac.srobo.org
+        RedirectPermanent / https://<%= www_canonical_hostname %>/trac/
+</VirtualHost>
