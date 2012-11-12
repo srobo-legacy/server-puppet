@@ -947,3 +947,11 @@ NameVirtualHost *:80
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 </VirtualHost>
+
+<VirtualHost *:80>
+        DocumentRoot /srv/git
+        ServerName git.<%= www_base_hostname %>
+        ServerAlias git.srobo.org
+
+        RedirectPermanent / https://<%= www_canonical_hostname %>/git/
+</VirtualHost>
