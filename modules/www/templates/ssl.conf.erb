@@ -20,7 +20,7 @@ SSLRandomSeed connect builtin
 SSLCryptoDevice builtin
 
 <VirtualHost *:443>
-	ServerName <%= www_hostname %>:443
+	ServerName <%= www_canonical_hostname %>:443
 	DocumentRoot /var/www/html
 
 	<Directory "/var/www/html">
