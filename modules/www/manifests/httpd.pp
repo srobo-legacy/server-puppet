@@ -20,6 +20,7 @@ class www::httpd {
 
   # Load some configuration for httpd.conf
   $www_canonical_hostname = extlookup('www_canonical_hostname')
+  $www_base_hostname = extlookup('www_base_hostname')
   file { "httpd.conf":
     path => "/etc/httpd/conf/httpd.conf",
     owner => root,
