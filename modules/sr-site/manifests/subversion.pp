@@ -23,6 +23,17 @@ class sr-site::subversion {
     require => User['svn'],
   }
 
+  exec { 'load-svn':
+    command => 'fname=`mktemp /usr/local/var/sr/svn_load_XXXXXX`;\
+                gzip -d -c /srv/secrets/svn/db > $fname;\
+                svnadmin load /srv/svn/sr < $fname;\
+                if test $? != 0; then exit 1; fi;\
+                rm $fname;\
+                touch /usr/local/var/sr/svn_installed',
+    provider => 'shell',
+    creates => '/usr/local/var/sr/svn_installed',
+  }
+
   file { '/srv/svn/sr/authfile':
     ensure => present,
     source => 'puppet:///modules/sr-site/authfile',
