@@ -57,4 +57,13 @@ class www::srweb ( $git_root, $web_root_dir ) {
     mode => '644',
     source => 'puppet:///modules/www/php.ini',
   }
+
+  # Create subscribed_people. No need for extended acls because we don't need
+  # the group to be www-admin any more.
+  file { "${web_root_dir}/subscribed_people.csv":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '660',
+  }
 }
