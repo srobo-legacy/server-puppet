@@ -19,7 +19,6 @@ class www::httpd {
   }
 
   # Load some configuration for httpd.conf
-  $www_hostspec = extlookup('www_hostspec')
   $www_hostname = extlookup('www_hostname')
   $ssl_site_url = extlookup('ssl_site_url')
   file { "httpd.conf":

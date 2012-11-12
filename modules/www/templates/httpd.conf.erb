@@ -907,7 +907,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 NameVirtualHost *:80
 
-<VirtualHost *:80 _default_:80 <%= www_hostspec %>>
+<VirtualHost *:80 _default_:80 <%= www_hostname %>:80>
 	ServerName <%= www_hostname %>
 
 	# Redirect non-https visitors to https
