@@ -925,3 +925,25 @@ NameVirtualHost *:80
         ServerAlias ide.srobo.org
         RedirectPermanent / https://<%= www_canonical_hostname %>/ide/
 </VirtualHost>
+
+<VirtualHost *:80>
+        DocumentRoot /var/www/html
+        ServerName svn.<%= www_base_hostname %>
+        ServerAlias svn.srobo.org
+
+        # Read only access through http://
+        # Means that old svn:externals still work
+        <Location / >
+                DAV svn
+                SVNPath /srv/svn/sr
+
+                #AuthType basic
+                #AuthName "Student Robotics SVN"
+
+                <LimitExcept GET PROPFIND OPTIONS REPORT>
+                        Require valid-user
+                </LimitExcept>
+
+                AuthzSVNAccessFile /srv/svn/sr/authfile
+        </Location>
+</VirtualHost>
