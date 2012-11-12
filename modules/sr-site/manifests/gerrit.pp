@@ -82,7 +82,7 @@ class sr-site::gerrit {
     source => 'puppet:///modules/sr-site/gerritcodereview',
   }
 
-  $ssl_site_url = extlookup('ssl_site_url')
+  $www_canonical_hostname = extlookup('www_canonical_hostname')
   $ldap_manager_pw = extlookup('ldap_manager_pw')
   file { '/home/gerrit/srdata/etc/gerrit.config':
     ensure => present,
