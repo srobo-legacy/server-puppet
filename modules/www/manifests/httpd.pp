@@ -31,7 +31,6 @@ class www::httpd {
     require => Package[ "httpd" ],
   }
 
-  $ssl_hostspec = extlookup('ssl_hostspec')
   file { "ssl.conf":
     path => "/etc/httpd/conf.d/ssl.conf",
     owner => root,
