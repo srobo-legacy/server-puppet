@@ -20,7 +20,6 @@ class www::httpd {
 
   # Load some configuration for httpd.conf
   $www_hostname = extlookup('www_hostname')
-  $ssl_site_url = extlookup('ssl_site_url')
   file { "httpd.conf":
     path => "/etc/httpd/conf/httpd.conf",
     owner => root,

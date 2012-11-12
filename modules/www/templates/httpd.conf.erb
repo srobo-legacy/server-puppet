@@ -911,5 +911,5 @@ NameVirtualHost *:80
 	ServerName <%= www_hostname %>
 
 	# Redirect non-https visitors to https
-	Redirect / <%= ssl_site_url %>
+	Redirect / https://<%= www_hostname %>
 </VirtualHost>
