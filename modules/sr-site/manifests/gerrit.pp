@@ -97,6 +97,8 @@ class sr-site::gerrit {
   $gerrit_db_pw = extlookup('gerrit_db_pw')
   $gerrit_email_key = extlookup('gerrit_email_key')
   $gerrit_email_pw = extlookup('gerrit_email_pw')
+  $gerrit_email_user = extlookup('gerrit_email_user')
+  $gerrit_email_smtp = extlookup('gerrit_email_smtp')
   file { '/home/gerrit/srdata/etc/secure.config':
     ensure => present,
     owner => 'gerrit',
