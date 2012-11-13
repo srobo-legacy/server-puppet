@@ -36,12 +36,22 @@ class sr-site::git($git_root) {
     home => '/'
   }
 
-  cron { 'cgit-reconf':
-    command => '/srv/git/scripts/cgit-reconf',
-    hour => '*/4',
-    minute => '13',
-    user => 'git',
-    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
+  if $devmode == "0" {
+    cron { 'cgit-reconf':
+      command => '/srv/git/scripts/cgit-reconf',
+      hour => '*/4',
+      minute => '13',
+      user => 'git',
+      require => Package['GitPython'],
+    }
+  } else {
+    cron { 'cgit-reconf':
+      command => '/srv/git/scripts/cgit-reconf',
+      hour => '*/4',
+      minute => '13',
+      user => 'git',
+      require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
+    }
   }
 
   file { '/srv/git':
@@ -53,15 +63,17 @@ class sr-site::git($git_root) {
   }
 
   # Maintain a clone of the git admin scripts.
-  vcsrepo { '/srv/git/scripts':
-    ensure => present,
-    provider => git,
-    source => "${git_root}/scripts",
-    revision => "origin/master",
-    force => true,
-    owner => 'root',
-    group => 'root',
-    require => [File['/srv/git'], Exec['ldap-groups-flushed']],
+  if $devmode != 0 {
+    vcsrepo { '/srv/git/scripts':
+      ensure => present,
+      provider => git,
+      source => "${git_root}/scripts",
+      revision => "origin/master",
+      force => true,
+      owner => 'root',
+      group => 'root',
+      require => [File['/srv/git'], Exec['ldap-groups-flushed']],
+    }
   }
 
   package { 'GitPython':
