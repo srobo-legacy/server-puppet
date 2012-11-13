@@ -1,10 +1,6 @@
 [groups]
-mentors = senglish, rob, tbennellick, jmorse, hbuck, justyn, psmith, aj204, rspa
-nton, plaw, ngreatbatch, ccross, tak, rn106, akisdi, probinson, rbarlow, amale, 
-lwallin, abusse, cmalton, ckirkham, tgrainger, fflorack, tsmith, aforward, sphip
-pen
-committers = senglish, tbennellick, jmorse, hbuck, jgough, justyn, psmith, aj204
-, rspanton, plaw, ccross, akisdi, rbarlow, abusse, aforward, cmalton
+mentors = senglish, rob, tbennellick, jmorse, hbuck, justyn, psmith, aj204, rspanton, plaw, ngreatbatch, ccross, tak, rn106, akisdi, probinson, rbarlow, amale, lwallin, abusse, cmalton, ckirkham, tgrainger, fflorack, tsmith, aforward, sphippen
+committers = senglish, tbennellick, jmorse, hbuck, jgough, justyn, psmith, aj204, rspanton, plaw, ccross, akisdi, rbarlow, abusse, aforward, cmalton
 
 [/]
 * = r
