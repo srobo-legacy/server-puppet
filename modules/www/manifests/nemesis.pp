@@ -25,7 +25,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   }
 
   file { "${root_dir}/nemesis/db/nemesis.sqlite":
-    owner => 'wwwcontent',
+    owner => 'apache',
     group => 'apache',
     mode => '660',
     require => Exec["${root_dir}/nemesis/make_db.sh"],
