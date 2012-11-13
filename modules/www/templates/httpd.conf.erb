@@ -955,3 +955,11 @@ NameVirtualHost *:80
 
         RedirectPermanent / https://<%= www_canonical_hostname %>/git/
 </VirtualHost>
+
+<VirtualHost *:80>
+        DocumentRoot /srv/git
+        ServerName ide.<%= www_base_hostname %>
+        ServerAlias ide.srobo.org
+
+        RedirectPermanent / https://<%= www_canonical_hostname %>/ide/
+</VirtualHost>
