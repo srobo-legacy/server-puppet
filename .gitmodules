@@ -9,13 +9,13 @@
 	url = git://github.com/puppetlabs/puppetlabs-mysql.git
 [submodule "modules/ldap"]
 	path = modules/ldap
-	url = git://git.srobo.org/~jmorse/puppet-openldap.git
+	url = git://srobo.org/~jmorse/puppet-openldap.git
 [submodule "modules/stdlib"]
 	path = modules/stdlib
 	url = git://github.com/puppetlabs/puppetlabs-stdlib.git
 [submodule "modules/ldapres"]
 	path = modules/ldapres
-	url = git://git.srobo.org/~jmorse/puppet-ldapres.git
+	url = git://srobo.org/~jmorse/puppet-ldapres.git
 [submodule "modules/subversion"]
 	path = modules/subversion
 	url = git://github.com/duritong/puppet-subversion.git
