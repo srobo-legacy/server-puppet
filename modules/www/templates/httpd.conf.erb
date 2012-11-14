@@ -911,7 +911,7 @@ NameVirtualHost *:80
 	ServerName <%= www_canonical_hostname %>
 
 	# Redirect non-https visitors to https
-	Redirect / https://<%= www_canonical_hostname %>
+	Redirect / https://<%= www_canonical_hostname %>/
 </VirtualHost>
 
 <VirtualHost *:80>
