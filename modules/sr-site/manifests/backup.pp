@@ -11,7 +11,7 @@ class sr-site::backup ( $git_root ) {
   }
 
   # FIXME: find a way of extracting all mysql dbs from puppet?
-  $list_of_dbs = 'phpbb_sr2013,piwik,trac'
+  $list_of_dbs = 'phpbb_sr2013,piwik,trac,reviewdb'
   $ide_loc = $www::ide::root_dir
 
   # Danger Will Robinson: All backup keys must also be (locally) signed by the
