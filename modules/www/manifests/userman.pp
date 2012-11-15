@@ -7,7 +7,7 @@ class www::userman ( $root_dir, $git_root ) {
     ensure => present,
     user => 'wwwcontent',
     provider => git,
-    source => 'git://github.com/samphippen/nemesis.git', # Should be come SR hosted
+    source => "${git_root}/userman.git",
     force => true,
   }
 }
