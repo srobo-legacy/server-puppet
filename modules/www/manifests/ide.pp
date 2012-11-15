@@ -51,7 +51,7 @@ class www::ide ( $git_root, $root_dir ) {
     uid => $ide_user,
     cn => "IDE account",
     sn => "IDE account",
-    uidnumber => 2321,
+    uidnumber => 2323,
     gidnumber => 1999, # srusers
     homedirectory => '/home/ide',
     userpassword => extlookup('ide_ldap_user_ssha_pw'),
