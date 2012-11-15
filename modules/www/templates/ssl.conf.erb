@@ -121,6 +121,9 @@ SSLCryptoDevice builtin
 	# Forums
 	Redirect permanent /forums /forum         
 	Alias /forum /var/www/phpbb/phpBB
+        <Directory /var/www/phpbb/phpBB>
+                AllowOverride All
+        </Directory>
 
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
         <Directory /srv/nemesis/nemesis>
