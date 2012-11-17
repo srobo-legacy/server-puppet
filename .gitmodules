@@ -15,7 +15,7 @@
 	url = git://github.com/puppetlabs/puppetlabs-stdlib.git
 [submodule "modules/ldapres"]
 	path = modules/ldapres
-	url = git://srobo.org/~jmorse/puppet-ldapres.git
+	url = git://srobo.org/server/ldapres.git
 [submodule "modules/subversion"]
 	path = modules/subversion
 	url = git://github.com/duritong/puppet-subversion.git
