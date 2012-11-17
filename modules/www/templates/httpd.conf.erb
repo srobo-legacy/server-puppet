@@ -927,6 +927,12 @@ NameVirtualHost *:80
 </VirtualHost>
 
 <VirtualHost *:80>
+        ServerName gerrit.<%= www_base_hostname %>
+        ServerAlias gerrit.srobo.org
+        RedirectPermanent / https://<%= www_canonical_hostname %>/gerrit/
+</VirtualHost>
+
+<VirtualHost *:80>
         DocumentRoot /var/www/html
         ServerName svn.<%= www_base_hostname %>
         ServerAlias svn.srobo.org
