@@ -26,8 +26,9 @@ class sr-site::subversion {
   exec { 'load-svn':
     command => 'fname=`mktemp /usr/local/var/sr/svn_load_XXXXXX`;\
                 gzip -d -c /srv/secrets/svn/db.gz > $fname;\
+                if test $? != 0; then rm $fname; exit 1; fi;\
                 svnadmin load /srv/svn/sr < $fname;\
-                if test $? != 0; then exit 1; fi;\
+                if test $? != 0; then rm $fname; exit 1; fi;\
                 rm $fname;\
                 touch /usr/local/var/sr/svn_installed',
     provider => 'shell',
