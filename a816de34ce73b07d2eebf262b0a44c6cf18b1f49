@@ -1,0 +1,9 @@
+Change-Id: Ia816de34ce73b07d2eebf262b0a44c6cf18b1f49
+Code-Review+2: Jeremy Morse <jeremy.morse@gmail.com>
+Verified+1: Jeremy Morse <jeremy.morse@gmail.com>
+Code-Review+1: Alistair Lynn <alynn@studentrobotics.org>
+Submitted-by: Jeremy Morse <jeremy.morse@gmail.com>
+Submitted-at: Mon, 19 Nov 2012 14:56:07 +0000
+Reviewed-on: https://www.studentrobotics.org/gerrit/102
+Project: server/puppet
+Branch: refs/heads/master
