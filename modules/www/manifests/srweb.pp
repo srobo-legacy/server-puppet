@@ -12,6 +12,14 @@ class www::srweb ( $git_root, $web_root_dir ) {
     hasstatus => 'true',
   }
 
+  file { "${web_root_dir}":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '644',
+    before => Vcsrepo[ "${web_root_dir}" ],
+  }
+
   # Maintain a git clone of the website
   vcsrepo { "${web_root_dir}":
     ensure => present,
