@@ -49,7 +49,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   }
 
   $ldap_manager_pw = extlookup('ldap_manager_pw')
-  file { "${root_dir}/nemesis/userman/sr/config.ini":
+  file { "${root_dir}/nemesis/userman/sr/local.ini":
     ensure => present,
     content => template('www/nemesis_conf.ini.erb'),
     owner => 'wwwcontent',
