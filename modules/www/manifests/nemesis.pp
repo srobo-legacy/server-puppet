@@ -16,7 +16,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     notify => Service['httpd'],
   }
 
-  exec { "${root_dir}/nemesis/make_db.sh":
+  exec { "${root_dir}/nemesis/scripts/make_db.sh":
     cwd => "${root_dir}/nemesis",
     creates => "${root_dir}/nemesis/db/nemesis.sqlite",
     path => ["/usr/bin"],
@@ -28,7 +28,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'apache',
     group => 'apache',
     mode => '660',
-    require => Exec["${root_dir}/nemesis/make_db.sh"],
+    require => Exec["${root_dir}/nemesis/scripts/make_db.sh"],
   }
 
   file { "${root_dir}/nemesis/db":
@@ -36,7 +36,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '660',
-    require => Exec["${root_dir}/nemesis/make_db.sh"],
+    require => Exec["${root_dir}/nemesis/scripts/make_db.sh"],
   }
 
   file { "${root_dir}/nemesis/nemesis.wsgi":
