@@ -41,7 +41,6 @@ class www::srweb ( $git_root, $web_root_dir ) {
     require => Vcsrepo[ "${web_root_dir}" ],
   }
 
-  $srweb_live_site = extlookup('srweb_live_site')
   file { "${web_root_dir}/local.config.inc.php":
     ensure => present,
     owner => 'wwwcontent',
