@@ -1,18 +1,30 @@
+# Configuration for LDAP: the operation of the server, a little of the SR
+# schema, certain built in accounts, the PAM config for ldap, ACLs, and initial
+# population of the DB.
+# Uses the 'ldap' module, which is just the most active/used openldap-installing
+# module I could find. It has some problems, and we can't use its ACL facility
+# as some md5/digest related exception occurs from puppet. So, some juggling and
+# patching occurs around the ldap module.
 
 class sr-site::openldap {
+  # Install both server and client packages for LDAP.
   class { 'ldap':
     server => 'true',
     client => 'true',
     localloginok => 'true',
   }
 
+  # Multiple domains (aka LDAP dbs) are available; call ours studentrobotics.org
+  # and set its base to o=sr.
   ldap::define::domain { 'studentrobotics.org':
     ensure => 'present',
     basedn => 'o=sr',
     rootdn => 'cn=Manager', # basedn is jammed on the front of this.
-    rootpw => extlookup("ldap_manager_pw"),
+    rootpw => extlookup("ldap_manager_pw"), # Manager password is in common.csv
   }
 
+  # Give some config options to the client configuration. I think some of these
+  # end up in /etc/ldap.conf
   ldap::client::config { 'studentrobotics.org':
     ensure => 'present',
     servers => ['localhost'],
@@ -20,6 +32,7 @@ class sr-site::openldap {
     base_dn => 'o=sr',
   }
 
+  # Configure connection information for barfing LDAP data into the db.
   Ldapres {
     binddn => 'cn=Manager,o=sr',
     bindpw => extlookup("ldap_manager_pw"),
@@ -28,7 +41,7 @@ class sr-site::openldap {
     require => Class['ldap'],
   }
 
-  # Ensure that test-date from the openldap module's base ldif is removed.
+  # Ensure that test-data from the openldap module's base ldif is removed.
   ldapres { "ou=people,o=sr":
     ensure => absent,
     objectclass => 'organizationalUnit',
@@ -71,6 +84,9 @@ class sr-site::openldap {
     userpassword => extlookup("ldap_anon_user_ssha_pw"),
   }
 
+  # A file to contain the ldap manager password; don't really know what it's
+  # for but it was on optimus, so it's on badger. Also useful for running
+  # ldap commands without providing the password on the command line or stdin.
   file { '/etc/ldap.secret':
     ensure => present,
     content => extlookup('ldap_manager_pw'),
@@ -81,7 +97,7 @@ class sr-site::openldap {
 
   # Put some data in variables for blowing into pam_ldap.conf via a template.
   # These could be used to configure the rest of this class, but that would
-  # probably be pointless.
+  # probably lead to little gain.
   $serverhostname = 'localhost'
   $basedn = 'o=sr'
   $anonbinddn = 'uid=anon,ou=users,o=sr'
@@ -139,6 +155,7 @@ class sr-site::openldap {
     require => Ldapres["$groupdn"],
   }
 
+  # Ensure the mentors group exists; identifies blueshirts.
   ldapres { "cn=mentors,$groupdn":
     ensure => present,
     cn => 'mentors',
@@ -162,6 +179,9 @@ class sr-site::openldap {
     refreshonly => true,
   }
 
+  # Install the ACL data in a random temporary directory that the ldap module
+  # uses to populate the ACL directory. Can't use ldap's ACL facility because
+  # of internal exceptions.
   file { "${ldap::params::lp_tmp_dir}/acl.d/studentrobotics.org-myeyes.conf":
     ensure => present,
     owner => 'ldap',
@@ -171,6 +191,7 @@ class sr-site::openldap {
     notify => Class['ldap::server::rebuild'],
   }
 
+  # Load the initial LDAP db if one hasn't been yet.
   exec { 'pop_ldap':
     command => "ldapadd -D cn=Manager,o=sr -y /etc/ldap.secret -x -h localhost -f /srv/secrets/ldap/ldap_backup; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/ldap_installed",
     provider => 'shell',
