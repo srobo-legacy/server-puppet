@@ -1,8 +1,15 @@
+# Voting scripts. Installed in a users public_html: this way apache will use
+# suexec to run the scripts as the 'voting' user, making sure that recorded
+# votes are only accessible by the voting user.
+
 class www::voting ($git_root, $web_root_dir) {
+  # The voting scripts use pyyaml,
   package { 'PyYAML':
     ensure => present,
   }
 
+  # Directories and user for 'voting' user; all with only traverse permission
+  # for other users.
   file { '/home/voting':
     ensure => directory,
     owner => 'voting',
@@ -27,6 +34,7 @@ class www::voting ($git_root, $web_root_dir) {
     home => '/home/voting',
   }
 
+  # Checkout of the voting scripts, for people to vote with.
   vcsrepo { "/home/voting/public_html/voting":
     ensure => present,
     provider => git,
@@ -38,6 +46,7 @@ class www::voting ($git_root, $web_root_dir) {
     group => 'users',
   }
 
+  # Directory for storing votes in. Only accessible by the voting user itself.
   file { '/home/voting/public_html/voting/votes':
     ensure => directory,
     owner => 'voting',
