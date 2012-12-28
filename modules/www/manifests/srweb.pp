@@ -1,10 +1,13 @@
+# Primary config goo for the root website
 
 class www::srweb ( $git_root, $web_root_dir ) {
+  # srweb is served through php and some other goo,
   package { [ "php", "php-Smarty", "memcached"]:
     ensure => latest,
     notify => Service[ "httpd" ],
   }
 
+  # Install and run memcached for the plus plus speed.
   service { 'memcached':
     enable => 'true',
     ensure => 'running',
@@ -12,6 +15,8 @@ class www::srweb ( $git_root, $web_root_dir ) {
     hasstatus => 'true',
   }
 
+  # Directory permissions and ownership of srwebs directory. Seeing how
+  # /var/www/html belongs to root by default on fedora.
   file { "${web_root_dir}":
     ensure => directory,
     owner => 'wwwcontent',
@@ -20,7 +25,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
     before => Vcsrepo[ "${web_root_dir}" ],
   }
 
-  # Maintain a git clone of the website
+  # Maintain a checkout of the website
   vcsrepo { "${web_root_dir}":
     ensure => present,
     user => 'wwwcontent',
@@ -41,6 +46,8 @@ class www::srweb ( $git_root, $web_root_dir ) {
     require => Vcsrepo[ "${web_root_dir}" ],
   }
 
+  # Local configuration for srweb - specifically setting the LIVE_SITE option
+  # to true.
   file { "${web_root_dir}/local.config.inc.php":
     ensure => present,
     owner => 'wwwcontent',
@@ -76,7 +83,8 @@ class www::srweb ( $git_root, $web_root_dir ) {
   }
 
   # Create subscribed_people. No need for extended acls because we don't need
-  # the group to be www-admin any more.
+  # the group to be www-admin any more. People filling out the joining form
+  # will have an entry written to this file (and a pipebot notification)
   file { "${web_root_dir}/subscribed_people.csv":
     ensure => present,
     owner => 'wwwcontent',
