@@ -15,6 +15,7 @@ class sr-site::pipebot ( $git_root ) {
     require => User['pipebot'],
   }
 
+  # Checkout of pipebot's code.
   vcsrepo { '/home/pipebot/pipebot':
     ensure => present,
     provider => git,
@@ -26,7 +27,7 @@ class sr-site::pipebot ( $git_root ) {
     require => File['/home/pipebot'],
   }
 
-  # Also, some systemd goo.
+  # Also, some systemd goo to install the service.
   file { '/etc/systemd/system/pipebot.service':
     ensure => present,
     owner => 'root',
@@ -35,6 +36,7 @@ class sr-site::pipebot ( $git_root ) {
     source => 'puppet:///modules/sr-site/pipebot.service',
   }
 
+  # Link in the systemd service to run in multi user mode.
   file { '/etc/systemd/system/multi-user.target.wants/pipebot.service':
     ensure => link,
     target => '/etc/systemd/system/pipebot.service',
@@ -49,6 +51,7 @@ class sr-site::pipebot ( $git_root ) {
     require => File['/etc/systemd/system/multi-user.target.wants/pipebot.service'],
   }
 
+  # And finally maintain pipebot being running.
   service { 'pipebot':
     ensure => running,
     require => Exec['pipebot-systemd-load'],
