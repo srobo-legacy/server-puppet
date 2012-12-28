@@ -1,10 +1,14 @@
+# Primary webserver configuration. The server part that is, not what gets served
 
 class www::httpd {
+  # Webserver binds to LDAP for certain auth/authz operations; use the
+  # anon user + password to do that.
   $anonpw = extlookup("ldap_anon_user_pw")
 
   # trac config is in ssl.conf, so we need that
   require sr-site::trac
 
+  # Use apache + mod_ssl to serve
   package { [ "httpd", "mod_ssl" ]:
     ensure => latest,
   }
@@ -18,7 +22,8 @@ class www::httpd {
     mode => '755',
   }
 
-  # Load some configuration for httpd.conf
+  # Load some configuration for httpd.conf. Sets up the general web server
+  # operation, number of processes, etc
   $www_canonical_hostname = extlookup('www_canonical_hostname')
   $www_base_hostname = extlookup('www_base_hostname')
   file { "httpd.conf":
@@ -30,6 +35,7 @@ class www::httpd {
     require => Package[ "httpd" ],
   }
 
+  # Primary configuration file for the SSL website. Most things go in here.
   file { "ssl.conf":
     path => "/etc/httpd/conf.d/ssl.conf",
     owner => root,
@@ -40,6 +46,9 @@ class www::httpd {
     notify => Service['httpd'],
   }
 
+  # Public certificate for the website, presented to all users. In dev mode,
+  # a generic self-signed certificate is used. For production we have one from
+  # GoDaddy
   file { "server.crt":
     path => "/etc/pki/tls/certs/server.crt",
     owner => root,
@@ -49,6 +58,9 @@ class www::httpd {
     require => Package[ "mod_ssl" ],
   }
 
+  # Private key for negotiating SSL connections with clients, corresponding
+  # to server.crt's public key. A generic (and published publically) key for
+  # dev mode.
   file { "server.key":
     path => "/etc/pki/tls/private/server.key",
     owner => root,
@@ -58,6 +70,9 @@ class www::httpd {
     require => Package[ "mod_ssl" ],
   }
 
+  # On the production machine, we need to present some intermediate certificates
+  # to users as there's an intermediate CA between GoDaddy's root cert and our
+  # cerfificate. Not necessary on the dummy config.
   if $devmode == "0" {
     file { "cert_chain":
       path => "/etc/pki/tls/certs/gd_bundle.crt",
@@ -69,6 +84,7 @@ class www::httpd {
     }
   }
 
+  # The webserver process itself; restart on updates to some important files.
   service { "httpd":
     enable => true,
     ensure => running,
