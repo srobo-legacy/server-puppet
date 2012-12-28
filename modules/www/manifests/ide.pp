@@ -1,12 +1,17 @@
+# The IDE. Here be dragons.
+
 class www::ide ( $git_root, $root_dir ) {
+  # Numerous packages are required; the IDE is written in php, binds to ldap,
+  # runs pylint to syntax check things. In the past it used a java web browser
+  # plugin which is why there are java dependancies, but it's not been deployed
+  # this year (sr2013). Everyone I spoke to didn't want it to exist any more.
   package { ['pylint', 'php-cli', 'java-1.7.0-openjdk', 'ant', 'php-ldap']:
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo["${root_dir}"],
   }
 
-  # NB: the applet is deliberately unconfigured because everyone I speak to
-  # doesn't want it to exist any more.
+  # Checkout of cyanide, acts as backend and serves the frontend of the IDE.
   vcsrepo { "${root_dir}":
     ensure => present,
     provider => git,
@@ -17,6 +22,8 @@ class www::ide ( $git_root, $root_dir ) {
     require => Class['srweb'],
   }
 
+  # Secret key for encrypting IDE cookies, protecting against users twiddling
+  # with stored data.
   file { "${root_dir}/config/ide-key.key":
     ensure => present,
     owner => 'wwwcontent',
@@ -26,6 +33,8 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Site-local configuration is stored in local.ini; assign some variables that
+  # will be templated into it.
   $ide_key_file = "${root_dir}/config/ide-key.key"
   $team_status_dir = "${root_dir}/settings/team-status"
   $team_status_imgs_dir = "${root_dir}/uploads/team-status"
@@ -39,6 +48,7 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # IDE ldap user has general read access to ou=groups,o=sr.
   $ide_user = extlookup('ide_ldap_user_uid')
   ldapres { "uid=${ide_user},ou=users,o=sr":
     binddn => 'cn=Manager,o=sr',
@@ -57,6 +67,8 @@ class www::ide ( $git_root, $root_dir ) {
     userpassword => extlookup('ide_ldap_user_ssha_pw'),
   }
 
+  # Zips directory contains generated zips, unsuprisingly. To be writeable
+  # by apache. (Was configured 02777 on optimus, so it is here)
   file { "${root_dir}/zips":
     ensure => directory,
     owner => 'wwwcontent',
@@ -65,6 +77,8 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Settings dir, contains user config goo, as well as team-status. (Was
+  # configured 02777 on optimus, so it is here).
   file { "${root_dir}/settings":
     ensure => directory,
     owner => 'wwwcontent',
@@ -73,6 +87,7 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Directory for user repos; self explanatory.
   file { "${root_dir}/repos":
     ensure => directory,
     owner => 'wwwcontent',
@@ -81,6 +96,7 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Notifications. Never used, to my knowledge.
   file { "${root_dir}/notifications":
     ensure => directory,
     owner => 'wwwcontent',
@@ -89,6 +105,8 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Script for applying the desired configuration to all repos. Not done
+  # automatically, only when administratively desired.
   file { "${root_dir}/repos/conf":
     ensure => present,
     owner => 'wwwcontent',
@@ -97,6 +115,7 @@ class www::ide ( $git_root, $root_dir ) {
     source => 'puppet:///modules/www/conf',
   }
 
+  # All-repo integrity checking script for after crashes.
   file { "${root_dir}/repos/fsck":
     ensure => present,
     owner => 'wwwcontent',
@@ -105,6 +124,7 @@ class www::ide ( $git_root, $root_dir ) {
     source => 'puppet:///modules/www/fsck',
   }
 
+  # Script for repacking/gcing user repos
   file { "${root_dir}/repos/repack":
     ensure => present,
     owner => 'wwwcontent',
@@ -113,6 +133,8 @@ class www::ide ( $git_root, $root_dir ) {
     source => 'puppet:///modules/www/repack',
   }
 
+  # Install backed up IDE copy unless data is already installed. This is based
+  # on the assumption that all IDE data is in {config/settings/notifications}.
   exec { 'ide_copy':
     command =>
          "cp -r /srv/secrets/ide/notifications/* ${root_dir}/notifications;\
