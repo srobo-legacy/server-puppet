@@ -1,3 +1,5 @@
+# Trac configuration; currently mostly incomplete and distributed primarily as
+# a directory of goo. Can be developed to correctness in the future.
 
 class sr-site::trac {
 
@@ -19,6 +21,7 @@ class sr-site::trac {
     mode => "0600",
   }
 
+  # All trac data lives inside an SQL db
   mysql::db { "trac":
     user => "trac",
     password => $mysql_trac_pw,
