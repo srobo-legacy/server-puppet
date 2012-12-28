@@ -1,3 +1,5 @@
+# Initial config attempt for nemesis/userman, superceded by nemesis.pp
+
 class www::userman ( $root_dir, $git_root ) {
   package { ['mod_wsgi', 'python-flask', 'python-ldap']:
     ensure => present,
