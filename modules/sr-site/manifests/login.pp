@@ -14,9 +14,9 @@ class sr-site::login {
     require => File['/etc/pam_ldap.conf'],
   }
 
-  # sr-auth PAM stack; our primary PAM config goo. Allows auth/account from
-  # LDAP subject to the pam_ldap configuration, also for local users to log
-  # in too.
+  # sr-auth PAM stack; our primary PAM config goo. Allows authentication and
+  # account-info from LDAP, subject to the pam_ldap configuration. Also the same
+  # operations for local users.
   file { '/etc/pam.d/sr-auth':
     ensure => present,
     source => 'puppet:///modules/sr-site/sr-auth',
