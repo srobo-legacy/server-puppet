@@ -1,15 +1,25 @@
 [gerrit]
+	; Path to git repos we will be serving
 	basePath = /srv/git
+	; Base URL that gerrit is going to be served at, aka what to tack onto
+	; the start of all URLs
 	canonicalWebUrl = https://<%= www_canonical_hostname %>/gerrit/
 [auth]
+	; What authentication mechanism to use
 	type = LDAP
 [ldap]
+	; LDAP connection information, password in secure.config
         server = ldap://localhost
         username = cn=Manager,o=sr
+	; Where users are stored in LDAP
         accountBase = ou=users,o=sr
+	; Where groups are stored in LDAP
         groupBase = ou=groups,o=sr
+	; How to form the full name of a user from LDAP data
         accountFullName = ${cn} ${sn}
+	; How to formulate an email address from a user
         accountEmailAddress = ${mail}
+	; The SSH account name of a user
         accountSshUserName = ${uid}
 [sendemail]
 	smtpServer = <%= gerrit_email_smtp %>
@@ -21,10 +31,14 @@
 [sshd]
 	listenAddress = *:29418
 [httpd]
+	; Instructs gerrits internal HTTPd that it should listen on port 8081,
+	; and serve out of the directory /gerrit there. Also that it is going to
+	; receive traffic proxyed from https.
 	listenUrl = proxy-https://127.0.0.1:8081/gerrit
 [cache]
 	directory = cache
 [database]
+	; Connection details for MySQL database
 	type = MYSQL
 	hostname = localhost
 	database = reviewdb
