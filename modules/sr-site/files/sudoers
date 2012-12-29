@@ -97,13 +97,15 @@ root	ALL=(ALL) 	ALL
 #includedir /etc/sudoers.d
 
 # Allow www-admins to remunge the permissions in /var/www/html
+# Probably redundant now
 Cmnd_Alias	WWW_ADJUST_PERMS = /var/www/html/adjust-perms
 Cmnd_Alias	IDE_ADJUST_PERMS = /var/www/html/ide/adjust-perms
 
 %www-admins	ALL = (root) NOPASSWD: WWW_ADJUST_PERMS
 %www-admins	ALL = (root) NOPASSWD: IDE_ADJUST_PERMS
 
-# Allow 'backup' user to run sudo over ssh without a tty.
+# Allow 'backup' user to run sudo over ssh without a tty. Required for automated
+# backups on cron, seeing how sudo gets run remotely
 Defaults:backup    !requiretty
 
 # Allow backup user to run the backup script with the following config:
