@@ -1,23 +1,43 @@
 # This file is managed by Puppet
+# SR PAM gunge. Read the relevant PAM documentation before fiddling with this.
+
+# Perform standard environment cleaning goo.
 auth        required      pam_env.so
+# It's sufficent to authenticate a user if they're a local unix user.
 auth        sufficient    pam_unix.so nullok try_first_pass
+# Immediately bail if the UID is below 500.
 auth        requisite     pam_succeed_if.so uid >= 500 quiet
+# It's sufficient to authenticate if LDAP accepts this user.
 auth        sufficient    pam_ldap.so use_first_pass config=/etc/pam_ldap.conf
+# Otherwise, deny.
 auth        required      pam_deny.so
 
+# Attempt to fetch account data from /etc/passwd first
 account     required      pam_unix.so broken_shadow
+# If user is a local user, that's sufficient to establish account information
 account     sufficient    pam_localuser.so
+# In fact if they have a low UID that's sufficient too (is this redundant)?
 account     sufficient    pam_succeed_if.so uid < 500 quiet
+# Pass control to LDAP to fetch account information. No info -> account failed.
 account     [default=bad success=ok user_unknown=ignore] pam_ldap.so config=/etc/pam_ldap.conf
+# If reached, give users the 'nobody' account? Unknown (and unreachable?)
 account     required      pam_permit.so
 
+# Password changing stack - unused because we don't use PAM for that.
 password    requisite     pam_cracklib.so try_first_pass retry=3
 password    sufficient    pam_unix.so md5 shadow nullok try_first_pass use_authtok
 password    sufficient    pam_ldap.so use_authtok config=/etc/pam_ldap.conf
 password    required      pam_deny.so
 
+# Session creation steps
+# 'Kernel session keyring' is entirely unknown to me
 session     optional      pam_keyinit.so revoke
+# Apply /etc/security/limits.conf limitations
 session     required      pam_limits.so
+# If 'service' is cron, allow session. Presumably this allows items in crontab
+# to avoid other restrictions.
 session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+# Does some logging of session creation
 session     required      pam_unix.so
+# Probably does nothing
 session     optional      pam_ldap.so config=/etc/pam_ldap.conf
