@@ -67,6 +67,11 @@ KeepAliveTimeout 5
 # ServerLimit: maximum value for MaxClients for the lifetime of the server
 # MaxClients: maximum number of server processes allowed to start
 # MaxRequestsPerChild: maximum number of requests a server process serves
+
+# jmorse: Not the default settings, see 'Optimus httpd configuration' on
+# srobo-devel. Don't keep a large number of spare servers hanging around, as if
+# we get a large number of users then we run out of memory purely by having
+# too many extra 'spare' servers.
 <IfModule prefork.c>
 StartServers       8
 MinSpareServers    1
@@ -297,6 +302,8 @@ DocumentRoot "/var/www/html"
     # of a username on the system (depending on home directory
     # permissions).
     #
+    # jmorse - while the production machine isn't for casual use, things like
+    # the voting scripts have to be served out of userdir's due to suexec.
     UserDir enabled
 
     #
@@ -907,13 +914,16 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 NameVirtualHost *:80
 
+# For all websites on port 80, immediately redirect to https.
 <VirtualHost *:80 _default_:80>
 	ServerName <%= www_canonical_hostname %>
-
-	# Redirect non-https visitors to https
 	Redirect / https://<%= www_canonical_hostname %>/
 </VirtualHost>
 
+# A series of redirects, pointing anyone using trac.{srobo,studentrobotics}.org
+# or a similar service-based hostname to the relevant dir on the main website.
+# This only applies on port 80; if you attempt to access a service vhost over
+# SSL you'll only get a certificate error, so we don't bother supporting that.
 <VirtualHost *:80>
         ServerName trac.<%= www_base_hostname %>
         ServerAlias trac.srobo.org
@@ -932,6 +942,8 @@ NameVirtualHost *:80
         RedirectPermanent / https://<%= www_canonical_hostname %>/gerrit/
 </VirtualHost>
 
+# Serve SVN over port 80. This is how it was on optimus to keep old checkouts
+# working, it can probably be retired to SSL-only nowdays.
 <VirtualHost *:80>
         DocumentRoot /var/www/html
         ServerName svn.<%= www_base_hostname %>
