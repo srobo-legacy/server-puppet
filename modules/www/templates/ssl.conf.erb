@@ -19,8 +19,10 @@ SSLRandomSeed connect builtin
 # Use "SSLCryptoDevice" to enable any supported hardware
 SSLCryptoDevice builtin
 
+# Primary configuration gunge for the main website.
 <VirtualHost *:443>
 	ServerName <%= www_canonical_hostname %>:443
+	# Serve everything out of srweb by default.
 	DocumentRoot /var/www/html
 
 	<Directory "/var/www/html">
@@ -33,6 +35,7 @@ SSLCryptoDevice builtin
 	# Voting user requires a public_html dir
 	UserDir enabled voting
 
+	# Configure trac, and point it to serve out of /srv/trac
         <Location /trac>
                 SetEnv PYTHON_EGG_CACHE /srv/trac/.python-eggs
 
@@ -44,20 +47,29 @@ SSLCryptoDevice builtin
                 PythonOption TracLocale "en_GB.UTF-8"
         </Location>
 
+	# To authenticate, trac has the user access /trac/login, allows apache
+	# to auth them, then gives them a session cookie. This config blob
+	# is copied in a number of other places.
         <Location "/trac/login">
+		# Use basic password authentication against LDAP,
                 AuthType basic
                 AuthName "Student Robotics Trac"
                 AuthBasicProvider ldap
 
+		# Server location and search filter when looking for a user
                 AuthzLDAPAuthoritative On
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
+		# What user to bind as when performing authorization, i.e.
+		# after authentication.
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
                 AuthLDAPBindPassword "<%= anonpw %>"
 
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
 
+		# Trac users must be in the mentors group
                 Require ldap-group cn=mentors,ou=groups,o=sr
+		# Trac users must have authenticated.
                 Require valid-user
         </Location>
 
@@ -78,11 +90,14 @@ SSLCryptoDevice builtin
                 AuthLDAPGroupAttributeIsDN off
 
                 Satisfy Any
+		# Only require that trac users are valid users; svn uses its own
+		# unpleasent authorization goo.
                 Require valid-user
 
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 
+	# Voting scripts are run out of the voting users's public_html directory
         Redirect /voting /~voting/voting/
         <Location /~voting/voting>
                 AuthType basic
@@ -106,6 +121,7 @@ SSLCryptoDevice builtin
 		Options Indexes
 	</Directory>
 
+	# Allow for http cloning through the /git dir
         Alias /git /srv/git
         <Directory /srv/git>
                 Options Indexes
@@ -114,6 +130,7 @@ SSLCryptoDevice builtin
         # CGit:
         Alias /cgit-data /usr/share/cgit
         ScriptAlias /cgit /var/www/cgi-bin/cgit
+
         # Redirect /git/ index to cgit
         RewriteEngine On
         RewriteRule ^/git/$ /cgit [PT]
@@ -125,12 +142,15 @@ SSLCryptoDevice builtin
                 AllowOverride All
         </Directory>
 
+	# Pass accesses to /userman over to nemesis in WSGI
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
         <Directory /srv/nemesis/nemesis>
             Order deny,allow
             Allow from all
         </Directory>
 
+	# Proxy all requests to the /gerrit dir to the local server process
+	# gerrit is running. Highly unpleasent.
 	ProxyPass /gerrit http://localhost:8081/gerrit
 
 	########## SSL stuff below
@@ -157,6 +177,7 @@ SSLCryptoDevice builtin
 	#   Server Private Key:
 	SSLCertificateKeyFile /etc/pki/tls/private/server.key
 
+	# Only install the certificate chain file on the production machine.
         <% if devmode == "0" then -%>
 	#   Server Certificate Chain:
 	SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle.crt
