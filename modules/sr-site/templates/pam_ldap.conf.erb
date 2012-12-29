@@ -35,6 +35,7 @@ base <%= basedn %>
 
 # The distinguished name to bind to the server with.
 # Optional: default is to bind anonymously.
+# jmorse: we use the 'anon' account to bind here
 binddn <%= anonbinddn %>
 
 # The credentials to bind with. 
@@ -98,9 +99,12 @@ pam_login_attribute uid
 #pam_check_service_attr yes
 
 # Group to enforce membership of
+# jmorse: Configured to be the 'shell-users' group in puppet.
 pam_groupdn <%= logingroupdn %>
 
 # Group member attribute
+# jmorse: this is 'memberUid' for posixGroups, it might end up changing in the
+# future.
 pam_member_attribute <%= logingroupattr %>
 
 # Specify a minium or maximum UID number allowed
