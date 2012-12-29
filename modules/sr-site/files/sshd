@@ -1,4 +1,5 @@
 #%PAM-1.0
+# PAM configuration for sshd: pass control to the sr-auth stack in all cases
 auth	   required	pam_sepermit.so
 auth       substack     sr-auth
 auth       include      postlogin
