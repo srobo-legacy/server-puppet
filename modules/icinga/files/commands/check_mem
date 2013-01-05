@@ -1,0 +1,22 @@
+#!/bin/bash
+
+warning=$1
+criticial=$2
+
+mem_free=`free -m | tr -s ' ' | grep "/cache"| cut -d" " -f4`
+
+if [ $mem_free -lt $warning ]; then
+	message="WARNING"
+	return_status=1
+elif [ $mem_free -lt $criticial ]; then
+	message="CRITICIAL"
+	return_status=2
+else
+	message="OK"
+	return_status=0
+fi
+
+performance="mem_free=$mem_free;$warning;$criticial;0;"
+
+echo "$message: ${mem_free}MB free| $performance"
+exit $return_status
