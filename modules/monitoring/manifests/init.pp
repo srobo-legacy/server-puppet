@@ -1,5 +1,5 @@
 
-class icinga {
+class monitoring ( $git_root ) {
 
 
 # install generic nagios checks
@@ -51,20 +51,15 @@ class icinga {
     require => User['monitoring']
   }
 
-  file { '/srv/monitoring/commands.sh':
-    mode => 700,
+  vcsrepo { '/srv/monitoring':
+    ensure => present,
     owner => 'monitoring',
     group => 'users',
-    source => "puppet:///modules/icinga/commands.sh",
-  }
-
-  file { '/srv/monitoring/commands':
-    ensure => directory,
-    recurse => true,
-    source => 'puppet:///modules/icinga/commands',
-    owner => 'monitoring',
-    group => 'users',
-    mode => 700,
+    provider => 'git',
+    source => "${git_root}/server/monitoring.git",
+    revision => "master", 
+    force => 'true',
+    require => User['monitoring']
   }
 
 }

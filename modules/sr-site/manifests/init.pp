@@ -34,7 +34,9 @@ class sr-site( $git_root ) {
   include bee
 
   # Monitoring
-  include icinga
+  class { 'monitoring':
+    git_root => $git_root,
+  }
 
   include sr-site::firewall
   include sr-site::mysql
