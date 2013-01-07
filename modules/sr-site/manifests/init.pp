@@ -33,6 +33,9 @@ class sr-site( $git_root ) {
   # The bee
   include bee
 
+  # Monitoring
+  include icinga
+
   include sr-site::firewall
   include sr-site::mysql
   include sr-site::openldap

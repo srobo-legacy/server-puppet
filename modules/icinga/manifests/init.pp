@@ -1,4 +1,5 @@
-#class icinga {
+
+class icinga {
 
 
 # install generic nagios checks
@@ -66,5 +67,5 @@
     mode => 700,
   }
 
-#}
+}
 
