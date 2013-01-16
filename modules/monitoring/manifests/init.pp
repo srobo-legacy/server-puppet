@@ -45,16 +45,16 @@ class monitoring ( $git_root ) {
 
   file { '/srv/monitoring':
     ensure => directory,
-    owner => 'monitoring',
-    group => 'users',
-    mode => '700',
+    owner => 'root',
+    group => 'root',
+    mode => '755',
     require => User['monitoring']
   }
 
   vcsrepo { '/srv/monitoring':
     ensure => present,
-    owner => 'monitoring',
-    group => 'users',
+    owner => 'root',
+    group => 'root',
     provider => 'git',
     source => "${git_root}/server/monitoring.git",
     revision => "master", 
