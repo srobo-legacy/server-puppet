@@ -108,11 +108,20 @@ Cmnd_Alias	IDE_ADJUST_PERMS = /var/www/html/ide/adjust-perms
 # backups on cron, seeing how sudo gets run remotely
 Defaults:backup    !requiretty
 
+# Allow 'monitoring' user to run sudo over ssh without a tty. Required for automated
+# scripts that require root
+Defaults:monitoring    !requiretty
+
 # Allow backup user to run the backup script with the following config:
 #   it can only be run with the -e, encrypted option
 #   it can operate on type of data to back up
 #   it can only write to stdout (lest backup be able to clobber any file)
 backup          ALL = (root) NOPASSWD: /srv/backup/backup.py -e *
+
+# Allow monitoring to run the check_puppet script as root
+#   this is required as the puppet results file might not be in a directory addessable by monitoring
+
+monitoring	ALL = (root) NOPASSWD: /srv/monitoring/commands/check_puppet_agent *
 
 # Allow backup to run `rsync -av` to back up git, without overwriting anything
 # on the server.
