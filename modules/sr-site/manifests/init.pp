@@ -33,6 +33,11 @@ class sr-site( $git_root ) {
   # The bee
   include bee
 
+  # Monitoring
+  class { 'monitoring':
+    git_root => $git_root,
+  }
+
   include sr-site::firewall
   include sr-site::mysql
   include sr-site::openldap
