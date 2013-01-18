@@ -46,6 +46,16 @@ class www::srweb ( $git_root, $web_root_dir ) {
     require => Vcsrepo[ "${web_root_dir}" ],
   }
 
+  # srweb needs this directory to be writeable too
+  file { "${web_root_dir}/cache":
+    ensure => directory,
+    owner => "wwwcontent",
+    group => "apache",
+    mode => "u=rwx,g=rwxs,o=rx",
+    recurse => false,
+    require => Vcsrepo[ "${web_root_dir}" ],
+  }
+
   # Local configuration for srweb - specifically setting the LIVE_SITE option
   # to true.
   file { "${web_root_dir}/local.config.inc.php":
