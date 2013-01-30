@@ -4,7 +4,7 @@ class www::teamgit {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '600',
+    mode => '700',
     content => template('www/team_repos_conf_builder.py.erb'),
   }
 
