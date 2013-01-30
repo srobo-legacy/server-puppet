@@ -67,4 +67,6 @@ class www( $git_root ) {
     root_dir => '/srv/nemesis',
     require => User['wwwcontent'],
   }
+
+  include www::teamgit
 }
