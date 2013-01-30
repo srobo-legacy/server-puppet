@@ -1,6 +1,6 @@
 class www::teamgit {
 
-  file { '/var/local/bin/team_repos_conf_builder.py':
+  file { '/usr/local/bin/team_repos_conf_builder.py':
     ensure => present,
     owner => 'root',
     group => 'root',
@@ -8,7 +8,7 @@ class www::teamgit {
     content => template('www/team_repos_conf_builder.py.erb'),
   }
 
-  file { '/var/local/bin/team_repos_conf_template.conf':
+  file { '/usr/local/bin/team_repos_conf_template.conf':
     ensure => present,
     owner => 'root',
     group => 'root',
