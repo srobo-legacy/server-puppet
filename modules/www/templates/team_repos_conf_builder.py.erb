@@ -80,5 +80,8 @@ new_content = ''.join(content[:start_line + 1])
 new_content += replaced_content
 new_content += ''.join(content[end_line:])
 
+# Ensure the following open file operation creates a file with mode 600
+os.umask(0177)
+
 with open(OUTPUT_FILE, 'w') as f:
 	f.write(new_content)
