@@ -17,7 +17,7 @@ class www::teamgit {
   }
 
   exec { 'create_team_git':
-    command => '/usr/local/bin/team_repos_conf_builder.py /etc/httpd/conf.d/teamgit.conf':
+    command => '/usr/local/bin/team_repos_conf_builder.py /etc/httpd/conf.d/teamgit.conf',
     user => 'root',
   }
 
