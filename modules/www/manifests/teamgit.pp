@@ -20,7 +20,7 @@ class www::teamgit {
     command => '/usr/local/bin/team_repos_conf_builder.py /etc/httpd/conf.d/teamgit.conf',
     cwd => '/usr/local/bin',
     require => File['/usr/local/bin/team_repos_conf_builder.py'],
-    notify => Service['httpd']
+    notify => Service['httpd'],
     user => 'root',
     provider => 'shell',
 
