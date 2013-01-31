@@ -1,5 +1,6 @@
 class www::teamgit {
 
+  $anonpw = extlookup("ldap_anon_user_pw")
   file { '/usr/local/bin/team_repos_conf_builder.py':
     ensure => present,
     owner => 'root',

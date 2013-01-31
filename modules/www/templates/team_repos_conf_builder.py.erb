@@ -16,7 +16,7 @@ OUTPUT_FILE = sys.argv[1]
 TEAM_START_MARKER = '## --PER-TEAM-START-- ##'
 TEAM_END_MARKER = '## --PER-TEAM-END-- ##'
 TEAM_PREFIX = 'team-'
-LDAP_PASSWD = "123456"
+LDAP_PASSWD = "<%= anonpw %>"
 
 content = None
 with open(TEMPLATE_FILE) as f:
