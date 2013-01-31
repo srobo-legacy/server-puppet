@@ -34,7 +34,9 @@ class www::teamgit {
         cmp $tmpfile /etc/httpd/conf.d/teamgit.conf;\
         res=$?;\
         rm $tmpfile;\
-        exit $res;\
-    '
+        if test $res = 0; then\
+            exit 1;\
+        fi;\
+        exit 0;'
   }
 }
