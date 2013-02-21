@@ -20,7 +20,8 @@ class www::teamgit {
   exec { 'create_team_git':
     command => '/usr/local/bin/team_repos_conf_builder.py /etc/httpd/conf.d/teamgit.conf',
     cwd => '/usr/local/bin',
-    require => File['/usr/local/bin/team_repos_conf_builder.py'],
+    require => [File['/usr/local/bin/team_repos_conf_builder.py'],
+                Package['python-ldap']],
     notify => Service['httpd'],
     user => 'root',
     provider => 'shell',
