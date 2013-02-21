@@ -8,8 +8,8 @@ class www::httpd {
   # trac config is in ssl.conf, so we need that
   require sr-site::trac
 
-  # Use apache + mod_ssl to serve
-  package { [ "httpd", "mod_ssl" ]:
+  # Use apache + mod_ssl to serve, wsgi for python services
+  package { [ "httpd", "mod_ssl", "mod_wsgi",]:
     ensure => latest,
   }
 
