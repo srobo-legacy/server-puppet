@@ -57,4 +57,20 @@ class sr-site::trac {
     checksum => none,
     mode => "0664",
   }
+
+  # Install WSGI service file
+  file { "/var/www/trac":
+    ensure => directory,
+    owner => "root",
+    group => "root",
+    mode => "644",
+  }
+
+  file { "/var/www/trac/trac.wsgi":
+    ensure => present,
+    owner => root,
+    group => root,
+    mode => "644",
+    source => 'puppet:///modules/sr-site/trac.wsgi',
+  }
 }

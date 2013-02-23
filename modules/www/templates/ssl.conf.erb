@@ -19,6 +19,9 @@ SSLRandomSeed connect builtin
 # Use "SSLCryptoDevice" to enable any supported hardware
 SSLCryptoDevice builtin
 
+# Relocate WSGI daemon sockets
+WSGISocketPrefix /var/run/wsgi
+
 # Primary configuration gunge for the main website.
 <VirtualHost *:443>
 	ServerName <%= www_canonical_hostname %>:443
@@ -36,16 +39,25 @@ SSLCryptoDevice builtin
 	UserDir enabled voting
 
 	# Configure trac, and point it to serve out of /srv/trac
-        <Location /trac>
-                SetEnv PYTHON_EGG_CACHE /srv/trac/.python-eggs
+#        <Location /trac>
+#                SetEnv PYTHON_EGG_CACHE /srv/trac/.python-eggs
+#
+#                SetHandler mod_python
+#                PythonInterpreter main_interpreter
+#                PythonHandler trac.web.modpython_frontend
+#                PythonOption TracEnv /srv/trac
+#                PythonOption TracUriRoot /trac
+#                PythonOption TracLocale "en_GB.UTF-8"
+#        </Location>
+        WSGIDaemonProcess trac user=apache group=apache threads=25
+        WSGIScriptAlias /trac /var/www/trac/trac.wsgi
 
-                SetHandler mod_python
-                PythonInterpreter main_interpreter
-                PythonHandler trac.web.modpython_frontend
-                PythonOption TracEnv /srv/trac
-                PythonOption TracUriRoot /trac
-                PythonOption TracLocale "en_GB.UTF-8"
-        </Location>
+        <Directory /var/www/trac>
+                WSGIProcessGroup trac
+                WSGIApplicationGroup %{GLOBAL}
+                Order deny,allow
+                Allow from all
+        </Directory>
 
 	# To authenticate, trac has the user access /trac/login, allows apache
 	# to auth them, then gives them a session cookie. This config blob
