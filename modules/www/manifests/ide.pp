@@ -105,6 +105,15 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Web Cache. Used for the combined CSS & JS files.
+  file { "${root_dir}/web/cache":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Vcsrepo["${root_dir}"],
+  }
+
   # Script for applying the desired configuration to all repos. Not done
   # automatically, only when administratively desired.
   file { "${root_dir}/repos/conf":
