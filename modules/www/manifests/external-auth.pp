@@ -30,7 +30,7 @@ class www::external-auth ( $git_root, $web_root_dir, $ext_auth_root_dir ) {
     group => "apache",
     mode => "u=rwx,g=rwxs,o=rx",
     recurse => false,
-    require => Vcsrepo[ "${web_root_dir}" ],
+    require => Vcsrepo[ "${ext_auth_root_dir}" ],
   }
 
   # Local configuration for external-auth (namely to use the IDE for authentication)
@@ -41,7 +41,7 @@ class www::external-auth ( $git_root, $web_root_dir, $ext_auth_root_dir ) {
     group => 'apache',
     mode => '640',
     source => 'puppet:///modules/www/ext_auth.config.inc.php',
-    require => Vcsrepo["${web_root_dir}"],
+    require => Vcsrepo["${ext_auth_root_dir}"],
   }
 
   # Symlink to make it appear in the right place
