@@ -25,6 +25,14 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
+  # External authentication mechanism - srobo.org/external-auth/
+  class { "www::external-auth":
+    git_root => $git_root,
+    web_root_dir => $web_root_dir,
+    ext_auth_root_dir => '/var/www/external-auth/',
+    require => User['wwwcontent'],
+  }
+
   # Voting scripts, at srobo.org/~voting/voting
   class { "www::voting":
     git_root => $git_root,
