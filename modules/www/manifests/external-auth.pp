@@ -1,6 +1,6 @@
 # Primary configuartion for the "External Authentication" system
 
-class www::external-auth ( $git_root, $ext_auth_root_dir ) {
+class www::external-auth ( $git_root, $web_root_dir, $ext_auth_root_dir ) {
   # external-auth is served through php and some other goo,
   package { [ "php" ]:
     ensure => latest,
