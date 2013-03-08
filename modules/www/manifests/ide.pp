@@ -160,4 +160,12 @@ class www::ide ( $git_root, $root_dir ) {
     creates => '/usr/local/var/sr/ide_installed',
     require => [File["${root_dir}/notifications"],File["${root_dir}/repos"]],
   }
+
+  cron { 'ide-cron':
+    command => 'curl --insecure https://localhost/ide/control.php/cron/cron',
+    hour => '3',
+    minute => '14',
+    user => 'root',
+    require => Vcsrepo["${root_dir}"],
+  }
 }
