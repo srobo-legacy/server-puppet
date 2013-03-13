@@ -34,7 +34,6 @@ class www::external-auth ( $git_root, $web_root_dir, $ext_auth_root_dir ) {
   }
 
   # Local configuration for external-auth (namely to use the IDE for authentication)
-  # to true.
   file { "${ext_auth_root_dir}/server/etc/config.inc.php":
     ensure => present,
     owner => 'wwwcontent',
@@ -42,6 +41,33 @@ class www::external-auth ( $git_root, $web_root_dir, $ext_auth_root_dir ) {
     mode => '640',
     source => 'puppet:///modules/www/ext_auth.config.inc.php',
     require => Vcsrepo["${ext_auth_root_dir}"],
+  }
+
+  # Directory to store server keys
+  file { "${ext_auth_root_dir}/keys":
+    ensure => 'directory',
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    require => Vcsrepo["${ext_auth_root_dir}"],
+  }
+
+  # The server's private key
+  file { "${ext_auth_root_dir}/keys/server":
+    source => '/srv/secrets/external-auth/server',
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    require => File["${ext_auth_root_dir}/keys"],
+  }
+
+  # The server's public key
+  file { "${ext_auth_root_dir}/keys/server.pub":
+    source => '/srv/secrets/external-auth/server.pub',
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    require => File["${ext_auth_root_dir}/keys"],
   }
 
   # Symlink to make it appear in the right place
