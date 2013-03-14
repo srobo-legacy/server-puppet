@@ -77,4 +77,10 @@ class www( $git_root ) {
   }
 
   include www::teamgit
+
+  # Ticket System
+  class { 'www::tickets':
+    require => [Class['srweb'], Class['Sr-site::Openldap']],
+  }
+
 }
