@@ -50,4 +50,12 @@ class www::tickets {
     mode => '770',
   }
 
+  file {'/var/www/html/tickets/tickets/webapi/users/.htaccess':
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '640',
+    source => "puppet:///modules/www/tickets/user_dir.htaccess",
+  }
+
 }
