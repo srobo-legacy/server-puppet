@@ -5,6 +5,11 @@ class www::tickets {
     ensure => present,
   }
 
+  # Inkscape, for converting SVGs to PDFs
+  package {'inkscape':
+    ensure => present,
+  }
+
   # create an LDAP user for getting ticket info
   ldapres { "uid=tickets,ou=users,o=sr":
     ensure => present,
