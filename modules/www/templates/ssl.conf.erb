@@ -156,6 +156,7 @@ WSGISocketPrefix /var/run/wsgi
 
 	# Pass accesses to /userman over to nemesis in WSGI
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
+        WSGIPassAuthorization on
         <Directory /srv/nemesis/nemesis>
             Order deny,allow
             Allow from all
