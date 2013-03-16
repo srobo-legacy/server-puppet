@@ -15,7 +15,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   vcsrepo { "${root_dir}":
     ensure => present,
     provider => git,
-    source => "${git_root}/nemesis.git",
+    source => "https://github.com/samphippen/nemesis.git",
     revision => "origin/master",
     force => true,
     owner => 'wwwcontent',
