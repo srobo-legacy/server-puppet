@@ -68,7 +68,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   # situation would trac ticket #1053 to be applied. Until then, use the LDAP
   # manager account.
   $ldap_manager_pw = extlookup('ldap_manager_pw')
-  file { "${root_dir}/nemesis/userman/sr/config.ini":
+  file { "${root_dir}/nemesis/libnemesis/libnemesis/srusers/local.ini":
     ensure => present,
     content => template('www/nemesis_conf.ini.erb'),
     owner => 'wwwcontent',
