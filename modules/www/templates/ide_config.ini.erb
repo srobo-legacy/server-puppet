@@ -15,8 +15,8 @@ team.status_images.dir = <%= team_status_imgs_dir %>
 
 ; Piwik
 usage_tracking = <% if devmode == "0" then lestring="true" else lestring="false" end%><%= lestring %>
-; Hide the ticket link
-gui.ticket_link = false
+; Show the ticket link
+gui.ticket_link = true
 
 announce.enabled = true
 
