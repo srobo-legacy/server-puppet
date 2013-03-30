@@ -16,7 +16,8 @@ class sr-site::pipebot ( $git_root ) {
   }
 
   # Checkout of pipebot's code.
-  vcsrepo { '/home/pipebot/pipebot':
+  $root_dir = '/home/pipebot/pipebot'
+  vcsrepo { "${root_dir}":
     ensure => present,
     provider => git,
     source => "${git_root}/pipebot",
@@ -25,6 +26,18 @@ class sr-site::pipebot ( $git_root ) {
     owner => 'pipebot',
     group => 'users',
     require => File['/home/pipebot'],
+  }
+
+  # Site-local configuration is stored in local.ini; assign some variables that
+  # will be templated into it.
+  $pipebot_nick = extlookup('pipebot_nick')
+  $pipebot_ident = extlookup('pipebot_ident')
+  file { "${root_dir}/localconfig.py":
+    ensure => present,
+    owner => 'pipebot',
+    group => 'users',
+    content => template('sr-site/pipebot_localconfig.py.erb'),
+    require => Vcsrepo["${root_dir}"],
   }
 
   # Also, some systemd goo to install the service.
