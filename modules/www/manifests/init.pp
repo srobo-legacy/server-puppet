@@ -25,6 +25,13 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
+  # Python 2.6.5 docs -- version match the python on the BBs
+  class { 'www::python-docs':
+    web_root_dir => $web_root_dir,
+    version => '2.6.5',
+    require => [User['wwwcontent'], Class['srweb']],
+  }
+
   # External authentication mechanism - srobo.org/external-auth/
   class { "www::external-auth":
     git_root => $git_root,
