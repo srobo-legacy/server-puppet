@@ -191,7 +191,7 @@ WSGISocketPrefix /var/run/wsgi
 	SSLCertificateKeyFile /etc/pki/tls/private/server.key
 
 	# Only install the certificate chain file on the production machine.
-        <% if devmode == "0" then -%>
+        <% if !devmode then -%>
 	#   Server Certificate Chain:
 	SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle.crt
         <% end -%>

@@ -1,3 +1,3 @@
 <?php
-<% if devmode == "0" then lestring="true" else lestring="false" end%>
+<% if !devmode then lestring="true" else lestring="false" end%>
 define('LIVE_SITE', <%= lestring %>);
