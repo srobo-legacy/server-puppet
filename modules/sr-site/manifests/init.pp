@@ -27,6 +27,11 @@ class sr-site( $git_root ) {
     require => File['/usr/local/var'],
   }
 
+  # Choose speedy yum mirrors
+  package { "yum-plugin-fastestmirror":
+    ensure => latest,
+  }
+
   # Anonymous git access
   include gitdaemon
 
