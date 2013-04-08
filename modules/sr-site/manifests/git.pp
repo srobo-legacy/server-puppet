@@ -41,7 +41,7 @@ class sr-site::git($git_root) {
     home => '/'
   }
 
-  if $devmode == "0" {
+  if !$devmode {
     # On a production machine, the dir /srv/git/scripts will already exist
     # as a matter of course (because git is stored on said production machine)
     cron { 'cgit-reconf':
@@ -72,7 +72,7 @@ class sr-site::git($git_root) {
   }
 
   # Maintain a clone of the git admin scripts.
-  if $devmode != 0 {
+  if $devmode {
     vcsrepo { '/srv/git/scripts':
       ensure => present,
       provider => git,

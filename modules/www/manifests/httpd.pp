@@ -70,7 +70,7 @@ class www::httpd {
   # On the production machine, we need to present some intermediate certificates
   # to users as there's an intermediate CA between GoDaddy's root cert and our
   # cerfificate. Not necessary on the dummy config.
-  if $devmode == "0" {
+  if !$devmode {
     file { "cert_chain":
       path => "/etc/pki/tls/certs/gd_bundle.crt",
       owner => 'root',
