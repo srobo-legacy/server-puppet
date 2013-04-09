@@ -73,4 +73,20 @@ class sr-site::trac {
     mode => "644",
     source => 'puppet:///modules/sr-site/trac.wsgi',
   }
+
+  if $devmode {
+
+    # When in devmode, make all authenticated users TRAC_ADMINs
+    # and give everyone access to XML_RPC
+    exec { "dev_perms":
+      command => "trac-admin /srv/trac permission add authenticated TRAC_ADMIN; \
+      trac-admin /srv/trac permission add anonymous XML_RPC; \
+      touch /usr/local/var/sr/trac_perms_configured",
+      provider => "shell",
+      creates => "/usr/local/var/sr/trac_perms_configured",
+      require => [ Exec["pop_db"], Exec["file_cp"] ],
+    }
+
+  }
+
 }
