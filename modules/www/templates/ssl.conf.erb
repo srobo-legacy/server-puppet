@@ -164,7 +164,7 @@ WSGISocketPrefix /var/run/wsgi
 
 	# Proxy all requests to the /gerrit dir to the local server process
 	# gerrit is running. Highly unpleasent.
-	ProxyPass /gerrit http://127.0.0.1:8081/gerrit
+	ProxyPass /gerrit http://localhost:8081/gerrit
 
 	########## SSL stuff below
 
