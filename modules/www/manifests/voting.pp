@@ -11,47 +11,47 @@ class www::voting ($git_root, $web_root_dir) {
   # Directories and user for 'voting' user; all with only traverse permission
   # for other users.
   file { '/home/voting':
-    ensure => directory,
-    owner => 'voting',
-    group => 'users',
-    mode => '711',
+    ensure  => directory,
+    owner   => 'voting',
+    group   => 'users',
+    mode    => '711',
     require => User['voting'],
   }
 
   file { '/home/voting/public_html':
-    ensure => directory,
-    owner => 'voting',
-    group => 'users',
-    mode => '711',
+    ensure  => directory,
+    owner   => 'voting',
+    group   => 'users',
+    mode    => '711',
     require => [User['voting'], File['/home/voting']],
   }
 
   user { 'voting':
-    ensure => present,
+    ensure  => present,
     comment => 'Owner of voting record files',
-    shell => '/sbin/nologin',
-    gid => 'users',
-    home => '/home/voting',
+    shell   => '/sbin/nologin',
+    gid     => 'users',
+    home    => '/home/voting',
   }
 
   # Checkout of the voting scripts, for people to vote with.
   vcsrepo { "/home/voting/public_html/voting":
-    ensure => present,
+    ensure   => present,
     provider => git,
-    source => "${git_root}/voting.git",
+    source   => "${git_root}/voting.git",
     revision => "origin/master",
-    force => true,
-    require => [Package['PyYAML'], User['voting']],
-    owner => 'voting',
-    group => 'users',
+    force    => true,
+    require  => [Package['PyYAML'], User['voting']],
+    owner    => 'voting',
+    group    => 'users',
   }
 
   # Directory for storing votes in. Only accessible by the voting user itself.
   file { '/home/voting/public_html/voting/votes':
-    ensure => directory,
-    owner => 'voting',
-    group => 'users',
-    mode => '700', # Prohibit people from seeing who voted.
+    ensure  => directory,
+    owner   => 'voting',
+    group   => 'users',
+    mode    => '700', # Prohibit people from seeing who voted.
     require => Vcsrepo['/home/voting/public_html/voting'],
   }
 }
