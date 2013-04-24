@@ -14,7 +14,7 @@ class www::voting ($git_root, $web_root_dir) {
     ensure  => directory,
     owner   => 'voting',
     group   => 'users',
-    mode    => '711',
+    mode    => '0711',
     require => User['voting'],
   }
 
@@ -22,7 +22,7 @@ class www::voting ($git_root, $web_root_dir) {
     ensure  => directory,
     owner   => 'voting',
     group   => 'users',
-    mode    => '711',
+    mode    => '0711',
     require => [User['voting'], File['/home/voting']],
   }
 
@@ -51,7 +51,11 @@ class www::voting ($git_root, $web_root_dir) {
     ensure  => directory,
     owner   => 'voting',
     group   => 'users',
-    mode    => '700', # Prohibit people from seeing who voted.
+    mode    => '0700', # Prohibit people from seeing who voted.
+    ensure => directory,
+    owner => 'voting',
+    group => 'users',
+    mode => '0700', # Prohibit people from seeing who voted.
     require => Vcsrepo['/home/voting/public_html/voting'],
   }
 }
