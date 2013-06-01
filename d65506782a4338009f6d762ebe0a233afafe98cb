@@ -1,0 +1,9 @@
+Change-Id: Id65506782a4338009f6d762ebe0a233afafe98cb
+Code-Review+2: Jeremy Morse <jeremy.morse@gmail.com>
+Verified+1: Jeremy Morse <jeremy.morse@gmail.com>
+Code-Review+1: Rob Spanton <rspanton@zepler.net>
+Submitted-by: Jeremy Morse <jeremy.morse@gmail.com>
+Submitted-at: Sat, 01 Jun 2013 22:43:17 +0100
+Reviewed-on: https://www.studentrobotics.org/gerrit/613
+Project: server/puppet
+Branch: refs/heads/master
