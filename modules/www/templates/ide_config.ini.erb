@@ -14,6 +14,10 @@ team.status_images.dir = <%= team_status_imgs_dir %>
 
 ; Piwik
 usage_tracking = <% if !devmode then lestring="true" else lestring="false" end%><%= lestring %>
+
+; Combine static files into a single file for performance
+combine_statics = true
+
 ; Show the ticket link
 gui.ticket_link = false
 
