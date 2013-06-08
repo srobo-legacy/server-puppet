@@ -1,20 +1,20 @@
 class www::teamgit {
 
-  $anonpw = extlookup("ldap_anon_user_pw")
   file { '/usr/local/bin/team_repos_conf_builder.py':
     ensure => present,
     owner => 'root',
     group => 'root',
     mode => '700',
-    content => template('www/team_repos_conf_builder.py.erb'),
+    source => 'puppet:///modules/www/team_repos_conf_builder.py',
   }
 
+  $anonpw = extlookup("ldap_anon_user_pw")
   file { '/usr/local/bin/team_repos_conf_template.conf':
     ensure => present,
     owner => 'root',
     group => 'root',
     mode => '600',
-    source => 'puppet:///modules/www/team_repos_conf_template.conf',
+    content => template('www/team_repos_conf_template.conf.erb'),
   }
 
   exec { 'create_team_git':

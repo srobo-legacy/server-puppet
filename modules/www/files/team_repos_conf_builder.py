@@ -16,7 +16,6 @@ OUTPUT_FILE = sys.argv[1]
 TEAM_START_MARKER = '## --PER-TEAM-START-- ##'
 TEAM_END_MARKER = '## --PER-TEAM-END-- ##'
 TEAM_PREFIX = 'team-'
-LDAP_PASSWD = "<%= anonpw %>"
 
 content = None
 with open(TEMPLATE_FILE) as f:
@@ -71,7 +70,7 @@ for team in teamlist:
     tlas.append(cn)
 
 for tla in tlas:
-	replaced = template_string.format(TLA=tla, ldap_passwd=LDAP_PASSWD, team_prefix=TEAM_PREFIX)
+	replaced = template_string.format(TLA=tla, team_prefix=TEAM_PREFIX)
 	replaced_content += replaced
 
 #print replaced_content
