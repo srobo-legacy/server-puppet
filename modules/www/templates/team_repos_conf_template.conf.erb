@@ -12,10 +12,37 @@ SetEnv GIT_PROJECT_ROOT <%= ide_root_dir %>/repos
 SetEnv GIT_HTTP_EXPORT_ALL
 
 ScriptAliasMatch "^/robogit/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-core/git-http-backend/$1/master/$2
+ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-core/git-http-backend/$1/master/$2
+
+# Require authentication for all /robogit-ro access.
+# Since it's all the same group we can do it all in one go.
+<Location /robogit-ro>
+	AuthType basic
+	AuthName "Student Robotics Team Git Mentor Access"
+	AuthBasicProvider ldap
+
+	AuthzLDAPAuthoritative On
+	AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
+	AuthLDAPBindDN "uid=anon,ou=users,o=sr"
+	AuthLDAPBindPassword "<%= anonpw %>"
+
+	AuthLDAPGroupAttribute memberUid
+	AuthLDAPGroupAttributeIsDN off
+
+	Require ldap-group cn=mentors,ou=groups,o=sr
+	Require valid-user
+
+</Location>
+
+# Block all attempts to write under the read-only url.
+<LocationMatch "^/robogit-ro/.*/git-receive-pack$">
+	Deny from all
+</LocationMatch>
+
 
 ## --PER-TEAM-START-- ##
 
-# Team {TLA}-specific block
+# Team {TLA}-specific block: Team read/write access
 <Location /robogit/{TLA}>
 	AuthType basic
 	AuthName "Student Robotics Team {TLA} Git repositories"
@@ -24,7 +51,7 @@ ScriptAliasMatch "^/robogit/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-cor
 	AuthzLDAPAuthoritative On
 	AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
 	AuthLDAPBindDN "uid=anon,ou=users,o=sr"
-	AuthLDAPBindPassword "{ldap_passwd}"
+	AuthLDAPBindPassword "<%= anonpw %>"
 
 	AuthLDAPGroupAttribute memberUid
 	AuthLDAPGroupAttributeIsDN off
