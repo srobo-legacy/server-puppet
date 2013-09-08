@@ -162,7 +162,7 @@ WSGISocketPrefix /var/run/wsgi
         RewriteRule ^/git/$ /cgit [PT]
 
 	# Forums
-	Redirect permanent /forums /forum         
+	Redirect permanent /forums /forum
 	Alias /forum /var/www/phpbb/phpBB
         <Directory /var/www/phpbb/phpBB>
                 AllowOverride All
@@ -227,5 +227,5 @@ WSGISocketPrefix /var/run/wsgi
 	# compact non-error SSL logfile on a virtual host basis.
 	CustomLog logs/ssl_request_log \
         	"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-</VirtualHost>                                  
+</VirtualHost>
 
