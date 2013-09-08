@@ -33,6 +33,20 @@ WSGISocketPrefix /var/run/wsgi
 		AllowOverride All
 	</Directory>
 
+	# Block various parts of the IDE being accessed externally
+	<LocationMatch "/ide/(config|notifications|repos|settings)">
+		Deny from all
+	</LocationMatch>
+
+	# Deny listing the zips
+	<Directory "/var/www/html/ide/zips">
+		Options -Indexes
+
+		# This is a hack to work around certain cases where IE8 is misconfigured.
+		ExpiresDefault "access plus 6 seconds"
+		Header set Content-Disposition attachment
+	</Directory>
+
 	# Deny everyone userdirs, except explicitly configured accounts
 	UserDir disabled
 	# Voting user requires a public_html dir
