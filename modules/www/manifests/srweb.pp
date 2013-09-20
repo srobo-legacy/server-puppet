@@ -7,6 +7,11 @@ class www::srweb ( $git_root, $web_root_dir ) {
     notify => Service[ "httpd" ],
   }
 
+  # needed to build the sitemap
+  package { [ "linkchecker", "python-BeautifulSoup" ]:
+    ensure => latest,
+  }
+
   # Install and run memcached for the plus plus speed.
   service { 'memcached':
     enable => 'true',
@@ -73,6 +78,16 @@ class www::srweb ( $git_root, $web_root_dir ) {
     onlyif => "grep '~chris' /var/www/html/.htaccess",
     cwd => "${web_root_dir}",
     subscribe => Vcsrepo[ "${web_root_dir}" ],
+  }
+
+  # Build the sitemap.xml
+  $www_canonical_hostname = extlookup('www_canonical_hostname')
+  exec { "build-sitemap":
+    command => "${web_root_dir}/createsitemap.sh 'https://${www_canonical_hostname}'",
+    cwd => "${web_root_dir}",
+    user => "root",
+    subscribe => Vcsrepo[ "${web_root_dir}" ],
+    require => Package["linkchecker"],
   }
 
   # Maintain existance and permissions on the 404log.
