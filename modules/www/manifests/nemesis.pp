@@ -98,4 +98,11 @@ class www::nemesis ( $git_root, $root_dir ) {
     user => 'wwwcontent',
     require => Vcsrepo["${root_dir}"],
   }
+
+  cron { 'nemesis-email-cron':
+    command => "${root_dir}/nemesis/scripts/send-emails.py",
+    minute => '*/5',
+    user => 'wwwcontent',
+    require => Vcsrepo["${root_dir}"],
+  }
 }
