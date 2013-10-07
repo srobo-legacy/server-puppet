@@ -70,7 +70,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   $ldap_manager_pw = extlookup('ldap_manager_pw')
   file { "${root_dir}/nemesis/libnemesis/libnemesis/srusers/local.ini":
     ensure => present,
-    content => template('www/nemesis_conf.ini.erb'),
+    content => template('www/nemesis_srusers.ini.erb'),
     owner => 'wwwcontent',
     group => 'apache',
     mode => '440',
