@@ -63,6 +63,20 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  # Configurate nemesis with the ability to send emails.
+  $nemesis_mail_smtp = extlookup('nemesis_mail_smtp')
+  $nemesis_mail_user = extlookup('nemesis_mail_user')
+  $nemesis_mail_pw   = extlookup('nemesis_mail_pw')
+  $nemesis_mail_from = extlookup('nemesis_mail_from')
+  file { "${root_dir}/nemesis/local.ini":
+    ensure => present,
+    content => template('www/nemesis_local.ini.erb'),
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '440',
+    require => Vcsrepo["${root_dir}"],
+  }
+
   # Configurate the srusers library so that nemesis can interact with LDAP.
   # Idealy this should not be using the LDAP manager account. An even more idea
   # situation would trac ticket #1053 to be applied. Until then, use the LDAP
