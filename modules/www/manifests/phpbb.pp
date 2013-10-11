@@ -2,7 +2,7 @@
 
 class www::phpbb ( $git_root, $root_dir ) {
   # MySQL database configuration
-  $forum_db_name = 'phpbb_sr2013'
+  $forum_db_name = 'phpbb_sr2014'
   $forum_user = extlookup("phpbb_sql_user")
   $forum_pw = extlookup("phpbb_sql_pw")
 
