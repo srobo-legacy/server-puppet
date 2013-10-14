@@ -90,4 +90,12 @@ class www::nemesis ( $git_root, $root_dir ) {
     mode => '440',
     require => Vcsrepo["${root_dir}"],
   }
+
+  cron { 'nemesis-cron':
+    command => "${root_dir}/nemesis/scripts/cron.py",
+    hour => '3',
+    minute => '41',
+    user => 'wwwcontent',
+    require => Vcsrepo["${root_dir}"],
+  }
 }
