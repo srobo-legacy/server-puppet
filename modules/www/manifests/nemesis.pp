@@ -4,8 +4,9 @@
 # too in the future.
 
 class www::nemesis ( $git_root, $root_dir ) {
+  # Nemesis is a flask application
   # An sqlite DB is used to store data, install the python bindings for it.
-  package { ['python-sqlite3dbm']:
+  package { ['python-sqlite3dbm', 'python-flask', 'python-ldap']:
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo["${root_dir}"],
