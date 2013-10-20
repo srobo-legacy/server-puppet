@@ -1,5 +1,10 @@
 class sr-site::gerrit {
 
+  # Gerrit runs on java...
+  package { ['java-1.7.0-openjdk']:
+    ensure => present,
+  }
+
   # A user for the gerrit service to be run as
   user { 'gerrit':
     ensure => present,
