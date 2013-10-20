@@ -4,7 +4,9 @@
 class www( $git_root ) {
   $web_root_dir = '/var/www/html'
 
-  include www::httpd
+  class { 'www::httpd':
+    web_root_dir => $web_root_dir,
+  }
 
   # We shouldn't let apache own any web content, lest it be able to edit
   # content rather than just serve it. So, all web content that doesn't have
@@ -58,14 +60,14 @@ class www( $git_root ) {
   # The IDE, srobo.org/ide
   class { 'www::ide':
     git_root => $git_root,
-    root_dir => '/var/www/html/ide',
+    root_dir => "${web_root_dir}/ide",
     require => [User['wwwcontent'], Class['srweb']],
   }
 
   # Piwik, for getting information about visitors, srobo.org/piwik
   class { 'www::piwik':
     git_root => $git_root,
-    root_dir => '/var/www/html/piwik',
+    root_dir => "${web_root_dir}/piwik",
     require => [User['wwwcontent'], Class['srweb']],
   }
 
@@ -76,10 +78,14 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
-  include www::teamgit
+  class { 'www::teamgit':
+    ide_root_dir => "${web_root_dir}/ide",
+    require => Class['ide'],
+  }
 
   # Ticket System
   class { 'www::tickets':
+    web_root_dir => $web_root_dir,
     require => [Class['srweb'], Class['Sr-site::Openldap']],
   }
 

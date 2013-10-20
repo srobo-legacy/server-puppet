@@ -18,6 +18,8 @@ class www::ide ( $git_root, $root_dir ) {
     before => Vcsrepo["${root_dir}"],
   }
 
+  $ide_repos_root = "${root_dir}/repos"
+
   # Checkout of cyanide, acts as backend and serves the frontend of the IDE.
   vcsrepo { "${root_dir}":
     ensure => present,
@@ -96,7 +98,7 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # Directory for user repos; self explanatory.
-  file { "${root_dir}/repos":
+  file { $ide_repos_root:
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
@@ -144,30 +146,30 @@ class www::ide ( $git_root, $root_dir ) {
 
   # Script for applying the desired configuration to all repos. Not done
   # automatically, only when administratively desired.
-  file { "${root_dir}/repos/conf":
+  file { "${ide_repos_root}/conf":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '744',
-    source => 'puppet:///modules/www/conf',
+    content => template('www/conf.erb'),
   }
 
   # All-repo integrity checking script for after crashes.
-  file { "${root_dir}/repos/fsck":
+  file { "${ide_repos_root}/fsck":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '744',
-    source => 'puppet:///modules/www/fsck',
+    content => template('www/fsck.erb'),
   }
 
   # Script for repacking/gcing user repos
-  file { "${root_dir}/repos/repack":
+  file { "${ide_repos_root}/repack":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '744',
-    source => 'puppet:///modules/www/repack',
+    content => template('www/repack.erb'),
   }
 
   # Install backed up IDE copy unless data is already installed. This is based
@@ -176,17 +178,17 @@ class www::ide ( $git_root, $root_dir ) {
     command =>
          "cp -r /srv/secrets/ide/notifications/* ${root_dir}/notifications;\
           if test $? != 0; then exit 1; fi;\
-          cp -r /srv/secrets/ide/repos/* ${root_dir}/repos;\
+          cp -r /srv/secrets/ide/repos/* ${ide_repos_root};\
           if test $? != 0; then exit 1; fi;\
           cp -r /srv/secrets/ide/settings/* ${root_dir}/settings;\
           if test $? != 0; then exit 1; fi;\
-          chown -R apache.apache ${root_dir}/repos/*;\
+          chown -R apache.apache ${ide_repos_root}/*;\
           chown -R apache.apache ${root_dir}/notifications/*;\
           chown -R apache.apache ${root_dir}/settings/*;\
           touch /usr/local/var/sr/ide_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/ide_installed',
-    require => [File["${root_dir}/notifications"],File["${root_dir}/repos"]],
+    require => [File["${root_dir}/notifications"],File[ $ide_repos_root ]],
   }
 
   cron { 'ide-cron':

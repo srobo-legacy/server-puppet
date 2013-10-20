@@ -1,12 +1,14 @@
 #!/bin/bash
 
-find /var/www/html/ide/repos -type d -name '*.git' | while read gdir
+REPOS="<%= ide_repos_root %>"
+
+find $REPOS -type d -name '*.git' | while read gdir
 do
     cd "$gdir"
     echo "$gdir"
 
     if [[ `git config core.bare` == "true" ]]
-    then 
+    then
 	git config receive.denyNonFastForwards true
     fi
 

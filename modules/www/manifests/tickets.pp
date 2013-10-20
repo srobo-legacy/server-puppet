@@ -1,4 +1,5 @@
-class www::tickets {
+class www::tickets( $web_root_dir ) {
+  $tickets_root = "${web_root_dir}/tickets/tickets"
 
   # The ticket system requires the python imaging library
   package {'python-imaging':
@@ -27,7 +28,7 @@ class www::tickets {
     userpassword => extlookup("ldap_ticket_user_ssha_pw"),
   }
 
-  file {'/var/www/html/tickets/tickets/webapi/config.ini':
+  file {"${tickets_root}/webapi/config.ini":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
@@ -35,7 +36,7 @@ class www::tickets {
     source => '/srv/secrets/tickets/config.ini',
   }
 
-  file {'/var/www/html/tickets/tickets/ticket.key':
+  file {"${tickets_root}/ticket.key":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
@@ -43,14 +44,14 @@ class www::tickets {
     source => '/srv/secrets/tickets/ticket.key',
   }
 
-  file {'/var/www/html/tickets/tickets/webapi/users':
+  file {"${tickets_root}/webapi/users":
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '770',
   }
 
-  file {'/var/www/html/tickets/tickets/webapi/users/.htaccess':
+  file {"${tickets_root}/webapi/users/.htaccess":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
