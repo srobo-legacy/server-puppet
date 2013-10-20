@@ -77,14 +77,6 @@ class www( $git_root ) {
     require => [User['wwwcontent'], Class['srweb']],
   }
 
-  # Redundant dir for installing the user management web interface; now lives
-  # in www::nemesis
-  class { 'www::userman':
-    git_root => $git_root,
-    root_dir => '/var/www/html/userman',
-    require => [User['wwwcontent'], Class['srweb']],
-  }
-
   # Web facing user managment interface, srobo.org/userman
   class { 'www::nemesis':
     git_root => $git_root,
