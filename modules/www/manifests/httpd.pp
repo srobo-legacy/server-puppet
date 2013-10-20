@@ -1,6 +1,6 @@
 # Primary webserver configuration. The server part that is, not what gets served
 
-class www::httpd {
+class www::httpd( $web_root_dir ) {
   # Webserver binds to LDAP for certain auth/authz operations; use the
   # anon user + password to do that.
   $anonpw = extlookup("ldap_anon_user_pw")

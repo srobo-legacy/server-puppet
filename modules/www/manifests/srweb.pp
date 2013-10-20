@@ -70,7 +70,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
   # Set the rewrite base
   exec { "rewritebase":
     command => "sed -i .htaccess -e 's#/~chris/srweb#/#'",
-    onlyif => "grep '~chris' /var/www/html/.htaccess",
+    onlyif => "grep '~chris' '${web_root_dir}/.htaccess'",
     cwd => "${web_root_dir}",
     subscribe => Vcsrepo[ "${web_root_dir}" ],
   }

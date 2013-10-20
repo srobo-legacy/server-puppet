@@ -26,9 +26,9 @@ WSGISocketPrefix /var/run/wsgi
 <VirtualHost *:443>
 	ServerName <%= www_canonical_hostname %>:443
 	# Serve everything out of srweb by default.
-	DocumentRoot /var/www/html
+	DocumentRoot <%= web_root_dir %>
 
-	<Directory "/var/www/html">
+	<Directory "<%= web_root_dir %>">
 		Options All
 		AllowOverride All
 	</Directory>
@@ -39,7 +39,7 @@ WSGISocketPrefix /var/run/wsgi
 	</LocationMatch>
 
 	# Deny listing the zips
-	<Directory "/var/www/html/ide/zips">
+	<Directory "<%= web_root_dir %>/ide/zips">
 		Options -Indexes
 
 		# Copied from IDE cyanide.git/resources/zips-htaccess commit c501109cc8b50.
