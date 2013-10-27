@@ -8,7 +8,7 @@ class sr-site::trac {
 
   $mysql_trac_pw = extlookup("mysql_trac_pw")
 
-  package { ["trac", "mod_python", "MySQL-python", "trac-xmlrpc-plugin"]:
+  package { ["trac", "mod_python", "MySQL-python", "python-pygments", "trac-xmlrpc-plugin"]:
     ensure => latest,
   }
 
