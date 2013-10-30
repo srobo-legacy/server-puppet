@@ -79,17 +79,17 @@ class www::srweb ( $git_root, $web_root_dir ) {
     cwd => "${web_root_dir}",
     subscribe => Vcsrepo[ "${web_root_dir}" ],
   }
-
-  # Build the sitemap.xml
-  $www_canonical_hostname = extlookup('www_canonical_hostname')
-  exec { "build-sitemap":
-    command => "${web_root_dir}/createsitemap.sh 'https://${www_canonical_hostname}'",
-    cwd => "${web_root_dir}",
-    user => "wwwcontent",
-    subscribe => Vcsrepo[ "${web_root_dir}" ],
-    require => Package["linkchecker"],
-  }
-
+#
+#  # Build the sitemap.xml
+#  $www_canonical_hostname = extlookup('www_canonical_hostname')
+#  exec { "build-sitemap":
+#    command => "${web_root_dir}/createsitemap.sh 'https://${www_canonical_hostname}'",
+#    cwd => "${web_root_dir}",
+#    user => "wwwcontent",
+#    subscribe => Vcsrepo[ "${web_root_dir}" ],
+#    require => Package["linkchecker"],
+#  }
+#
   # Maintain existance and permissions on the 404log.
   file { "${web_root_dir}/404log":
     ensure => present,
