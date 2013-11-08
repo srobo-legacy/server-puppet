@@ -34,7 +34,7 @@ WSGISocketPrefix /var/run/wsgi
 	</Directory>
 
 	# Block various parts of the IDE being accessed externally
-	<LocationMatch "/ide/(config|notifications|repos|settings)">
+	<LocationMatch "/ide/(config|notifications|repos|settings|uploads)">
 		Deny from all
 	</LocationMatch>
 
