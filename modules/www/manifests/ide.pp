@@ -38,6 +38,7 @@ class www::ide ( $git_root, $root_dir ) {
   $ide_key_file = "${root_dir}/config/ide-key.key"
   $team_status_dir = "${root_dir}/settings/team-status"
   $team_status_imgs_dir = "${root_dir}/uploads/team-status"
+  $team_status_imgs_live_dir = "${root_dir}/../images/teams"
   $ide_ldap_pw = extlookup('ide_ldap_user_pw')
   file { "${root_dir}/config/local.ini":
     ensure => present,
@@ -98,6 +99,26 @@ class www::ide ( $git_root, $root_dir ) {
 
   # Notifications. Never used, to my knowledge.
   file { "${root_dir}/notifications":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Vcsrepo["${root_dir}"],
+  }
+
+  # Team Status dir. Contains post-reviewed team-status images
+  # Warning: This folder is actually outside the IDE tree!
+  #          It should already exist -- we're just setting permissions here
+  file { $team_status_imgs_live_dir :
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2777',
+    require => Class['srweb'],
+  }
+
+  # Uploads dir. Contains un-reviewed team-status images
+  file { "${root_dir}/uploads":
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
