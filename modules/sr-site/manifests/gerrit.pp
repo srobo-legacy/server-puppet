@@ -25,8 +25,8 @@ class sr-site::gerrit {
   # This also needs to consider the fact that updates can bring in schema
   # changes to the db.
   exec { 'download-gerrit':
-    command => 'curl http://gerrit.googlecode.com/files/gerrit-full-2.5.war > /home/gerrit/gerrit-full-2.5.war',
-    creates => '/home/gerrit/gerrit-full-2.5.war',
+    command => 'curl http://gerrit-releases.storage.googleapis.com/gerrit-2.7.war',
+    creates => '/home/gerrit/gerrit-2.7.war',
     user => 'gerrit',
     require => File['/home/gerrit'],
   }
@@ -37,7 +37,7 @@ class sr-site::gerrit {
   exec { 'install-gerrit':
     require => [Exec['download-gerrit'], Package['java-1.7.0-openjdk']],
     user => 'gerrit',
-    command => 'java -jar /home/gerrit/gerrit-full-2.5.war init --no-auto-start -d /home/gerrit/srdata',
+    command => 'java -jar /home/gerrit/gerrit-2.7.war init --no-auto-start -d /home/gerrit/srdata',
     creates => '/home/gerrit/srdata',
   }
 
