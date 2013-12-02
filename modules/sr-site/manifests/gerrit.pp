@@ -26,7 +26,7 @@ class sr-site::gerrit {
   # changes to the db.
   $gerrit_war = '/home/gerrit/gerrit-2.8.war'
   exec { 'download-gerrit':
-    command => 'curl http://gerrit-releases.storage.googleapis.com/gerrit-2.8.war',
+    command => "curl http://gerrit-releases.storage.googleapis.com/gerrit-2.8.war  > '${gerrit_war}'",
     creates => $gerrit_war,
     user => 'gerrit',
     require => File['/home/gerrit'],
