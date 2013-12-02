@@ -24,9 +24,10 @@ class sr-site::gerrit {
   # to update gerrit, which given how bad it is will happen fairly frequently.
   # This also needs to consider the fact that updates can bring in schema
   # changes to the db.
+  $gerrit_war = '/home/gerrit/gerrit-2.8.war'
   exec { 'download-gerrit':
     command => 'curl http://gerrit-releases.storage.googleapis.com/gerrit-2.8.war',
-    creates => '/home/gerrit/gerrit-2.8.war',
+    creates => $gerrit_war,
     user => 'gerrit',
     require => File['/home/gerrit'],
   }
@@ -37,7 +38,7 @@ class sr-site::gerrit {
   exec { 'install-gerrit':
     require => [Exec['download-gerrit'], Package['java-1.7.0-openjdk']],
     user => 'gerrit',
-    command => 'java -jar /home/gerrit/gerrit-2.8.war init --no-auto-start -d /home/gerrit/srdata',
+    command => "java -jar '${gerrit_war}' init --no-auto-start -d /home/gerrit/srdata",
     creates => '/home/gerrit/srdata',
   }
 
