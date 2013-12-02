@@ -21,6 +21,10 @@
         accountEmailAddress = ${mail}
 	; The SSH account name of a user
         accountSshUserName = ${uid}
+	; Limit the accounts identified to those that do not contain an
+	; underscore -- i.e., deny that teacher or student accounts exist.
+	; If there's a better way of doing this, I'm all ears.
+	accountPattern = (&(uid=${username})(!(uid=*_*)))
 [sendemail]
 	smtpServer = <%= gerrit_email_smtp %>
 	smtpEncryption = SSL
