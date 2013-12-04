@@ -20,6 +20,26 @@ class sr-site::fw_pre {
     proto => "all",
   }
 
+  # We've been regularly spammed by some signage in ECS for a while.
+  # They operate from these IPs, and grab our news page 500 times each
+  # regularly
+  firewall { "000.0 Block ECS signage":
+    source => "152.78.71.52",
+    action => "drop",
+  }
+  firewall { "000.1 Block ECS signage":
+    source => "152.78.71.95",
+    action => "drop",
+  }
+  firewall { "000.2 Block ECS signage":
+    source => "152.78.71.97",
+    action => "drop",
+  }
+  firewall { "000.3 Block ECS signage":
+    source => "152.78.71.141",
+    action => "drop",
+  }
+
   # Allow everyone to connect to ssh.
   firewall { "002 ssh":
     proto  => "tcp",
