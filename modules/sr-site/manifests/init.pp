@@ -51,6 +51,7 @@ class sr-site( $git_root ) {
   include sr-site::login
   include sr-site::gerrit
   include sr-site::meta
+  include sr-site::ntpd
 
   class { 'sr-site::git':
     git_root => $git_root,
