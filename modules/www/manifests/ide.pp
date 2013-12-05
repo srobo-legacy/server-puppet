@@ -5,7 +5,14 @@ class www::ide ( $git_root, $root_dir ) {
   # runs pylint to syntax check things. In the past it used a java web browser
   # plugin which is why there are java dependancies, but it's not been deployed
   # this year (sr2013). Everyone I spoke to didn't want it to exist any more.
-  package { ['pylint', 'php-cli', 'java-1.7.0-openjdk', 'ant', 'php-ldap']:
+  package { ['pylint', 'php-cli', 'java-1.7.0-openjdk', 'ant', 'php-ldap',
+
+             #### Packages required for packaging robot.zip:
+             # These contain the various *-strip utils required:
+             'msp430-binutils', 'binutils-arm-linux-gnu',
+             # Contains readelf:
+             'binutils' ]:
+
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo["${root_dir}"],
