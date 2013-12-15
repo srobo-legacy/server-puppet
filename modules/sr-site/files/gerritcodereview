@@ -1,2 +1,2 @@
 GERRIT_SITE=/home/gerrit/srdata
-GERRIT_WAR=/home/gerrit/gerrit-2.7.war
+GERRIT_WAR=/home/gerrit/gerrit-2.8.war
