@@ -183,6 +183,18 @@ class sr-site::openldap {
     require => Ldapres["$groupdn"],
   }
 
+  # Ensure the 'withdrawn' group exists
+  ldapres { "cn=withdrawn,$groupdn":
+    ensure => present,
+    cn => 'withdrawn',
+    objectclass => "posixGroup",
+    gidnumber => 2003,
+    # Don't enable memberuid, or puppet will try to manage it.
+    # memberuid => blah
+    notify => Exec['ldap-groups-flushed'],
+    require => Ldapres["$groupdn"],
+  }
+
   # A command to flush ldap groups. The idea here is that we flush/restart nscd
   # after any modifications have been made to ldap group records. That way, any
   # cached data is cleared. Plus, resources that depend on an ldap group
