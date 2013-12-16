@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPOS=/var/www/html/ide/repos
+REPOS="<%= ide_repos_root %>"
 
 find $REPOS -type d -name '*.git' | while read gdir
 do

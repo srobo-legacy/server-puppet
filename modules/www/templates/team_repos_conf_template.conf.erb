@@ -8,7 +8,7 @@
 #                                                                      #
 ########################################################################
 
-SetEnv GIT_PROJECT_ROOT /var/www/html/ide/repos
+SetEnv GIT_PROJECT_ROOT <%= ide_root_dir %>/repos
 SetEnv GIT_HTTP_EXPORT_ALL
 
 ScriptAliasMatch "^/robogit/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-core/git-http-backend/$1/master/$2
