@@ -64,6 +64,20 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
+  service { 'rsyslog':
+    ensure => running,
+  }
+
+  # Syslog configuration, using local0
+  file { '/etc/rsyslog.d/nemesis.conf':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    source => "puppet:///modules/www/nemesis-syslog.conf",
+    notify => Service['rsyslog'],
+  }
+
   # Configurate nemesis with the ability to send emails.
   $nemesis_mail_smtp = extlookup('nemesis_mail_smtp')
   $nemesis_mail_user = extlookup('nemesis_mail_user')
