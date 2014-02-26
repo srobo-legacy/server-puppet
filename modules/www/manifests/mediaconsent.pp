@@ -11,12 +11,12 @@ class www::mediaconsent( $web_root_dir ) {
     bindpw => extlookup("ldap_manager_pw"),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
-    uid => "tickets",
-    cn => "Tickets user",
-    sn => "Tickets user",
+    uid => "mediaconsent",
+    cn => "Media consent user",
+    sn => "Media consent user",
     uidnumber => '3000',
     gidnumber => '1999',
-    homedirectory => '/home/tickets',
+    homedirectory => '/home/mediaconsent',
     userpassword => extlookup("ldap_mediaconsent_user_ssha_pw"),
   }
 
