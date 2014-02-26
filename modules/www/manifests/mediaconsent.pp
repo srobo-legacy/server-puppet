@@ -1,5 +1,6 @@
 class www::mediaconsent( $web_root_dir ) {
   $mcf_root = "${web_root_dir}/mediaconsent"
+  $mcf_ldap_pw = extlookup("ldap_mediaconsent_user_pw")
 
   # Dependencies are identical to the ticket system, which we should depend on
 
@@ -26,6 +27,14 @@ class www::mediaconsent( $web_root_dir ) {
     group => 'apache',
     mode => '640',
     content => template('www/mcf_local.ini.erb'),
+  }
+
+  file {"${mcf_root}/tickets/sr/local.ini":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '640',
+    content => template('www/mcf_sr_local.ini.erb'),
   }
 
   file {"${mcf_root}/tickets/ticket.key":
