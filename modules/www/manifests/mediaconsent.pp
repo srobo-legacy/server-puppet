@@ -25,7 +25,7 @@ class www::mediaconsent( $web_root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '640',
-    source => '/srv/secrets/mcfs/local.ini',
+    content => template('www/mcf_local.ini.erb'),
   }
 
   file {"${tickets_root}/tickets/ticket.key":
