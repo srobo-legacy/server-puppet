@@ -51,4 +51,12 @@ class www::mediaconsent( $web_root_dir ) {
     group => 'apache',
     mode => '770',
   }
+
+  file {"${mcf_root}/pdfs/.htaccess":
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '640',
+    source => "puppet:///modules/www/mcf/user_dir.htaccess",
+  }
 }
