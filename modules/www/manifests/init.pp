@@ -89,4 +89,12 @@ class www( $git_root ) {
     require => [Class['srweb'], Class['Sr-site::Openldap']],
   }
 
+  # Media Consent System
+  class { 'www::mediaconsent':
+    web_root_dir => $web_root_dir,
+    require => [Class['srweb'], Class['Sr-site::Openldap'], Class['tickets']],
+  }
+
+
+
 }
