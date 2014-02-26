@@ -36,7 +36,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
     user => 'wwwcontent',
     provider => git,
     source => "${git_root}/srweb.git",
-    revision => "origin/master",
+    revision => "bb98fb1701cf027848c263047ee59eeb653bd8b1",
     force => true,
     require => Package[ "php" ],
   }
