@@ -20,7 +20,7 @@ class www::mediaconsent( $web_root_dir ) {
     userpassword => extlookup("ldap_mediaconsent_user_ssha_pw"),
   }
 
-  file {"${tickets_root}/tickets/local.ini":
+  file {"${mcf_root}/tickets/local.ini":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
@@ -28,7 +28,7 @@ class www::mediaconsent( $web_root_dir ) {
     content => template('www/mcf_local.ini.erb'),
   }
 
-  file {"${tickets_root}/tickets/ticket.key":
+  file {"${mcf_root}/tickets/ticket.key":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
@@ -36,7 +36,7 @@ class www::mediaconsent( $web_root_dir ) {
     source => '/srv/secrets/mcfs/ticket.key',
   }
 
-  file {"${tickets_root}/pdfs":
+  file {"${mcf_root}/pdfs":
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
