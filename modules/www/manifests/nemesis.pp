@@ -6,7 +6,7 @@
 class www::nemesis ( $git_root, $root_dir ) {
   # Nemesis is a flask application
   # An sqlite DB is used to store data, install the python bindings for it.
-  package { ['python-sqlite3dbm', 'python-flask', 'python-ldap', 'python-unidecode']:
+  package { ['python-sqlite3dbm', 'python-ldap', 'python-unidecode']:
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo["${root_dir}"],
@@ -21,6 +21,9 @@ class www::nemesis ( $git_root, $root_dir ) {
     force => true,
     owner => 'wwwcontent',
     group => 'apache',
+    # Flask is installed by pip since comp-api needed a more recent version
+    # than the repos could provide. comp-api therefore provides the package.
+    require => Package['Flask'],
     notify => Service['httpd'],
   }
 
