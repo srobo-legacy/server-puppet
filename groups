@@ -1,3 +1,5 @@
 # UUID                                  	Group Name
 #
 2d1c943692c05658d7884e9dc5bb6e8fd0cd538d	serveradminmaintainer
+global:Registered-Users                 	Registered Users
+ldap:cn=mentors,ou=groups,o=sr          	mentors
