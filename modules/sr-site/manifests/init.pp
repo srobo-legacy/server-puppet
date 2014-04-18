@@ -51,7 +51,8 @@ class sr-site( $git_root ) {
   include sr-site::login
   include sr-site::gerrit
   include sr-site::meta
-  include sr-site::ntpd
+  # Alternative NTP situation that's allegedly easier to use than ntpd
+  include sr-site::chronyd
 
   class { 'sr-site::git':
     git_root => $git_root,
