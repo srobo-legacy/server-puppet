@@ -2,7 +2,7 @@
 
 class www::srweb ( $git_root, $web_root_dir ) {
   # srweb is served through php and some other goo,
-  package { [ "php", "php-Smarty", "php-xml", "memcached"]:
+  package { [ "php", "php-Smarty2", "php-xml", "memcached"]:
     ensure => latest,
     notify => Service[ "httpd" ],
   }
