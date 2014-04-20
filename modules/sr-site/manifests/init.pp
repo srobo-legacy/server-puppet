@@ -36,8 +36,6 @@ class sr-site( $git_root ) {
   include bee
 
   include sr-site::firewall
-  include sr-site::openldap
-  include sr-site::login
   # Alternative NTP situation that's allegedly easier to use than ntpd
   include sr-site::chronyd
 
