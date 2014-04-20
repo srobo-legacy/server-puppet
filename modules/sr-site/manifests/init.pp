@@ -32,42 +32,17 @@ class sr-site( $git_root ) {
     ensure => latest,
   }
 
-  # Anonymous git access
-  include gitdaemon
-
   # The bee
   include bee
 
-  # Monitoring
-  class { 'monitoring':
-    git_root => $git_root,
-  }
-
   include sr-site::firewall
-  include sr-site::mysql
   include sr-site::openldap
-  include sr-site::trac
-  include sr-site::subversion
   include sr-site::login
-  include sr-site::gerrit
-  include sr-site::meta
   # Alternative NTP situation that's allegedly easier to use than ntpd
   include sr-site::chronyd
 
-  class { 'sr-site::git':
-    git_root => $git_root,
-  }
-
   # Web stuff
   class { "www":
-    git_root => $git_root,
-  }
-
-  class { "backup":
-    git_root => $git_root,
-  }
-
-  class { "pipebot":
     git_root => $git_root,
   }
 }
