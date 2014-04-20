@@ -7,6 +7,7 @@ class sr-site::chronyd {
 
   service { "chronyd":
     ensure => running,
+    enable => true,
     require => Package[ "chrony" ],
     subscribe => [ File[ "chrony.conf" ],
                    File[ "chrony.keys" ] ],
