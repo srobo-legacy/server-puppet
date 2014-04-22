@@ -171,6 +171,13 @@ WSGISocketPrefix /var/run/wsgi
                 AllowOverride All
         </Directory>
 
+	# Pass accesses to /comp-api over to the Competition API in WSGI
+        WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
+        <Directory /srv/srcomp-http>
+            Order deny,allow
+            Allow from all
+        </Directory>
+
 	# Pass accesses to /userman over to nemesis in WSGI
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
         WSGIPassAuthorization on
