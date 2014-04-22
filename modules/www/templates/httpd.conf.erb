@@ -118,6 +118,12 @@ ServerAdmin root@localhost
 #
 DocumentRoot "/var/www/html"
 
+# Pass accesses to /comp-api over to the Competition API in WSGI
+WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
+<Directory /srv/srcomp-http>
+	Require all granted
+</Directory>
+
 #
 # Relax access to content within /var/www.
 #
