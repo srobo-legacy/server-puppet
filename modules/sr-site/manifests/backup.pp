@@ -15,7 +15,14 @@ class sr-site::backup ( $git_root ) {
   }
 
   # FIXME: find a way of extracting all mysql dbs from puppet?
-  $list_of_dbs = 'phpbb_sr2013,piwik,trac,reviewdb'
+  $all_dbs = [
+    $www::phpbb::forum_db_name,
+    $www::piwik::piwik_db_name,
+    # Constants because hyphens in the names cause issues
+    'trac', # sr-site::trac::trac_db_name
+    'reviewdb', # sr-site::gerrit::gerrit_db_name
+  ]
+  $list_of_dbs = join($all_dbs, ',')
   $ide_loc = $www::ide::root_dir
   $team_status_images_loc = $www::ide::team_status_imgs_live_dir
 

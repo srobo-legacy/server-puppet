@@ -117,6 +117,7 @@ class sr-site::gerrit {
 
   $www_canonical_hostname = extlookup('www_canonical_hostname')
   $ldap_manager_pw = extlookup('ldap_manager_pw')
+  $gerrit_db_name = 'reviewdb'
   $gerrit_db_pw = extlookup('gerrit_db_pw')
   $gerrit_email_key = extlookup('gerrit_email_key')
   $gerrit_email_pw = extlookup('gerrit_email_pw')
@@ -198,7 +199,7 @@ class sr-site::gerrit {
 
   # A mysql database for gerrit to store user info, group info, reviews and so
   # forth.
-  mysql::db { 'reviewdb':
+  mysql::db { $gerrit_db_name:
     user => 'gerrit',
     password => "$gerrit_db_pw",
     host => "localhost",
