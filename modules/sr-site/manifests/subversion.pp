@@ -26,7 +26,7 @@ class sr-site::subversion {
   subversion::svnrepo { 'sr': # /srv/svn is pasted on the front
     owner => 'svn',
     group => 'svn',
-    mode => '644',
+    mode => '0644',
     require => User['svn'],
   }
 
@@ -51,7 +51,7 @@ class sr-site::subversion {
     source => 'puppet:///modules/sr-site/authfile',
     owner => 'svn',
     group => 'svn',
-    mode => '644',
+    mode => '0644',
     require => Subversion::Svnrepo['sr'],
   }
 

@@ -2,63 +2,63 @@
 
 class www::srweb ( $git_root, $web_root_dir ) {
   # srweb is served through php and some other goo,
-  package { [ "php", "php-Smarty", "php-xml", "memcached"]:
+  package { [ 'php', 'php-Smarty', 'php-xml', 'memcached']:
     ensure => latest,
-    notify => Service[ "httpd" ],
+    notify => Service[ 'httpd' ],
   }
 
   # needed to build the sitemap
-  package { [ "linkchecker", "python-BeautifulSoup" ]:
+  package { [ 'linkchecker', 'python-BeautifulSoup' ]:
     ensure => latest,
   }
 
   # Install and run memcached for the plus plus speed.
   service { 'memcached':
-    enable => 'true',
     ensure => 'running',
-    hasrestart => 'true',
-    hasstatus => 'true',
+    enable => true,
+    hasrestart => true,
+    hasstatus => true,
   }
 
   # Directory permissions and ownership of srwebs directory. Seeing how
   # /var/www/html belongs to root by default on fedora.
-  file { "${web_root_dir}":
+  file { $web_root_dir:
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '644',
-    before => Vcsrepo[ "${web_root_dir}" ],
+    mode => '0644',
+    before => Vcsrepo[$web_root_dir],
   }
 
   # Maintain a checkout of the website
-  vcsrepo { "${web_root_dir}":
+  vcsrepo {$web_root_dir:
     ensure => present,
     user => 'wwwcontent',
     provider => git,
     source => "${git_root}/srweb.git",
-    revision => "origin/master",
+    revision => 'origin/master',
     force => true,
-    require => Package[ "php" ],
+    require => Package['php'],
   }
 
   # srweb needs this directory to belong to apache
   file { "${web_root_dir}/templates_compiled":
     ensure => directory,
-    owner => "wwwcontent",
-    group => "apache",
-    mode => "u=rwx,g=rwxs,o=rx",
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => 'u=rwx,g=rwxs,o=rx',
     recurse => false,
-    require => Vcsrepo[ "${web_root_dir}" ],
+    require => Vcsrepo[$web_root_dir],
   }
 
   # srweb needs this directory to be writeable too
   file { "${web_root_dir}/cache":
     ensure => directory,
-    owner => "wwwcontent",
-    group => "apache",
-    mode => "u=rwx,g=rwxs,o=rx",
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => 'u=rwx,g=rwxs,o=rx',
     recurse => false,
-    require => Vcsrepo[ "${web_root_dir}" ],
+    require => Vcsrepo[$web_root_dir],
   }
 
   # Local configuration for srweb - specifically setting the LIVE_SITE option
@@ -67,27 +67,27 @@ class www::srweb ( $git_root, $web_root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '640',
+    mode => '0640',
     content => template('www/srweb_local.config.inc.php.erb'),
-    require => Vcsrepo["${web_root_dir}"],
+    require => Vcsrepo[$web_root_dir],
   }
 
   # Set the rewrite base
-  exec { "rewritebase":
-    command => "sed -i .htaccess -e 's#/~chris/srweb#/#'",
+  exec { 'rewritebase':
+    command => 'sed -i .htaccess -e "s#/~chris/srweb#/#"',
     onlyif => "grep '~chris' '${web_root_dir}/.htaccess'",
-    cwd => "${web_root_dir}",
-    subscribe => Vcsrepo[ "${web_root_dir}" ],
+    cwd => $web_root_dir,
+    subscribe => Vcsrepo[$web_root_dir],
   }
 #
 #  # Build the sitemap.xml
 #  $www_canonical_hostname = extlookup('www_canonical_hostname')
-#  exec { "build-sitemap":
+#  exec { 'build-sitemap':
 #    command => "${web_root_dir}/createsitemap.sh 'https://${www_canonical_hostname}'",
-#    cwd => "${web_root_dir}",
-#    user => "wwwcontent",
-#    subscribe => Vcsrepo[ "${web_root_dir}" ],
-#    require => Package["linkchecker"],
+#    cwd => $web_root_dir,
+#    user => 'wwwcontent',
+#    subscribe => Vcsrepo[$web_root_dir],
+#    require => Package['linkchecker'],
 #  }
 #
   # Maintain existance and permissions on the 404log.
@@ -95,7 +95,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '664',
+    mode => '0664',
   }
 
   # Configure php
@@ -103,7 +103,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '644',
+    mode => '0644',
     source => 'puppet:///modules/www/php.ini',
   }
 
@@ -114,6 +114,6 @@ class www::srweb ( $git_root, $web_root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '660',
+    mode => '0660',
   }
 }

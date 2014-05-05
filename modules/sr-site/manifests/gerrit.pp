@@ -1,3 +1,5 @@
+# Gerrit provides review of our commits as well as easy push access
+
 class sr-site::gerrit {
 
   # Gerrit runs on java...
@@ -18,8 +20,8 @@ class sr-site::gerrit {
   # future.
   file { '/home/gerrit':
     ensure => directory,
-    owner => "gerrit",
-    group => "users",
+    owner => 'gerrit',
+    group => 'users',
     require => User['gerrit'],
   }
 
@@ -77,7 +79,7 @@ class sr-site::gerrit {
     source => 'puppet:///modules/sr-site/gerritmail',
     owner => 'gerrit',
     group => 'users',
-    mode => '444',
+    mode => '0444',
     require => Exec['install-gerrit'],
   }
 
@@ -94,16 +96,16 @@ class sr-site::gerrit {
   file { '/etc/rc3.d/S90gerrit':
     ensure => link,
     target => '/etc/init.d/gerrit',
-    owner => root,
-    group => root,
+    owner => 'root',
+    group => 'root',
   }
 
   # Kill gerrit below runlevel 3.
   file { '/etc/rc3.d/K90gerrit':
     ensure => link,
     target => '/etc/init.d/gerrit',
-    owner => root,
-    group => root,
+    owner => 'root',
+    group => 'root',
   }
 
   # Configuration data for the gerrit service (i.e. the SYSV init script),
@@ -130,7 +132,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'gerrit',
     group => 'users',
-    mode => '644',
+    mode => '0644',
     content => template('sr-site/gerrit.config.erb'),
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
@@ -142,7 +144,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'gerrit',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     content => template('sr-site/secure.config.erb'),
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
@@ -155,7 +157,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'gerrit',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     source => '/srv/secrets/gerrit/ssh_host_dsa_key',
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
@@ -165,7 +167,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'gerrit',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     source => '/srv/secrets/gerrit/ssh_host_dsa_key',
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
@@ -175,7 +177,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'gerrit',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     source => '/srv/secrets/gerrit/ssh_host_rsa_key',
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
@@ -185,7 +187,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'gerrit',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     source => '/srv/secrets/gerrit/ssh_host_rsa_key.pub',
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
@@ -201,17 +203,17 @@ class sr-site::gerrit {
   # forth.
   mysql::db { $gerrit_db_name:
     user => 'gerrit',
-    password => "$gerrit_db_pw",
-    host => "localhost",
-    grant => ["all"],
+    password => $gerrit_db_pw,
+    host => 'localhost',
+    grant => ['all'],
   }
 
   # Load the contents of the Gerrit database from backup.
-  exec { "pop_gerrit_db":
+  exec { 'pop_gerrit_db':
     command => "mysql -u gerrit --password='${gerrit_db_pw}' reviewdb < /srv/secrets/mysql/gerrit.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/gerrit_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/gerrit_installed',
-    require => Mysql::Db["reviewdb"],
+    require => Mysql::Db['reviewdb'],
     notify => Service['gerrit'],
   }
 

@@ -30,7 +30,7 @@ class www( $git_root ) {
 
   # Primary website served at https://studentrobotics.org. Other applications
   # exist either as subdirectories or aliases.
-  class { "www::srweb":
+  class { 'www::srweb':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
     require => User['wwwcontent'],
@@ -44,7 +44,7 @@ class www( $git_root ) {
   }
 
   # Voting scripts, at srobo.org/~voting/voting
-  class { "www::voting":
+  class { 'www::voting':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
     require => User['wwwcontent'],

@@ -1,3 +1,4 @@
+# A wall of fire!
 
 class sr-site::firewall {
 
@@ -7,7 +8,7 @@ class sr-site::firewall {
     refreshonly => true,
   }
 
-  # These defaults ensure that the persistence command is executed after 
+  # These defaults ensure that the persistence command is executed after
   # every change to the firewall, and that pre & post classes are run in the
   # right order to avoid potentially locking you out of your box during the
   # first puppet run.
@@ -23,7 +24,7 @@ class sr-site::firewall {
   #
   # This will clear any existing rules, and make sure that only rules
   # defined in puppet exist on the machine
-  resources { "firewall":
+  resources { 'firewall':
     purge => true
   }
 

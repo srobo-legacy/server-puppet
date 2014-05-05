@@ -35,11 +35,11 @@ class www::voting ($git_root, $web_root_dir) {
   }
 
   # Checkout of the voting scripts, for people to vote with.
-  vcsrepo { "/home/voting/public_html/voting":
+  vcsrepo { '/home/voting/public_html/voting':
     ensure   => present,
     provider => git,
     source   => "${git_root}/voting.git",
-    revision => "origin/master",
+    revision => 'origin/master',
     force    => true,
     require  => [Package['PyYAML'], User['voting']],
     owner    => 'voting',

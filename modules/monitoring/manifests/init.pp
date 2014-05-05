@@ -1,6 +1,6 @@
+# Support for monitoring our server's activities
 
 class monitoring ( $git_root ) {
-
 
 # install generic nagios checks
   package { 'nagios-plugins-all':
@@ -23,7 +23,7 @@ class monitoring ( $git_root ) {
     ensure => directory,
     owner => 'monitoring',
     group => 'users',
-    mode => '700',
+    mode => '0700',
     require => User['monitoring']
   }
 
@@ -31,14 +31,14 @@ class monitoring ( $git_root ) {
     ensure => directory,
     owner => 'monitoring',
     group => 'users',
-    mode => '700',
+    mode => '0700',
   }
 
   file { '/home/monitoring/.ssh/authorized_keys':
     ensure => present,
     owner => 'monitoring',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     source => '/srv/secrets/login/monitoring_ssh_keys',
     require => File['/home/monitoring/.ssh'],
   }
@@ -47,7 +47,7 @@ class monitoring ( $git_root ) {
     ensure => directory,
     owner => 'root',
     group => 'root',
-    mode => '755',
+    mode => '0755',
     require => User['monitoring']
   }
 
@@ -57,8 +57,9 @@ class monitoring ( $git_root ) {
     group => 'root',
     provider => 'git',
     source => "${git_root}/server/monitoring.git",
-    revision => "master", 
-    force => 'true',
+    # TODO: why is this not 'origin/master'?
+    revision => 'master',
+    force => true,
     require => User['monitoring']
   }
 

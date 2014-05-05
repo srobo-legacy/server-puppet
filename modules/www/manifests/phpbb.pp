@@ -3,8 +3,8 @@
 class www::phpbb ( $git_root, $root_dir ) {
   # MySQL database configuration
   $forum_db_name = 'phpbb_sr2014'
-  $forum_user = extlookup("phpbb_sql_user")
-  $forum_pw = extlookup("phpbb_sql_pw")
+  $forum_user = extlookup('phpbb_sql_user')
+  $forum_pw = extlookup('phpbb_sql_pw')
 
   # We require the bindings between php and mysql to work
   package { ['php-mysql']:
@@ -15,18 +15,18 @@ class www::phpbb ( $git_root, $root_dir ) {
   # Checkout of the phpbb installation, with SRs patches against phpbb. One
   # of these is to delete the installation directory, which is mandatory before
   # the forum will start serving.
-  vcsrepo { "${root_dir}":
+  vcsrepo { $root_dir:
     ensure => present,
     user => 'wwwcontent',
     provider => git,
     source => "${git_root}/sr-phpbb3.git",
-    revision => "origin/master",
+    revision => 'origin/master',
     force => true,
-    require => Package[ "php", 'php-mysql' ],
+    require => Package[ 'php', 'php-mysql' ],
   }
 
   # Create the MySQL db for the forum
-  mysql::db { "$forum_db_name":
+  mysql::db { $forum_db_name:
     user => $forum_user,
     password => $forum_pw,
     host => 'localhost',
@@ -38,7 +38,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     command => "mysql -u ${forum_user} --password='${forum_pw}' ${forum_db_name} < /srv/secrets/mysql/phpbb.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/forum_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/forum_installed',
-    require => Mysql::Db["${forum_db_name}"],
+    require => Mysql::Db[$forum_db_name],
   }
 
   # Maintain permissions on the config file, and template it. Contains SQL
@@ -47,9 +47,9 @@ class www::phpbb ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '640',
+    mode => '0640',
     content => template('www/forum_config.php.erb'),
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Directory for storing forum attachments.
@@ -59,7 +59,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Some form of forum page cache
@@ -68,7 +68,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Not the foggiest, but this is how it was on optimus, so this is configured
@@ -78,6 +78,6 @@ class www::phpbb ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 }

@@ -1,7 +1,7 @@
-$extlookup_datadir = "/srv/secrets"
-$extlookup_precedence = [ "common" ]
+$extlookup_datadir = '/srv/secrets'
+$extlookup_precedence = [ 'common' ]
 $devmode = false
 
-class { "sr-site":
-  git_root => "/srv/git",
+class { 'sr-site':
+  git_root => '/srv/git',
 }

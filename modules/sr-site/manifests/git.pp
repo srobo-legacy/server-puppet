@@ -8,7 +8,7 @@ class sr-site::git($git_root) {
   # Ldapres defaults,
 #  Ldapres {
 #    binddn => 'cn=Manager,o=sr',
-#    bindpw => extlookup("ldap_manager_pw"),
+#    bindpw => extlookup('ldap_manager_pw'),
 #    ldapserverhost => 'localhost',
 #    ldapserverport => '389',
 #    require => Class['ldap'],
@@ -77,7 +77,7 @@ class sr-site::git($git_root) {
       ensure => present,
       provider => git,
       source => "${git_root}/scripts",
-      revision => "origin/master",
+      revision => 'origin/master',
       force => true,
       owner => 'root',
       group => 'root',
@@ -97,8 +97,8 @@ class sr-site::git($git_root) {
 
 #  file { '/root/python-pyrss2gen.noarch.rpm':
 #    ensure => present,
-#    owner => root,
-#    mode => 400,
+#    owner => 'root',
+#    mode => '0400',
 #    source => 'puppet:///modules/sr-site/python-pyrss2gen-1.0.0-2.2.noarch.rpm',
 #    before => Package['python-pyrss2gen.noarch'],
 #  }
@@ -121,7 +121,7 @@ class sr-site::git($git_root) {
 #    ensure => present,
 #    owner => 'git',
 #    group => 'srusers',
-#    mode => '644',
+#    mode => '0644',
 #    before => Vcsrepo['/srv/git/scripts'],
 #  }
 
@@ -129,7 +129,7 @@ class sr-site::git($git_root) {
 #    ensure => present,
 #    owner => 'git',
 #    group => 'srusers',
-#    mode => '644',
+#    mode => '0644',
 #    before => Vcsrepo['/srv/git/scripts'],
 #  }
 
@@ -137,7 +137,7 @@ class sr-site::git($git_root) {
 #    ensure => present,
 #    owner => 'root',
 #    group => 'git-commit',
-#    mode => '664',
+#    mode => '0664',
 #    before => Vcsrepo['/srv/git/scripts'],
 #  }
 
@@ -145,7 +145,7 @@ class sr-site::git($git_root) {
 #    ensure => present,
 #    owner => 'root',
 #    group => 'git-commit',
-#    mode => '664',
+#    mode => '0664',
 #    before => Vcsrepo['/srv/git/scripts'],
 #  }
 
@@ -153,7 +153,7 @@ class sr-site::git($git_root) {
 #    ensure => present,
 #    owner => 'root',
 #    group => 'git-admin',
-#    mode => '664',
+#    mode => '0664',
 #    before => Vcsrepo['/srv/git/scripts'],
 #    require => Exec['ldap-groups-flushed'],
 #  }
@@ -169,7 +169,7 @@ class sr-site::git($git_root) {
     ensure => present,
     owner => 'git',
     group => 'root',
-    mode => '644',
+    mode => '0644',
     require => [Package['cgit'], Exec['ldap-groups-flushed']],
   }
 

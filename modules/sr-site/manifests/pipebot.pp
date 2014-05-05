@@ -1,3 +1,5 @@
+# Pipebot emits things from /tmp/hash-srobo into the #srobo IRC channel
+
 class sr-site::pipebot ( $git_root ) {
   # For lack of a more appropriate user,
   user { 'pipebot':
@@ -11,13 +13,13 @@ class sr-site::pipebot ( $git_root ) {
     ensure => directory,
     owner => 'pipebot',
     group => 'users',
-    mode => '700',
+    mode => '0700',
     require => User['pipebot'],
   }
 
   # Checkout of pipebot's code.
   $root_dir = '/home/pipebot/pipebot'
-  vcsrepo { "${root_dir}":
+  vcsrepo { $root_dir:
     ensure => present,
     provider => git,
     source => "${git_root}/pipebot",
@@ -37,7 +39,7 @@ class sr-site::pipebot ( $git_root ) {
     owner => 'pipebot',
     group => 'users',
     content => template('sr-site/pipebot_localconfig.py.erb'),
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Also, some systemd goo to install the service.
@@ -45,7 +47,7 @@ class sr-site::pipebot ( $git_root ) {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '644',
+    mode => '0644',
     source => 'puppet:///modules/sr-site/pipebot.service',
   }
 

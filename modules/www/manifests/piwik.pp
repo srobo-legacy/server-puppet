@@ -9,7 +9,7 @@ class www::piwik ( $git_root, $root_dir ) {
 
   # Checkout of piwik's tree. Don't update automatically, they make schema
   # changes between releases.
-  vcsrepo { "${root_dir}":
+  vcsrepo { $root_dir:
     ensure => present,
     user => 'wwwcontent',
     provider => git,
@@ -35,7 +35,7 @@ class www::piwik ( $git_root, $root_dir ) {
     command => "mysql -u ${piwik_user} --password='${piwik_pw}' piwik < /srv/secrets/mysql/piwik.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/piwik_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/piwik_installed',
-    require => Mysql::Db["piwik"],
+    require => Mysql::Db['piwik'],
   }
 
   # Piwik web config file - database connection details, as well as an MD5 of
@@ -47,7 +47,7 @@ class www::piwik ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '640',
+    mode => '0640',
     content => template('www/piwik_config.ini.php.erb'),
     before => Mysql::Db['piwik'],
   }
@@ -60,7 +60,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/tmp/templates_c":
@@ -68,7 +68,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/tmp/cache":
@@ -76,7 +76,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/tmp/assets":
@@ -84,7 +84,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/tmp/tcpdf":
@@ -92,7 +92,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/config":
@@ -100,7 +100,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/tmp/sessions":
@@ -108,7 +108,7 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   file { "${root_dir}/tmp/latest":
@@ -116,6 +116,6 @@ class www::piwik ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2770',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 }
