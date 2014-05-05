@@ -9,7 +9,7 @@ do
 
     if [[ `git config core.bare` == "true" ]]
     then
-	git config receive.denyNonFastForwards true
+        git config receive.denyNonFastForwards true
     fi
 
     git config core.sharedRepository all

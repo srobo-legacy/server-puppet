@@ -12,7 +12,7 @@
 #
 
 # Your LDAP server. Must be resolvable without using LDAP.
-# Multiple hosts may be specified, each separated by a 
+# Multiple hosts may be specified, each separated by a
 # space. How long nss_ldap takes to failover depends on
 # whether your LDAP client library supports configurable
 # network or connect timeouts (see bind_timelimit).
@@ -25,7 +25,7 @@ base <%= basedn %>
 # uri with the server name. This allows to use
 # Unix Domain Sockets to connect to a local LDAP Server.
 #uri ldap://127.0.0.1/
-#uri ldaps://127.0.0.1/   
+#uri ldaps://127.0.0.1/
 #uri ldapi://%2fvar%2frun%2fldapi_sock/
 # Note: %2f encodes the '/' used as directory separator
 
@@ -38,7 +38,7 @@ base <%= basedn %>
 # jmorse: we use the 'anon' account to bind here
 binddn <%= anonbinddn %>
 
-# The credentials to bind with. 
+# The credentials to bind with.
 # Optional: default is no credential.
 bindpw <%= anonbindpw %>
 
@@ -131,7 +131,7 @@ pam_min_uid 2000
 # Michigan LDAP server, and works with Netscape
 # Directory Server if you're using the UNIX-Crypt
 # hash mechanism and not using the NT Synchronization
-# service. 
+# service.
 #pam_password crypt
 
 # Remove old password first, then update in
