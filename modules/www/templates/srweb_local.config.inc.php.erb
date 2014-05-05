@@ -1,5 +1,5 @@
 <?php
-<% if !devmode then lestring="true" else lestring="false" end%>
+<% if !@devmode then lestring="true" else lestring="false" end%>
 define('LIVE_SITE', <%= lestring %>);
 define('TEAM_STATUS_DIR', ROOT_DIR . '/ide/settings/team-status');
 // The following is used in both a template and a parsed page so ROOT_DIR

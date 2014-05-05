@@ -16,10 +16,10 @@
 # space. How long nss_ldap takes to failover depends on
 # whether your LDAP client library supports configurable
 # network or connect timeouts (see bind_timelimit).
-host <%= serverhostname %>
+host <%= @serverhostname %>
 
 # The distinguished name of the search base.
-base <%= basedn %>
+base <%= @basedn %>
 
 # Another way to specify your LDAP server is to provide an
 # uri with the server name. This allows to use
@@ -36,16 +36,16 @@ base <%= basedn %>
 # The distinguished name to bind to the server with.
 # Optional: default is to bind anonymously.
 # jmorse: we use the 'anon' account to bind here
-binddn <%= anonbinddn %>
+binddn <%= @anonbinddn %>
 
 # The credentials to bind with.
 # Optional: default is no credential.
-bindpw <%= anonbindpw %>
+bindpw <%= @anonbindpw %>
 
 # The distinguished name to bind to the server with
 # if the effective user ID is root. Password is
 # stored in /etc/ldap.secret (mode 600)
-rootbinddn <%= managerdn %>
+rootbinddn <%= @managerdn %>
 
 # The port.
 # Optional: default is 389.
@@ -100,12 +100,12 @@ pam_login_attribute uid
 
 # Group to enforce membership of
 # jmorse: Configured to be the 'shell-users' group in puppet.
-pam_groupdn <%= logingroupdn %>
+pam_groupdn <%= @logingroupdn %>
 
 # Group member attribute
 # jmorse: this is 'memberUid' for posixGroups, it might end up changing in the
 # future.
-pam_member_attribute <%= logingroupattr %>
+pam_member_attribute <%= @logingroupattr %>
 
 # Specify a minium or maximum UID number allowed
 pam_min_uid 2000
@@ -167,9 +167,9 @@ pam_password exop
 # nss_base_passwd	ou=People,
 # to append the default base DN but this
 # may incur a small performance impact.
-nss_base_passwd		<%= passwddn %>
+nss_base_passwd		<%= @passwddn %>
 #nss_base_shadow	ou=People,dc=example,dc=com?one
-nss_base_group		<%= groupdn %>
+nss_base_group		<%= @groupdn %>
 #nss_base_hosts		ou=Hosts,dc=example,dc=com?one
 #nss_base_services	ou=Services,dc=example,dc=com?one
 #nss_base_networks	ou=Networks,dc=example,dc=com?one

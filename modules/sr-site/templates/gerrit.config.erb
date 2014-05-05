@@ -3,7 +3,7 @@
 	basePath = /srv/git
 	; Base URL that gerrit is going to be served at, aka what to tack onto
 	; the start of all URLs
-	canonicalWebUrl = https://<%= www_canonical_hostname %>/gerrit/
+	canonicalWebUrl = https://<%= @www_canonical_hostname %>/gerrit/
 [auth]
 	; What authentication mechanism to use
 	type = LDAP
@@ -26,9 +26,9 @@
 	; If there's a better way of doing this, I'm all ears.
 	accountPattern = (&(uid=${username})(!(uid=*_*)))
 [sendemail]
-	smtpServer = <%= gerrit_email_smtp %>
+	smtpServer = <%= @gerrit_email_smtp %>
 	smtpEncryption = SSL
-	smtpUser = <%= gerrit_email_user %>
+	smtpUser = <%= @gerrit_email_user %>
 [container]
 	user = gerrit
 	javaHome = /usr/lib/jvm/jre

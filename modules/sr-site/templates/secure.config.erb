@@ -1,8 +1,8 @@
 [database]
-	password = <%= gerrit_db_pw %>
+	password = <%= @gerrit_db_pw %>
 [ldap]
-	password = <%= ldap_manager_pw %>
+	password = <%= @ldap_manager_pw %>
 [auth]
-        registerEmailPrivateKey = <%= gerrit_email_key %>
+        registerEmailPrivateKey = <%= @gerrit_email_key %>
 [sendemail]
-	smtpPass = <%= gerrit_email_pw %>
+	smtpPass = <%= @gerrit_email_pw %>

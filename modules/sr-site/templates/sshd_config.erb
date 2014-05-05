@@ -39,7 +39,7 @@ SyslogFacility AUTHPRIV
 
 #LoginGraceTime 2m
 #PermitRootLogin yes
-PermitRootLogin <% if devmode then lestring="yes" else lestring = "no" end%><%= lestring %>
+PermitRootLogin <% if @devmode then lestring="yes" else lestring = "no" end%><%= lestring %>
 #StrictModes yes
 #MaxAuthTries 6
 #MaxSessions 10
