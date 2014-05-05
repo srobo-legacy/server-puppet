@@ -9,15 +9,15 @@ class www::nemesis ( $git_root, $root_dir ) {
   package { ['python-sqlite3dbm', 'python-ldap', 'python-unidecode']:
     ensure => present,
     notify => Service['httpd'],
-    before => Vcsrepo["${root_dir}"],
+    before => Vcsrepo[$root_dir],
   }
 
   # Main checkout of the Nemesis codebase
-  vcsrepo { "${root_dir}":
+  vcsrepo { $root_dir:
     ensure => present,
     provider => git,
     source => "${git_root}/nemesis.git",
-    revision => "origin/master",
+    revision => 'origin/master',
     force => true,
     owner => 'wwwcontent',
     group => 'apache',
@@ -32,9 +32,9 @@ class www::nemesis ( $git_root, $root_dir ) {
   exec { "${root_dir}/nemesis/scripts/make_db.sh":
     cwd => "${root_dir}/nemesis",
     creates => "${root_dir}/nemesis/db/nemesis.sqlite",
-    path => ["/usr/bin"],
-    user => "wwwcontent",
-    require => Vcsrepo["${root_dir}"],
+    path => ['/usr/bin'],
+    user => 'wwwcontent',
+    require => Vcsrepo[$root_dir],
   }
 
   # Maintain permissions of the sqlite DB. SQLite determines what user to create
@@ -44,7 +44,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   file { "${root_dir}/nemesis/db/nemesis.sqlite":
     owner => 'apache',
     group => 'apache',
-    mode => '660',
+    mode => '0660',
     require => Exec["${root_dir}/nemesis/scripts/make_db.sh"],
   }
 
@@ -53,7 +53,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '660',
+    mode => '0660',
     require => Exec["${root_dir}/nemesis/scripts/make_db.sh"],
   }
 
@@ -62,9 +62,9 @@ class www::nemesis ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '644',
-    source => "puppet:///modules/www/nemesis.wsgi",
-    require => Vcsrepo["${root_dir}"],
+    mode => '0644',
+    source => 'puppet:///modules/www/nemesis.wsgi',
+    require => Vcsrepo[$root_dir],
   }
 
   service { 'rsyslog':
@@ -76,8 +76,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '644',
-    source => "puppet:///modules/www/nemesis-syslog.conf",
+    mode => '0644',
+    source => 'puppet:///modules/www/nemesis-syslog.conf',
     notify => Service['rsyslog'],
   }
 
@@ -91,8 +91,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     content => template('www/nemesis_local.ini.erb'),
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '440',
-    require => Vcsrepo["${root_dir}"],
+    mode => '0440',
+    require => Vcsrepo[$root_dir],
   }
 
   # Configurate the srusers library so that nemesis can interact with LDAP.
@@ -105,8 +105,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     content => template('www/nemesis_srusers.ini.erb'),
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '440',
-    require => Vcsrepo["${root_dir}"],
+    mode => '0440',
+    require => Vcsrepo[$root_dir],
   }
 
   cron { 'nemesis-cron':
@@ -114,13 +114,13 @@ class www::nemesis ( $git_root, $root_dir ) {
     hour => '3',
     minute => '41',
     user => 'wwwcontent',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   cron { 'nemesis-email-cron':
     command => "${root_dir}/nemesis/scripts/send-emails.py",
     minute => '*/5',
     user => 'wwwcontent',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 }

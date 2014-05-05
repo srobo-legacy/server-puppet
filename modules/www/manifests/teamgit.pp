@@ -1,26 +1,30 @@
+# Provides access to the team's IDE git repos via HTTPS
+
 class www::teamgit( $ide_root_dir ) {
 
-  file { '/usr/local/bin/team_repos_conf_builder.py':
+  # WARNING: this variable also appears as a literal below.
+  $teams_conf_builder = '/usr/local/bin/team_repos_conf_builder.py'
+  file { $teams_conf_builder:
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '700',
+    mode => '0700',
     source => 'puppet:///modules/www/team_repos_conf_builder.py',
   }
 
-  $anonpw = extlookup("ldap_anon_user_pw")
+  $anonpw = extlookup('ldap_anon_user_pw')
   file { '/usr/local/bin/team_repos_conf_template.conf':
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '600',
+    mode => '0600',
     content => template('www/team_repos_conf_template.conf.erb'),
   }
 
   exec { 'create_team_git':
-    command => '/usr/local/bin/team_repos_conf_builder.py /etc/httpd/conf.d/teamgit.conf',
+    command => "${teams_conf_builder} /etc/httpd/conf.d/teamgit.conf",
     cwd => '/usr/local/bin',
-    require => [File['/usr/local/bin/team_repos_conf_builder.py'],
+    require => [File[$teams_conf_builder],
                 Package['python-ldap'], Exec['pop_ldap']],
     notify => Service['httpd'],
     user => 'root',

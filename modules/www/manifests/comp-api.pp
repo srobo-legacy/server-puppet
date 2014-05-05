@@ -16,7 +16,7 @@ class www::comp-api ( $git_root, $root_dir ) {
 
   # Need more recent than version 0.8, which is all that's available in the F17 repos
   # Ensure the Fedora-provided package is removed
-  package { "python-flask":
+  package { 'python-flask':
     ensure => absent,
   }
 
@@ -25,7 +25,7 @@ class www::comp-api ( $git_root, $root_dir ) {
     ensure => present,
     provider => pip,
     require => [ Package['python-pip'],
-                 Package["python-flask"] ],
+                 Package['python-flask'] ],
     notify => Service['httpd'],
     before => Vcsrepo[$root_dir],
   }

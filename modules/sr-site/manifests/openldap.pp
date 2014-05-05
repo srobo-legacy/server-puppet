@@ -9,9 +9,12 @@
 class sr-site::openldap {
   # Install both server and client packages for LDAP.
   class { 'ldap':
+    # Yes, lint complains about these being quoted.
+    # However, if you remove the quotes, puppet errors with:
+    # Could not find dependent Service[nscd] for File[/etc/nss_ldap.conf]
     server => 'true',
     client => 'true',
-    localloginok => 'true',
+    localloginok => true,
   }
 
   # Multiple domains (aka LDAP dbs) are available; call ours studentrobotics.org
@@ -20,7 +23,7 @@ class sr-site::openldap {
     ensure => 'present',
     basedn => 'o=sr',
     rootdn => 'cn=Manager', # basedn is jammed on the front of this.
-    rootpw => extlookup("ldap_manager_pw"), # Manager password is in common.csv
+    rootpw => extlookup('ldap_manager_pw'), # Manager password is in common.csv
   }
 
   # Give some config options to the client configuration. I think some of these
@@ -28,21 +31,21 @@ class sr-site::openldap {
   ldap::client::config { 'studentrobotics.org':
     ensure => 'present',
     servers => ['localhost'],
-    ssl => 'false',
+    ssl => false,
     base_dn => 'o=sr',
   }
 
   # Configure connection information for barfing LDAP data into the db.
   Ldapres {
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup("ldap_manager_pw"),
+    bindpw => extlookup('ldap_manager_pw'),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     require => Class['ldap'],
   }
 
   # Ensure that test-data from the openldap module's base ldif is removed.
-  ldapres { "ou=people,o=sr":
+  ldapres { 'ou=people,o=sr':
     ensure => absent,
     objectclass => 'organizationalUnit',
     # I hope what this means is "require uid=test is absent first".
@@ -50,19 +53,19 @@ class sr-site::openldap {
     require => Ldapres['uid=test,ou=people,o=sr'],
   }
 
-  ldapres { "uid=test,ou=people,o=sr":
+  ldapres { 'uid=test,ou=people,o=sr':
     ensure => absent,
     objectclass => 'inetOrgPerson',
   }
 
   # Organizational unit for storing LDAP groups
-  ldapres { "ou=groups,o=sr":
+  ldapres { 'ou=groups,o=sr':
     ensure => present,
     objectclass => 'organizationalUnit',
   }
 
   # Organizational unit for storing LDAP users
-  ldapres { "ou=users,o=sr":
+  ldapres { 'ou=users,o=sr':
     ensure => present,
     objectclass => 'organizationalUnit',
   }
@@ -72,16 +75,16 @@ class sr-site::openldap {
   # apache to bind to ldap and find out various things such as group membership.
   # Essentially it's a catch-all privileged account, but crucially that can't
   # write to anything.
-  ldapres { "uid=anon,ou=users,o=sr":
+  ldapres { 'uid=anon,ou=users,o=sr':
     ensure => present,
-    objectclass => ["inetOrgPerson", "uidObject", "posixAccount"],
-    uid => "anon",
-    cn => "Anon user",
-    sn => "Anon user",
+    objectclass => ['inetOrgPerson', 'uidObject', 'posixAccount'],
+    uid => 'anon',
+    cn => 'Anon user',
+    sn => 'Anon user',
     uidnumber => '2043',
     gidnumber => '1999',
     homedirectory => '/home/anon',
-    userpassword => extlookup("ldap_anon_user_ssha_pw"),
+    userpassword => extlookup('ldap_anon_user_ssha_pw'),
   }
 
   # A file to contain the ldap manager password; don't really know what it's
@@ -90,9 +93,9 @@ class sr-site::openldap {
   file { '/etc/ldap.secret':
     ensure => present,
     content => extlookup('ldap_manager_pw'),
-    owner => "root",
-    group => "root",
-    mode => "0600",
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
   }
 
   # Put some data in variables for blowing into pam_ldap.conf via a template.
@@ -101,7 +104,7 @@ class sr-site::openldap {
   $serverhostname = 'localhost'
   $basedn = 'o=sr'
   $anonbinddn = 'uid=anon,ou=users,o=sr'
-  $anonbindpw = extlookup("ldap_anon_user_pw")
+  $anonbindpw = extlookup('ldap_anon_user_pw')
   $managerdn = 'cn=Manager,o=sr'
   $logingroupname = 'shell-users'
   $groupdn = 'ou=groups,o=sr'
@@ -115,9 +118,9 @@ class sr-site::openldap {
   file { '/etc/pam_ldap.conf':
     ensure => present,
     content => template('sr-site/pam_ldap.conf.erb'),
-    owner => "root",
-    group => "root",
-    mode => "0600",
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
     require => File['/etc/ldap.secret'],
   }
 
@@ -126,73 +129,73 @@ class sr-site::openldap {
   file { '/etc/nss_ldap.conf':
     ensure => link,
     target => '/etc/pam_ldap.conf',
-    owner => "root",
-    group => "root",
-    mode => "0600",
-    notify => Service["nscd"],
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
+    notify => Service['nscd'],
     require => File['/etc/pam_ldap.conf'],
   }
 
   # Ensure that the login group exists in ldap. No configuration of its member
   # attributes, that counts as data.
-  ldapres { "$logingroupdn":
+  ldapres { $logingroupdn:
     ensure => present,
     cn => $logingroupname,
-    objectclass => "posixGroup",
+    objectclass => 'posixGroup',
     gidnumber => 3046,
     notify => Exec['ldap-groups-flushed'],
-    require => Ldapres["$groupdn"],
+    require => Ldapres[$groupdn],
   }
 
   # Add srusers group. I have no idea what its purpose is, but that's what
   # everyones primary unix group is.
-  ldapres { "cn=srusers,$groupdn":
+  ldapres { "cn=srusers,${groupdn}":
     ensure => present,
     cn => 'srusers',
-    objectclass => "posixGroup",
+    objectclass => 'posixGroup',
     gidnumber => 1999,
     notify => Exec['ldap-groups-flushed'],
-    require => Ldapres["$groupdn"],
+    require => Ldapres[$groupdn],
   }
 
   # Ensure the mentors group exists; identifies blueshirts.
-  ldapres { "cn=mentors,$groupdn":
+  ldapres { "cn=mentors,${groupdn}":
     ensure => present,
     cn => 'mentors',
-    objectclass => "posixGroup",
+    objectclass => 'posixGroup',
     gidnumber => 2001,
     # Don't enable memberuid, or puppet will try to manage it. Without memberuid
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],
-    require => Ldapres["$groupdn"],
+    require => Ldapres[$groupdn],
   }
 
   # Ensure the media-consent group exists
-  ldapres { "cn=media-consent,$groupdn":
+  ldapres { "cn=media-consent,${groupdn}":
     ensure => present,
     cn => 'media-consent',
-    objectclass => "posixGroup",
+    objectclass => 'posixGroup',
     gidnumber => 2002,
     # Don't enable memberuid, or puppet will try to manage it. Without memberuid
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],
-    require => Ldapres["$groupdn"],
+    require => Ldapres[$groupdn],
   }
 
   # Ensure the 'withdrawn' group exists
-  ldapres { "cn=withdrawn,$groupdn":
+  ldapres { "cn=withdrawn,${groupdn}":
     ensure => present,
     cn => 'withdrawn',
-    objectclass => "posixGroup",
+    objectclass => 'posixGroup',
     gidnumber => 2003,
     # Don't enable memberuid, or puppet will try to manage it.
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],
-    require => Ldapres["$groupdn"],
+    require => Ldapres[$groupdn],
   }
 
   # A command to flush ldap groups. The idea here is that we flush/restart nscd
@@ -212,14 +215,14 @@ class sr-site::openldap {
     ensure => present,
     owner => 'ldap',
     group => 'ldap',
-    mode => '440',
+    mode => '0440',
     source => 'puppet:///modules/sr-site/ldap_acl.conf',
     notify => Class['ldap::server::rebuild'],
   }
 
   # Load the initial LDAP db if one hasn't been yet.
   exec { 'pop_ldap':
-    command => "ldapadd -D cn=Manager,o=sr -y /etc/ldap.secret -x -h localhost -f /srv/secrets/ldap/ldap_backup; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/ldap_installed",
+    command => 'ldapadd -D cn=Manager,o=sr -y /etc/ldap.secret -x -h localhost -f /srv/secrets/ldap/ldap_backup; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/ldap_installed',
     provider => 'shell',
     creates => '/usr/local/var/sr/ldap_installed',
 

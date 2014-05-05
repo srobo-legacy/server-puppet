@@ -6,7 +6,7 @@ class sr-site( $git_root ) {
 
   # Default PATH
   Exec {
-    path => [ "/usr/bin" ],
+    path => [ '/usr/bin' ],
   }
 
   # Directory for 'installed flags' for various flavours of data. When some
@@ -16,19 +16,19 @@ class sr-site( $git_root ) {
     ensure => directory,
     owner => 'root',
     group => 'root',
-    mode => '755',
+    mode => '0755',
   }
 
   file { '/usr/local/var/sr':
     ensure => directory,
     owner => 'root',
     group => 'root',
-    mode => '700',
+    mode => '0700',
     require => File['/usr/local/var'],
   }
 
   # Choose speedy yum mirrors
-  package { "yum-plugin-fastestmirror":
+  package { 'yum-plugin-fastestmirror':
     ensure => latest,
   }
 
@@ -58,15 +58,15 @@ class sr-site( $git_root ) {
   }
 
   # Web stuff
-  class { "www":
+  class { 'www':
     git_root => $git_root,
   }
 
-  class { "backup":
+  class { 'backup':
     git_root => $git_root,
   }
 
-  class { "pipebot":
+  class { 'pipebot':
     git_root => $git_root,
   }
 }

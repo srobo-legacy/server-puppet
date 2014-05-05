@@ -1,3 +1,5 @@
+# Backups make sure that we have all the datas, even if we don't have the server
+
 class sr-site::backup ( $git_root ) {
 
   # A checkout of the server backup git repo. The backup script has to exist at
@@ -9,9 +11,9 @@ class sr-site::backup ( $git_root ) {
     group => 'root',
     provider => 'git',
     source => "${git_root}/server/backup.git",
-    revision => "master", # Deliberately no auto update, the scripts here will
+    revision => 'master', # Deliberately no auto update, the scripts here will
                           # end up be run as root
-    force => 'true',
+    force => true,
   }
 
   # FIXME: find a way of extracting all mysql dbs from puppet?
@@ -35,7 +37,7 @@ class sr-site::backup ( $git_root ) {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '400',
+    mode => '0400',
     content => template('sr-site/backup.ini.erb')
   }
 
@@ -45,7 +47,7 @@ class sr-site::backup ( $git_root ) {
   # This could be locked down further, not urgent at all.
   user { 'backup':
     ensure => present,
-    comment => "Backup operations user",
+    comment => 'Backup operations user',
     shell => '/bin/bash',
     gid => 'users',
   }
@@ -55,7 +57,7 @@ class sr-site::backup ( $git_root ) {
     ensure => directory,
     owner => 'backup',
     group => 'users',
-    mode => '700',
+    mode => '0700',
     require => User['backup'],
   }
 
@@ -64,7 +66,7 @@ class sr-site::backup ( $git_root ) {
     ensure => directory,
     owner => 'backup',
     group => 'users',
-    mode => '700',
+    mode => '0700',
   }
 
   # Backup's ssh keys - this is simply a authorized_keys file that's kept in
@@ -73,7 +75,7 @@ class sr-site::backup ( $git_root ) {
     ensure => present,
     owner => 'backup',
     group => 'users',
-    mode => '600',
+    mode => '0600',
     source => '/srv/secrets/login/backups_ssh_keys',
     require => File['/home/backup/.ssh'],
   }

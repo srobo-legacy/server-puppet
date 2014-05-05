@@ -7,25 +7,26 @@ class www::ide ( $git_root, $root_dir ) {
   # this year (sr2013). Everyone I spoke to didn't want it to exist any more.
   package { ['pylint', 'php-cli', 'php-ldap',
 
-             #### Packages required for packaging robot.zip:
-             # These contain the various *-strip utils required:
-             'msp430-binutils', 'binutils-arm-linux-gnu',
-             # Contains readelf:
-             'binutils' ]:
+              #### Packages required for packaging robot.zip:
+              # These contain the various *-strip utils required:
+              'msp430-binutils', 'binutils-arm-linux-gnu',
+              # Contains readelf:
+              'binutils',
+            ]:
 
     ensure => present,
     notify => Service['httpd'],
-    before => Vcsrepo["${root_dir}"],
+    before => Vcsrepo[$root_dir],
   }
 
   $ide_repos_root = "${root_dir}/repos"
 
   # Checkout of cyanide, acts as backend and serves the frontend of the IDE.
-  vcsrepo { "${root_dir}":
+  vcsrepo { $root_dir:
     ensure => present,
     provider => git,
     source => "${git_root}/cyanide.git",
-    revision => "origin/master",
+    revision => 'origin/master',
     force => true,
     user =>'wwwcontent',
     require => Class['srweb'],
@@ -37,9 +38,9 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '640',
+    mode => '0640',
     content => extlookup('ide_cookie_key'),
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Site-local configuration is stored in local.ini; assign some variables that
@@ -53,26 +54,26 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '640',
+    mode => '0640',
     content => template('www/ide_config.ini.erb'),
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # IDE ldap user has general read access to ou=groups,o=sr.
   $ide_user = extlookup('ide_ldap_user_uid')
   ldapres { "uid=${ide_user},ou=users,o=sr":
+    ensure => present,
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup("ldap_manager_pw"),
+    bindpw => extlookup('ldap_manager_pw'),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     require => Class['sr-site::openldap'],
-    ensure => present,
-    objectclass => ["inetOrgPerson", "uidObject", "posixAccount"],
+    objectclass => ['inetOrgPerson', 'uidObject', 'posixAccount'],
     uid => $ide_user,
-    cn => "IDE account",
-    sn => "IDE account",
-    uidnumber => 2323,
-    gidnumber => 1999, # srusers
+    cn => 'IDE account',
+    sn => 'IDE account',
+    uidnumber => '2323',
+    gidnumber => '1999', # srusers
     homedirectory => '/home/ide',
     userpassword => extlookup('ide_ldap_user_ssha_pw'),
   }
@@ -84,7 +85,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Settings dir, contains user config goo, as well as team-status. (Was
@@ -94,7 +95,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Directory for user repos; self explanatory.
@@ -103,7 +104,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Notifications. Never used, to my knowledge.
@@ -112,7 +113,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Team Status dir. Contains post-reviewed team-status images
@@ -132,7 +133,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Web Cache. Used for the combined CSS & JS files.
@@ -141,7 +142,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 
   # Script for applying the desired configuration to all repos. Not done
@@ -150,7 +151,7 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '744',
+    mode => '0744',
     content => template('www/conf.erb'),
   }
 
@@ -159,7 +160,7 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '744',
+    mode => '0744',
     content => template('www/fsck.erb'),
   }
 
@@ -168,7 +169,7 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
-    mode => '744',
+    mode => '0744',
     content => template('www/repack.erb'),
   }
 
@@ -196,6 +197,6 @@ class www::ide ( $git_root, $root_dir ) {
     hour => '3',
     minute => '14',
     user => 'root',
-    require => Vcsrepo["${root_dir}"],
+    require => Vcsrepo[$root_dir],
   }
 }

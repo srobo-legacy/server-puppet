@@ -6,8 +6,8 @@ class www::python-docs ( $web_root_dir, $version ) {
   # We use the name of the archive we're passed as part of the already-there
   # key so that they'll be updated if it changes.
 
-  $archive_name = "python-$version-docs-html"
-  $target_root = "/srv/python-docs/"
+  $archive_name = "python-${version}-docs-html"
+  $target_root = '/srv/python-docs/'
   $target_dir = "${$target_root}${archive_name}"
 
   file { $target_root:
@@ -19,8 +19,8 @@ class www::python-docs ( $web_root_dir, $version ) {
 
   exec { 'extract-python-docs':
     command =>
-         "rm -rf ${target_dir} ;\
-          curl http://docs.python.org/ftp/python/doc/${version}/$archive_name.tar.bz2 | tar -xj -C ${target_root} ",
+      "rm -rf ${target_dir} ;\
+       curl http://docs.python.org/ftp/python/doc/${version}/${archive_name}.tar.bz2 | tar -xj -C ${target_root} ",
     provider => 'shell',
     creates => $target_dir,
     require => File[$target_root],

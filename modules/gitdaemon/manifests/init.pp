@@ -2,35 +2,35 @@
 
 class gitdaemon {
 
-  package { "xinetd":
+  package { 'xinetd':
     ensure => latest,
   }
 
-  service { "xinetd":
-    enable => true,
+  service { 'xinetd':
     ensure => running,
+    enable => true,
   }
 
   # Restart xinetd after package updates
-  Package["xinetd"] ~> Service["xinetd"]
+  Package['xinetd'] ~> Service['xinetd']
 
-  package { "git-daemon":
+  package { 'git-daemon':
     ensure => latest,
-    require => Package["xinetd"],
+    require => Package['xinetd'],
   }
 
   # The xinetd git daemon config file
-  file { "/etc/xinetd.d/git":
-    mode => 644,
-    owner => root,
-    group => root,
-    source => "puppet:///modules/gitdaemon/git.xinetd",
+  file { '/etc/xinetd.d/git':
+    mode => '0644',
+    owner => 'root',
+    group => 'root',
+    source => 'puppet:///modules/gitdaemon/git.xinetd',
 
     # Install after git-daemon package
-    require => Package["git-daemon"],
+    require => Package['git-daemon'],
 
     # Restart xinetd when this file changes
-    notify => Service["xinetd"],
+    notify => Service['xinetd'],
   }
 
 }

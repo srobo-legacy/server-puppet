@@ -7,10 +7,10 @@ class sr-site::login {
   file { '/etc/pam.d/sshd':
     ensure => present,
     source => 'puppet:///modules/sr-site/sshd',
-    owner => "root",
-    group => "root",
-    mode => "0600",
-    notify => Service["nscd"],
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
+    notify => Service['nscd'],
     require => File['/etc/pam_ldap.conf'],
   }
 
@@ -20,10 +20,10 @@ class sr-site::login {
   file { '/etc/pam.d/sr-auth':
     ensure => present,
     source => 'puppet:///modules/sr-site/sr-auth',
-    owner => "root",
-    group => "root",
-    mode => "0600",
-    notify => Service["nscd"],
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
+    notify => Service['nscd'],
     require => File['/etc/pam_ldap.conf'],
   }
 
@@ -32,7 +32,7 @@ class sr-site::login {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '440',
+    mode => '0440',
     source => 'puppet:///modules/sr-site/sudoers',
   }
 
@@ -42,7 +42,7 @@ class sr-site::login {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '600',
+    mode => '0600',
     content => template('sr-site/sshd_config.erb'),
     notify => Service['sshd'],
   }
