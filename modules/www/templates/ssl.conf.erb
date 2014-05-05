@@ -24,11 +24,11 @@ WSGISocketPrefix /var/run/wsgi
 
 # Primary configuration gunge for the main website.
 <VirtualHost *:443>
-	ServerName <%= www_canonical_hostname %>:443
+	ServerName <%= @www_canonical_hostname %>:443
 	# Serve everything out of srweb by default.
-	DocumentRoot <%= web_root_dir %>
+	DocumentRoot <%= @web_root_dir %>
 
-	<Directory "<%= web_root_dir %>">
+	<Directory "<%= @web_root_dir %>">
 		Options All
 		AllowOverride All
 	</Directory>
@@ -39,7 +39,7 @@ WSGISocketPrefix /var/run/wsgi
 	</LocationMatch>
 
 	# Deny listing the zips
-	<Directory "<%= web_root_dir %>/ide/zips">
+	<Directory "<%= @web_root_dir %>/ide/zips">
 		Options -Indexes
 
 		# Copied from IDE cyanide.git/resources/zips-htaccess commit c501109cc8b50.
@@ -91,7 +91,7 @@ WSGISocketPrefix /var/run/wsgi
 		# What user to bind as when performing authorization, i.e.
 		# after authentication.
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
-                AuthLDAPBindPassword "<%= anonpw %>"
+                AuthLDAPBindPassword "<%= @anonpw %>"
 
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
@@ -113,7 +113,7 @@ WSGISocketPrefix /var/run/wsgi
                 AuthzLDAPAuthoritative On
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
-                AuthLDAPBindPassword "<%= anonpw %>"
+                AuthLDAPBindPassword "<%= @anonpw %>"
 
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
@@ -136,7 +136,7 @@ WSGISocketPrefix /var/run/wsgi
                 AuthzLDAPAuthoritative On
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
-                AuthLDAPBindPassword "<%= anonpw %>"
+                AuthLDAPBindPassword "<%= @anonpw %>"
 
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
@@ -218,7 +218,7 @@ WSGISocketPrefix /var/run/wsgi
 	SSLCertificateKeyFile /etc/pki/tls/private/server.key
 
 	# Only install the certificate chain file on the production machine.
-        <% if !devmode then -%>
+        <% if !@devmode then -%>
 	#   Server Certificate Chain:
 	SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle.crt
         <% end -%>

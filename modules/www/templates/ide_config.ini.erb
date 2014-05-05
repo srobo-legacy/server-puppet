@@ -1,6 +1,6 @@
 auth_module = ldap
 
-ldap.ideuser.password = "<%= ide_ldap_pw %>"
+ldap.ideuser.password = "<%= @ide_ldap_pw %>"
 ldap.host = localhost
 ldap.team.prefix = "team-"
 ldap.read_all_group = "mentors"
@@ -8,14 +8,14 @@ ldap.admin_group = "ide-admin"
 
 log.level = LOG_NOTICE
 
-keyfile = <%= ide_key_file %>
+keyfile = <%= @ide_key_file %>
 
-team.status_dir = <%= team_status_dir %>
-team.status_images.dir = <%= team_status_imgs_dir %>
-team.status_images.live_dir = <%= team_status_imgs_live_dir %>
+team.status_dir = <%= @team_status_dir %>
+team.status_images.dir = <%= @team_status_imgs_dir %>
+team.status_images.live_dir = <%= @team_status_imgs_live_dir %>
 
 ; Piwik
-usage_tracking = <% if !devmode then lestring="true" else lestring="false" end%><%= lestring %>
+usage_tracking = <% if !@devmode then lestring="true" else lestring="false" end%><%= lestring %>
 
 ; Combine static files into a single file for performance
 combine_statics = true

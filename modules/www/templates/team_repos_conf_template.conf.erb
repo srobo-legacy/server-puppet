@@ -8,7 +8,7 @@
 #                                                                      #
 ########################################################################
 
-SetEnv GIT_PROJECT_ROOT <%= ide_root_dir %>/repos
+SetEnv GIT_PROJECT_ROOT <%= @ide_root_dir %>/repos
 SetEnv GIT_HTTP_EXPORT_ALL
 
 ScriptAliasMatch "^/robogit/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-core/git-http-backend/$1/master/$2
@@ -24,7 +24,7 @@ ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-
 	AuthzLDAPAuthoritative On
 	AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
 	AuthLDAPBindDN "uid=anon,ou=users,o=sr"
-	AuthLDAPBindPassword "<%= anonpw %>"
+	AuthLDAPBindPassword "<%= @anonpw %>"
 
 	AuthLDAPGroupAttribute memberUid
 	AuthLDAPGroupAttributeIsDN off
@@ -51,7 +51,7 @@ ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-
 	AuthzLDAPAuthoritative On
 	AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
 	AuthLDAPBindDN "uid=anon,ou=users,o=sr"
-	AuthLDAPBindPassword "<%= anonpw %>"
+	AuthLDAPBindPassword "<%= @anonpw %>"
 
 	AuthLDAPGroupAttribute memberUid
 	AuthLDAPGroupAttributeIsDN off
