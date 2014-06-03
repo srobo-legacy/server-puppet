@@ -3,6 +3,11 @@
 
 class sr-site::login {
 
+  # Group that the private key files in /etc/ssh are in
+  group { 'ssh_keys':
+    ensure => present,
+  }
+
   # PAM configuration for SSHD, just passes control to the sr-auth stack.
   file { '/etc/pam.d/sshd':
     ensure => present,
@@ -45,6 +50,60 @@ class sr-site::login {
     mode => '0600',
     content => template('sr-site/sshd_config.erb'),
     notify => Service['sshd'],
+  }
+
+  file { '/etc/ssh/ssh_host_dsa_key':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'ssh_keys',
+    mode    => '0640',
+    source  => '/srv/secrets/login/ssh_host_dsa_key',
+    notify  => Service['sshd'],
+  }
+
+  file { '/etc/ssh/ssh_host_dsa_key.pub':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    source  => '/srv/secrets/login/ssh_host_dsa_key.pub',
+    notify  => Service['sshd'],
+  }
+
+  file { '/etc/ssh/ssh_host_key':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'ssh_keys',
+    mode    => '0640',
+    source  => '/srv/secrets/login/ssh_host_key',
+    notify  => Service['sshd'],
+  }
+
+  file { '/etc/ssh/ssh_host_key.pub':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    source  => '/srv/secrets/login/ssh_host_key.pub',
+    notify  => Service['sshd'],
+  }
+
+  file { '/etc/ssh/ssh_host_rsa_key':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'ssh_keys',
+    mode    => '0640',
+    source  => '/srv/secrets/login/ssh_host_rsa_key',
+    notify  => Service['sshd'],
+  }
+
+  file { '/etc/ssh/ssh_host_rsa_key.pub':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    source  => '/srv/secrets/login/ssh_host_rsa_key.pub',
+    notify  => Service['sshd'],
   }
 
   service { 'sshd':
