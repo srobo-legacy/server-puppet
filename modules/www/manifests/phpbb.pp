@@ -52,8 +52,9 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Vcsrepo["${root_dir}"],
   }
 
-  # Directory for storing forum attachments. Not currently backed up, see #1467
-  file { "${root_dir}/phpBB/files":
+  # Directory for storing forum attachments.
+  $attachments_dir = "${root_dir}/phpBB/files"
+  file { $attachments_dir:
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',

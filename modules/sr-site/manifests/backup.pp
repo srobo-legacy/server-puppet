@@ -25,6 +25,7 @@ class sr-site::backup ( $git_root ) {
   $list_of_dbs = join($all_dbs, ',')
   $ide_loc = $www::ide::root_dir
   $team_status_images_loc = $www::ide::team_status_imgs_live_dir
+  $forum_attachments_loc = $www::phpbb::attachments_dir
 
   # A list of users permitted to use backups. This list doesn't actually allow
   # them to do anything, instead it's used as the list of email IDs that GPG
