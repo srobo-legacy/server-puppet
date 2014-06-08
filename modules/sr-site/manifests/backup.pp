@@ -17,6 +17,7 @@ class sr-site::backup ( $git_root ) {
   # FIXME: find a way of extracting all mysql dbs from puppet?
   $list_of_dbs = 'phpbb_sr2013,piwik,trac,reviewdb'
   $ide_loc = $www::ide::root_dir
+  $team_status_images_loc = $www::ide::team_status_imgs_live_dir
 
   # A list of users permitted to use backups. This list doesn't actually allow
   # them to do anything, instead it's used as the list of email IDs that GPG
