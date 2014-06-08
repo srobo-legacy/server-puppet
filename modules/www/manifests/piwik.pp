@@ -22,7 +22,8 @@ class www::piwik ( $git_root, $root_dir ) {
   # Database for storing piwiks end user data.
   $piwik_user = extlookup('piwik_sql_user')
   $piwik_pw = extlookup('piwik_sql_pw')
-  mysql::db { 'piwik':
+  $piwik_db_name = 'piwik'
+  mysql::db { $piwik_db_name:
     user => $piwik_user,
     password => $piwik_pw,
     host => 'localhost',

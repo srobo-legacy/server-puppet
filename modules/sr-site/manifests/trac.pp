@@ -22,7 +22,8 @@ class sr-site::trac {
   }
 
   # All trac data lives inside an SQL db
-  mysql::db { "trac":
+  $trac_db_name = 'trac'
+  mysql::db { $trac_db_name:
     user => "trac",
     password => $mysql_trac_pw,
     host => "localhost",
