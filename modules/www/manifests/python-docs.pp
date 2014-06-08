@@ -10,6 +10,11 @@ class www::python-docs ( $web_root_dir, $version ) {
   $target_root = "/srv/python-docs/"
   $target_dir = "${$target_root}${archive_name}"
 
+  # wget is generally nicer than curl for downloading things.
+  package { ['wget']:
+    ensure => present,
+  }
+
   file { $target_root:
     ensure => 'directory',
     owner => 'wwwcontent',
@@ -20,10 +25,10 @@ class www::python-docs ( $web_root_dir, $version ) {
   exec { 'extract-python-docs':
     command =>
          "rm -rf ${target_dir} ;\
-          curl http://docs.python.org/ftp/python/doc/${version}/$archive_name.tar.bz2 | tar -xj -C ${target_root} ",
+          wget -O - https://www.python.org/ftp/python/doc/${version}/$archive_name.tar.bz2 | tar -xj -C ${target_root} ",
     provider => 'shell',
     creates => $target_dir,
-    require => File[$target_root],
+    require => [Package['wget'],File[$target_root]],
   }
 
   file { "${web_root_dir}/docs":
