@@ -20,13 +20,11 @@ class www::srweb ( $git_root, $web_root_dir ) {
     hasstatus => true,
   }
 
-  # Directory permissions and ownership of srwebs directory. Seeing how
-  # /var/www/html belongs to root by default on fedora.
+  # Ensure that the web root directory is nonexistant before installing srweb
+  # there. Vcsrepo will throw it's cookies otherwise. The before flag ensures
+  # this doesn't delete the vcsrepo installation itself.
   file { $web_root_dir:
-    ensure => directory,
-    owner => 'wwwcontent',
-    group => 'apache',
-    mode => '0644',
+    ensure => absent,
     before => Vcsrepo[$web_root_dir],
   }
 
@@ -37,7 +35,6 @@ class www::srweb ( $git_root, $web_root_dir ) {
     provider => git,
     source => "${git_root}/srweb.git",
     revision => 'origin/master',
-    force => true,
     require => Package['php'],
   }
 
@@ -96,6 +93,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0664',
+    require => Vcsrepo[$web_root_dir],
   }
 
   # Configure php
@@ -115,5 +113,6 @@ class www::srweb ( $git_root, $web_root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0660',
+    require => Vcsrepo[$web_root_dir],
   }
 }
