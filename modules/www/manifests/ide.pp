@@ -27,7 +27,6 @@ class www::ide ( $git_root, $root_dir ) {
     provider => git,
     source => "${git_root}/cyanide.git",
     revision => 'origin/master',
-    force => true,
     user =>'wwwcontent',
     require => Class['srweb'],
   }

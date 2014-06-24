@@ -59,7 +59,6 @@ class monitoring ( $git_root ) {
     source => "${git_root}/server/monitoring.git",
     # TODO: why is this not 'origin/master'?
     revision => 'master',
-    force => true,
     require => User['monitoring']
   }
 
