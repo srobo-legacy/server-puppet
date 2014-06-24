@@ -57,8 +57,7 @@ class monitoring ( $git_root ) {
     group => 'root',
     provider => 'git',
     source => "${git_root}/server/monitoring.git",
-    revision => "master", 
-    force => 'true',
+    revision => "master",
     require => User['monitoring']
   }
 

@@ -40,7 +40,6 @@ class www::voting ($git_root, $web_root_dir) {
     provider => git,
     source   => "${git_root}/voting.git",
     revision => "origin/master",
-    force    => true,
     require  => [Package['PyYAML'], User['voting']],
     owner    => 'voting',
     group    => 'users',

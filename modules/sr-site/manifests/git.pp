@@ -78,7 +78,6 @@ class sr-site::git($git_root) {
       provider => git,
       source => "${git_root}/scripts",
       revision => "origin/master",
-      force => true,
       owner => 'root',
       group => 'root',
       require => [File['/srv/git'], Exec['ldap-groups-flushed']],

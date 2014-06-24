@@ -18,7 +18,6 @@ class www::nemesis ( $git_root, $root_dir ) {
     provider => git,
     source => "${git_root}/nemesis.git",
     revision => "origin/master",
-    force => true,
     owner => 'wwwcontent',
     group => 'apache',
     # Flask is installed by pip since comp-api needed a more recent version
