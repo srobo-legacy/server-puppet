@@ -24,7 +24,6 @@ class sr-site::pipebot ( $git_root ) {
     provider => git,
     source => "${git_root}/pipebot",
     revision => 'origin/master',
-    force => true,
     owner => 'pipebot',
     group => 'users',
     require => File['/home/pipebot'],

@@ -33,7 +33,7 @@ class www( $git_root ) {
   class { 'www::srweb':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => User['wwwcontent'],
+    require => [User['wwwcontent'], File['/var/www']],
   }
 
   # Python 2.6.5 docs -- version match the python on the BBs
