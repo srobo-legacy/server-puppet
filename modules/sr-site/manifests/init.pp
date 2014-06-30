@@ -70,6 +70,10 @@ class sr-site( $git_root ) {
     git_root => $git_root,
   }
 
+  class { 'userman':
+    git_root => $git_root,
+  }
+
   # Sanity stuff
   package { "rsyslog":
     ensure => latest,
