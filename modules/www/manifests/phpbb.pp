@@ -7,9 +7,15 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_pw = extlookup('phpbb_sql_pw')
 
   # We require the bindings between php and mysql to work
-  package { ['php-mysql']:
+  $phpMySQL_pkg_name = $::operatingsystemrelease ? {
+    20 => 'php-mysqlnd',
+    17 => 'php-mysql',
+  }
+
+  package { $phpMySQL_pkg_name:
     ensure => present,
     notify => Service['httpd'],
+    alias  => 'php-mysql',
   }
 
   # Checkout of the phpbb installation, with SRs patches against phpbb. One
