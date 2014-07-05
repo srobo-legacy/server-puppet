@@ -28,15 +28,17 @@ class www::tickets( $web_root_dir ) {
     userpassword => extlookup("ldap_ticket_user_ssha_pw"),
   }
 
+  $tickets_keyfile = "${tickets_root}/ticket.key"
+  $ldap_ticket_user_pw = extlookup('ldap_ticket_user_pw')
   file {"${tickets_root}/webapi/config.ini":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '640',
-    source => '/srv/secrets/tickets/config.ini',
+    content => template('www/tickets_config.ini.erb'),
   }
 
-  file {"${tickets_root}/ticket.key":
+  file { $tickets_keyfile:
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
