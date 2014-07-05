@@ -46,7 +46,9 @@ class sr-site( $git_root ) {
   include sr-site::firewall
   include sr-site::mysql
   include sr-site::openldap
-  include sr-site::trac
+  class { 'sr-site::trac':
+    git_root => $git_root,
+  }
   include sr-site::subversion
   include sr-site::login
   include sr-site::gerrit
