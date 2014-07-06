@@ -2,8 +2,13 @@ class www::tickets( $web_root_dir ) {
   $tickets_root = "${web_root_dir}/tickets/tickets"
 
   # The ticket system requires the python imaging library
-  package {'python-imaging':
-    ensure => present,
+  $python_imaging_package = $::operatingsystemrelease ? {
+    20 => 'python-pillow',
+    17 => 'python-imaging',
+  }
+  package { $python_imaging_package:
+    ensure  => 'present',
+    alias   => 'python-imaging',
   }
 
   # Inkscape, for converting SVGs to PDFs
