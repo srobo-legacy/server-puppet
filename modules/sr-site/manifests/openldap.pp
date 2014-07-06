@@ -17,6 +17,11 @@ class sr-site::openldap {
     localloginok => true,
   }
 
+  # Install the ruby bindings for ldap so we can use ldapres:
+  package{ 'ruby-ldap':
+    ensure => 'present',
+  }
+
   # Multiple domains (aka LDAP dbs) are available; call ours studentrobotics.org
   # and set its base to o=sr.
   ldap::define::domain { 'studentrobotics.org':
