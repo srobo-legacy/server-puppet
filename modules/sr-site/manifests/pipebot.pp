@@ -66,9 +66,11 @@ class sr-site::pipebot ( $git_root ) {
     require => File['/etc/systemd/system/multi-user.target.wants/pipebot.service'],
   }
 
-  # And finally maintain pipebot being running.
-  service { 'pipebot':
-    ensure => running,
-    require => Exec['pipebot-systemd-load'],
+  if !$devmode {
+    # And finally maintain pipebot being running.
+    service { 'pipebot':
+      ensure => running,
+      require => Exec['pipebot-systemd-load'],
+    }
   }
 }
