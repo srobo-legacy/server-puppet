@@ -56,16 +56,6 @@ WSGISocketPrefix /var/run/wsgi
 	UserDir enabled voting
 
 	# Configure trac, and point it to serve out of /srv/trac
-#        <Location /trac>
-#                SetEnv PYTHON_EGG_CACHE /srv/trac/.python-eggs
-#
-#                SetHandler mod_python
-#                PythonInterpreter main_interpreter
-#                PythonHandler trac.web.modpython_frontend
-#                PythonOption TracEnv /srv/trac
-#                PythonOption TracUriRoot /trac
-#                PythonOption TracLocale "en_GB.UTF-8"
-#        </Location>
         WSGIDaemonProcess trac user=apache group=apache threads=25 maximum-requests=1000
         WSGIScriptAlias /trac /var/www/trac/trac.wsgi
 
