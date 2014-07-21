@@ -36,7 +36,6 @@ class www::comp-api ( $git_root, $root_dir ) {
     provider  => git,
     source    => "${git_root}/comp/srcomp-http.git",
     revision  => 'origin/master',
-    force     => true,
     owner     => 'wwwcontent',
     group     => 'apache',
     require   => Package['Flask', 'python-simplejson'],
@@ -50,9 +49,9 @@ class www::comp-api ( $git_root, $root_dir ) {
     provider  => git,
     source    => "${git_root}/comp/sr2014-comp.git",
     revision  => 'origin/master',
-    force     => true,
     owner     => 'wwwcontent',
     group     => 'apache',
+    require   => Vcsrepo[$root_dir],
   }
 
   # A WSGI config file for serving inside of apache.
