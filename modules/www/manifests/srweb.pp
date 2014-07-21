@@ -23,10 +23,16 @@ class www::srweb ( $git_root, $web_root_dir ) {
   # Ensure that the web root directory is nonexistant before installing srweb
   # there. Vcsrepo will throw it's cookies otherwise. The before flag ensures
   # this doesn't delete the vcsrepo installation itself.
-  file { $web_root_dir:
-    ensure => absent,
-    before => Vcsrepo[$web_root_dir],
-  }
+  #
+  # Disabled because this triggers puppet (on badger) attempting to index the
+  # entire contents of /var/www/html, for some reason. Commenting this block out
+  # prevents that from happening, uncommenting resumes indexing. This may break
+  # fresh builds.
+  #
+  #file { $web_root_dir:
+  #  ensure => absent,
+  #  before => Vcsrepo[$web_root_dir],
+  #}
 
   # Maintain a checkout of the website
   vcsrepo {$web_root_dir:
