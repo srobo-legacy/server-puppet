@@ -210,7 +210,7 @@ WSGISocketPrefix /var/run/wsgi
 	# Only install the certificate chain file on the production machine.
         <% if !@devmode then -%>
 	#   Server Certificate Chain:
-	SSLCertificateChainFile /etc/pki/tls/certs/gd_bundle.crt
+	SSLCertificateChainFile /etc/pki/tls/certs/comodo_bundle.crt
         <% end -%>
 
 	<Files ~ "\.(cgi|shtml|phtml|php3?)$">

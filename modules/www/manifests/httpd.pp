@@ -68,15 +68,15 @@ class www::httpd( $web_root_dir ) {
   }
 
   # On the production machine, we need to present some intermediate certificates
-  # to users as there's an intermediate CA between GoDaddy's root cert and our
+  # to users as there's an intermediate CA between the root cert and our
   # cerfificate. Not necessary on the dummy config.
   if !$devmode {
     file { 'cert_chain':
-      path => '/etc/pki/tls/certs/gd_bundle.crt',
+      path => '/etc/pki/tls/certs/comodo_bundle.crt',
       owner => 'root',
       group => 'root',
       mode => '0400',
-      source => '/srv/secrets/https/gd_bundle.crt',
+      source => '/srv/secrets/https/comodo_bundle.crt',
       require => Package[ 'mod_ssl' ],
     }
   }
