@@ -21,7 +21,6 @@ ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-
 	AuthName "Student Robotics Team Git Mentor Access"
 	AuthBasicProvider ldap
 
-	AuthzLDAPAuthoritative On
 	AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
 	AuthLDAPBindDN "uid=anon,ou=users,o=sr"
 	AuthLDAPBindPassword "<%= @anonpw %>"
@@ -48,7 +47,6 @@ ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-
 	AuthName "Student Robotics Team {TLA} Git repositories"
 	AuthBasicProvider ldap
 
-	AuthzLDAPAuthoritative On
 	AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
 	AuthLDAPBindDN "uid=anon,ou=users,o=sr"
 	AuthLDAPBindPassword "<%= @anonpw %>"

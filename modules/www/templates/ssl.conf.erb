@@ -9,9 +9,6 @@ SSLPassPhraseDialog exec:/usr/libexec/httpd-ssl-pass-dialog
 SSLSessionCache         shmcb:/var/cache/mod_ssl/scache(512000)
 SSLSessionCacheTimeout  300
 
-#   Semaphore:
-SSLMutex default
-
 #   Pseudo Random Number Generator (PRNG):
 SSLRandomSeed startup file:/dev/urandom  256
 SSLRandomSeed connect builtin
@@ -35,7 +32,7 @@ WSGISocketPrefix /var/run/wsgi
 
 	# Block various parts of the IDE being accessed externally
 	<LocationMatch "/ide/(config|notifications|repos|settings|uploads)">
-		Deny from all
+		Require all denied
 	</LocationMatch>
 
 	# Deny listing the zips
@@ -62,8 +59,7 @@ WSGISocketPrefix /var/run/wsgi
         <Directory /var/www/trac>
                 WSGIProcessGroup trac
                 WSGIApplicationGroup %{GLOBAL}
-                Order deny,allow
-                Allow from all
+                Require all granted
         </Directory>
 
 	# To authenticate, trac has the user access /trac/login, allows apache
@@ -76,7 +72,6 @@ WSGISocketPrefix /var/run/wsgi
                 AuthBasicProvider ldap
 
 		# Server location and search filter when looking for a user
-                AuthzLDAPAuthoritative On
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
 		# What user to bind as when performing authorization, i.e.
 		# after authentication.
@@ -100,7 +95,6 @@ WSGISocketPrefix /var/run/wsgi
                 AuthName "Student Robotics SVN"
                 AuthBasicProvider ldap
 
-                AuthzLDAPAuthoritative On
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
                 AuthLDAPBindPassword "<%= @anonpw %>"
@@ -123,7 +117,6 @@ WSGISocketPrefix /var/run/wsgi
                 AuthName "Student Robotics Voting System"
                 AuthBasicProvider ldap
 
-                AuthzLDAPAuthoritative On
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
                 AuthLDAPBindPassword "<%= @anonpw %>"
@@ -164,16 +157,14 @@ WSGISocketPrefix /var/run/wsgi
 	# Pass accesses to /comp-api over to the Competition API in WSGI
         WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
         <Directory /srv/srcomp-http>
-            Order deny,allow
-            Allow from all
+            Require all granted
         </Directory>
 
 	# Pass accesses to /userman over to nemesis in WSGI
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
         WSGIPassAuthorization on
         <Directory /srv/nemesis/nemesis>
-            Order deny,allow
-            Allow from all
+            Require all granted
         </Directory>
 
 	# Proxy all requests to the /gerrit dir to the local server process

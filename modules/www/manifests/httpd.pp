@@ -10,7 +10,14 @@ class www::httpd( $web_root_dir ) {
     ensure => latest,
   }
 
-  # Ensure /var/www belongs to wwwcontent, allowing vcsrepos to be cloned
+  # On F20, mod_ldap is a separate package
+  if $::operatingsystemrelease == 20 {
+    package { 'mod_ldap':
+      ensure => latest,
+    }
+  }
+
+ # Ensure /var/www belongs to wwwcontent, allowing vcsrepos to be cloned
   # into it.
   file { '/var/www':
     ensure => directory,
