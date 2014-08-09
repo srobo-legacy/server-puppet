@@ -1,8 +1,24 @@
 # Primary config goo for the root website
 
 class www::srweb ( $git_root, $web_root_dir ) {
+
+  # Use Smarty v2, which has different package name and location on F17 vs F20
+  $smarty_dir = $::operatingsystemrelease ? {
+    20 => '/usr/share/php/Smarty2/',
+    17 => '/usr/share/php/Smarty/',
+  }
+  $smarty_package = $::operatingsystemrelease ? {
+    20 => 'php-Smarty2',
+    17 => 'php-Smarty',
+  }
+
+  package { $smarty_package:
+    ensure => latest,
+    alias  => 'php-Smarty'
+  }
+
   # srweb is served through php and some other goo,
-  package { [ 'php', 'php-Smarty', 'php-xml', 'memcached']:
+  package { [ 'php', 'php-xml', 'memcached']:
     ensure => latest,
     notify => Service[ 'httpd' ],
   }
@@ -38,7 +54,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
     provider => git,
     source => "${git_root}/srweb.git",
     revision => 'origin/master',
-    require => Package['php'],
+    require   => [ Package['php'], Package['php-Smarty'], ],
   }
 
   # srweb needs this directory to belong to apache
