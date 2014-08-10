@@ -63,13 +63,25 @@ class sr-site::git($git_root) {
   }
 
   # Ensure the git serving dir exists
-  file { '/srv/git':
+  $git_dir = '/srv/git'
+  file { $git_dir:
     ensure => directory,
     owner => 'gerrit',
     group => 'users',
     mode => '0755',
     require => User['gerrit'],
   }
+
+  # Our custom cgit logo
+  file { "${git_dir}/srgit.png":
+    ensure => 'file',
+    owner => 'gerrit',
+    group => 'users',
+    mode => '0644',
+    source => 'puppet:///modules/sr-site/srgit.png',
+    require => File[$git_dir],
+  }
+
 
   # Maintain a clone of the git admin scripts.
   if $devmode {
