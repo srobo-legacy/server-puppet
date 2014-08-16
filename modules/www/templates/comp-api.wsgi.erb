@@ -1,6 +1,9 @@
 import sys
 sys.path.insert(0, "<%= @root_dir %>")
 
+import config
+config.configure_logging("<%= @root_dir %>/logging-syslog.ini")
+
 from app import app as application
 
 application.config["COMPSTATE"] = "<%= @compstate_dir %>"
