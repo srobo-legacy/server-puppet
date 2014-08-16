@@ -77,7 +77,7 @@ class www::comp-api ( $git_root, $root_dir ) {
     owner   => 'wwwcontent',
     group   => 'apache',
     mode    => '0644',
-    source  => 'puppet:///modules/www/comp-api.wsgi',
+    content => template('www/comp-api.wsgi.erb'),
     require => Vcsrepo[$root_dir],
   }
 }
