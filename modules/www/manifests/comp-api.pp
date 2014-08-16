@@ -63,13 +63,4 @@ class www::comp-api ( $git_root, $root_dir ) {
     source  => 'puppet:///modules/www/comp-api.wsgi',
     require => Vcsrepo[$root_dir],
   }
-
-  # TODO: review this mechanism
-  #  -- should we instead put a post-recieve-pack hook into the repo?
-  cron { 'comp-api-updates':
-    command => "cd ${compstate_dir} && git pull origin master",
-    minute  => '*/5',
-    user    => 'wwwcontent',
-    require => Vcsrepo[$compstate_dir],
-  }
 }
