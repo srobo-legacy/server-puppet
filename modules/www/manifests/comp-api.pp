@@ -42,6 +42,16 @@ class www::comp-api ( $git_root, $root_dir ) {
     notify    => Service['httpd'],
   }
 
+  # Syslog configuration, using local1
+  file { '/etc/rsyslog.d/comp-api.conf':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    source => 'puppet:///modules/www/comp-api-syslog.conf',
+    notify => Service['rsyslog'],
+  }
+
   # Checkout of the competition state
   $compstate_dir = "${root_dir}/compstate"
   vcsrepo { $compstate_dir:
