@@ -54,6 +54,23 @@ class www::comp-api ( $git_root, $root_dir ) {
     require   => Vcsrepo[$root_dir],
   }
 
+  # Update trigger and lock files
+  file { "${compstate_dir}/.update-pls":
+    ensure  => present,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    mode    => '0644',
+    require => Vcsrepo[$compstate_dir],
+  }
+  # The lock file is writable by apache so it can get a lock on it
+  file { "${compstate_dir}/.update-lock":
+    ensure  => present,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    mode    => '0664',
+    require => Vcsrepo[$compstate_dir],
+  }
+
   # A WSGI config file for serving inside of apache.
   file { "${root_dir}/comp-api.wsgi":
     ensure  => present,
