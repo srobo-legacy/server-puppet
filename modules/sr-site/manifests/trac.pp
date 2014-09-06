@@ -52,9 +52,16 @@ class sr-site::trac ( $git_root ) {
 
   # Copy the trac attachments from backup, but only if it doesn't
   # already exist
+
+  exec { 'attachment_install':
+    command => "cp -r /srv/secrets/trac/attachments/* ${trac_env_root}/attachments; touch /usr/local/var/sr/trac_attachments_installed",
+    creates => '/usr/local/var/sr/trac_attachments_installed',
+    onlyif => 'test ! -e /usr/local/var/sr/trac_attachments_installed',
+    require => File["${trac_env_root}/attachments"],
+  }
+
   file { "${trac_env_root}/attachments":
     ensure  => 'directory',
-    source  => '/srv/secrets/trac/attachments',
     recurse => true,
     require => File[$trac_env_root],
   }
