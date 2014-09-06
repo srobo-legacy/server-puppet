@@ -29,6 +29,13 @@ class www::ide ( $git_root, $root_dir ) {
     revision => 'origin/master',
     user =>'wwwcontent',
     require => Class['srweb'],
+    notify  => Exec['pyenv-binaries-stip'],
+  }
+
+  # Strip debug information from the binaries in pyenv
+  exec { 'pyenv-binaries-stip':
+    command => "${root_dir}/pyenv/strip-binaries",
+    require => Vcsrepo[$root_dir],
   }
 
   # Secret key for encrypting IDE cookies, protecting against users twiddling
