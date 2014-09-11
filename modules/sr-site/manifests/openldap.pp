@@ -216,7 +216,7 @@ class sr-site::openldap {
   # existing can now depend on this happening.
   exec { 'ldap-groups-flushed':
     command => '/sbin/nscd -i group',
-    require => Class['ldap'],
+    require => [Class['ldap'], Service['nscd']],
     refreshonly => true,
   }
 
