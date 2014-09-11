@@ -43,15 +43,28 @@ class sr-site( $git_root ) {
     git_root => $git_root,
   }
 
-  include sr-site::firewall
-  include sr-site::mysql
-  include sr-site::openldap
+  class { 'sr-site::firewall':
+    require => File['/usr/local/var/sr'],
+  }
+
+  class { 'sr-site::mysql':
+    require => File['/usr/local/var/sr'],
+  }
+
+  class { 'sr-site::openldap':
+    require => File['/usr/local/var/sr'],
+  }
+
   class { 'sr-site::trac':
     git_root => $git_root,
   }
+
+  class { 'sr-site::gerrit':
+    require => File['/usr/local/var/sr'],
+  }
+
   include sr-site::subversion
   include sr-site::login
-  include sr-site::gerrit
   include sr-site::meta
   include sr-site::ntpd
 
@@ -62,6 +75,7 @@ class sr-site( $git_root ) {
   # Web stuff
   class { 'www':
     git_root => $git_root,
+    require => File['/usr/local/var/sr'],
   }
 
   class { 'backup':
