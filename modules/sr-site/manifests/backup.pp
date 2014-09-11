@@ -5,7 +5,8 @@ class sr-site::backup ( $git_root ) {
   # A checkout of the server backup git repo. The backup script has to exist at
   # a known location on the server so that we can configure sudo, so that the
   # 'backup' user can run backups as root.
-  vcsrepo { '/srv/backup':
+  $backup_root = '/srv/backup'
+  vcsrepo { $backup_root:
     ensure => present,
     owner => 'root',
     group => 'root',
@@ -46,7 +47,8 @@ class sr-site::backup ( $git_root ) {
     owner => 'root',
     group => 'root',
     mode => '0400',
-    content => template('sr-site/backup.ini.erb')
+    content => template('sr-site/backup.ini.erb'),
+    require => Vcsrepo[$backup_root],
   }
 
   # A user for running backups - anyone permitted to run backups gets an SSH
@@ -61,7 +63,8 @@ class sr-site::backup ( $git_root ) {
   }
 
   # Backup's home dir.
-  file { '/home/backup':
+  $backup_home = '/home/backup'
+  file { $backup_home:
     ensure => directory,
     owner => 'backup',
     group => 'users',
@@ -70,11 +73,13 @@ class sr-site::backup ( $git_root ) {
   }
 
   # Backup's ssh key dir.
-  file { '/home/backup/.ssh':
+  $backup_ssh_key = '/home/backup/.ssh'
+  file { $backup_ssh_key:
     ensure => directory,
     owner => 'backup',
     group => 'users',
     mode => '0700',
+    require => File[$backup_home],
   }
 
   # Backup's ssh keys - this is simply a authorized_keys file that's kept in
@@ -85,7 +90,7 @@ class sr-site::backup ( $git_root ) {
     group => 'users',
     mode => '0600',
     source => '/srv/secrets/login/backups_ssh_keys',
-    require => File['/home/backup/.ssh'],
+    require => File[$backup_ssh_key],
   }
 
   # The backup scripts run GPG to encrypt backups; ensure it's installed.
