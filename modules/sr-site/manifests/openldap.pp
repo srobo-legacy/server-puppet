@@ -31,6 +31,13 @@ class sr-site::openldap {
     rootpw => extlookup('ldap_manager_pw'), # Manager password is in common.csv
   }
 
+  # In an apparent bug, the openldap module seems to define the nscd service
+  # but doesn't install the package (on fedora)
+  package { 'nscd':
+    ensure => 'present',
+    before => Ldap::Client::Config['studentrobotics.org'],
+  }
+
   # Give some config options to the client configuration. I think some of these
   # end up in /etc/ldap.conf
   ldap::client::config { 'studentrobotics.org':
