@@ -41,3 +41,5 @@ session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet 
 session     required      pam_unix.so
 # Probably does nothing
 session     optional      pam_ldap.so config=/etc/pam_ldap.conf
+# Perform systemd session juggling.
+session    required     pam_systemd.so
