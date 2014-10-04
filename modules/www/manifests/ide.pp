@@ -132,7 +132,6 @@ class www::ide ( $git_root, $root_dir ) {
     group => 'apache',
     command => "cp -r /srv/secrets/team_status_images/* ${team_status_imgs_live_dir}; touch /usr/local/var/sr/team_status_images_installed",
     creates => '/usr/local/var/sr/team_status_images_installed',
-    onlyif => 'test ! -e /usr/local/var/sr/team_status_images_installed',
     require => File[$team_status_imgs_live_dir],
   }
 
