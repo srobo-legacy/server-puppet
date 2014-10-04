@@ -94,4 +94,12 @@ class sr-site( $git_root ) {
   package { "rsyslog":
     ensure => latest,
   }
+
+  file {'/etc/systemd/journald.conf':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    source => 'puppet:///modules/sr-site/journald.conf'
+  }
 }
