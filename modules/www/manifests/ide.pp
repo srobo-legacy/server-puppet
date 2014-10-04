@@ -206,4 +206,8 @@ class www::ide ( $git_root, $root_dir ) {
     user => 'root',
     require => Vcsrepo[$root_dir],
   }
+
+  package{'zip':
+    ensure => present,
+  }
 }
