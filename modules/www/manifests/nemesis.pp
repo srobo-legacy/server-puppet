@@ -59,6 +59,13 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Exec["${root_dir}/nemesis/scripts/make_db.sh"],
   }
 
+  # Restore nemesis from backup, if it hasn't been already.
+  exec { 'nemesis_install':
+    command => "gzip -d < /srv/secrets/nemesis/sqlite3_dump.gz | sqlite3 $nemesis_db && touch /usr/local/var/sr/nemesis_installed",
+    creates => '/usr/local/var/sr/nemesis_installed',
+    require => File["${root_dir}/nemesis/db"],
+  }
+
   # A WSGI config file for serving nemesis inside of apache.
   file { "${root_dir}/nemesis/nemesis.wsgi":
     ensure => present,
