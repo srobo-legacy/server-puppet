@@ -6,6 +6,9 @@
 class www::nemesis ( $git_root, $root_dir ) {
   # Nemesis is a flask application
   # An sqlite DB is used to store data, install the python bindings for it.
+
+  $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
+
   package { ['python-sqlite3dbm', 'python-ldap', 'python-unidecode']:
     ensure => present,
     notify => Service['httpd'],
@@ -30,7 +33,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   # exists.
   exec { "${root_dir}/nemesis/scripts/make_db.sh":
     cwd => "${root_dir}/nemesis",
-    creates => "${root_dir}/nemesis/db/nemesis.sqlite",
+    creates => $nemesis_db,
     path => ['/usr/bin'],
     user => 'wwwcontent',
     require => Vcsrepo[$root_dir],
@@ -40,7 +43,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   # the journal and locking files as based on who owns the DB. If it's owned
   # by wwwcontent, SQLite attempts to chown files it creates to wwwcontent,
   # and EPERMs
-  file { "${root_dir}/nemesis/db/nemesis.sqlite":
+  file { $nemesis_db:
     owner => 'apache',
     group => 'apache',
     mode => '0660',
