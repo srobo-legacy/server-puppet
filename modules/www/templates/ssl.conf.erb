@@ -81,10 +81,12 @@ WSGISocketPrefix /var/run/wsgi
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
 
-		# Trac users must be in the mentors group
-                Require ldap-group cn=mentors,ou=groups,o=sr
-		# Trac users must have authenticated.
-                Require valid-user
+		<RequireAll>
+			# Trac users must be in the mentors group
+			Require ldap-group cn=mentors,ou=groups,o=sr
+			# Trac users must have authenticated.
+			Require valid-user
+		</RequireAll>
         </Location>
 
         # Legacy SVN goo
