@@ -28,8 +28,10 @@ ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-
 	AuthLDAPGroupAttribute memberUid
 	AuthLDAPGroupAttributeIsDN off
 
-	Require ldap-group cn=mentors,ou=groups,o=sr
-	Require valid-user
+	<RequireAll>
+		Require ldap-group cn=mentors,ou=groups,o=sr
+		Require valid-user
+	</RequireAll>
 
 </Location>
 
@@ -54,8 +56,10 @@ ScriptAliasMatch "^/robogit-ro/([A-Z]*[0-9]?)/([^/]+.git/.*)$" /usr/libexec/git-
 	AuthLDAPGroupAttribute memberUid
 	AuthLDAPGroupAttributeIsDN off
 
-	Require ldap-group cn={team_prefix}{TLA},ou=groups,o=sr
-	Require valid-user
+	<RequireAll>
+		Require ldap-group cn={team_prefix}{TLA},ou=groups,o=sr
+		Require valid-user
+	</RequireAll>
 
 </Location>
 
