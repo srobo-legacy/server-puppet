@@ -126,8 +126,10 @@ WSGISocketPrefix /var/run/wsgi
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
 
-                Require ldap-group cn=mentors,ou=groups,o=sr
-                Require valid-user
+		<RequireAll>
+			Require ldap-group cn=mentors,ou=groups,o=sr
+			Require valid-user
+		</RequireAll>
         </Location>
 
 	<Directory /home/voting/public_html/voting>
