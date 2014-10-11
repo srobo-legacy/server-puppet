@@ -57,6 +57,11 @@ class sr-site( $git_root ) {
     git_root => $git_root,
   }
 
+  # Sends emails to LDAP groups
+  class { 'fritter':
+    git_root => $git_root,
+  }
+
   # Web stuff
   class { 'www':
     git_root => $git_root,
