@@ -36,10 +36,10 @@ class www( $git_root ) {
     require => [User['wwwcontent'], File['/var/www']],
   }
 
-  # Python 2.6.5 docs -- version match the python on the BBs
+  # Python 2.7.5 docs -- version match the python on the BBs
   class { 'www::python-docs':
     web_root_dir => $web_root_dir,
-    version => '2.6.5',
+    version => '2.7.5',
     require => [User['wwwcontent'], Class['srweb']],
   }
 
