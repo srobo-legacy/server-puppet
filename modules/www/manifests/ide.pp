@@ -210,4 +210,23 @@ class www::ide ( $git_root, $root_dir ) {
   package{'zip':
     ensure => present,
   }
+
+  # Install the wifi keys that get exported in robot.zip into /etc, for reading
+  # by the IDE.
+  # The creation of the /etc/sr directory could be somewhere better; that can
+  # be improved at a later date.
+  file { '/etc/sr/':
+    ensure => directory,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+  }
+
+  file { '/etc/sr/wifi-keys.yaml':
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '440',
+    source => "/srv/secrets/wifi-keys.yaml",
+  }
 }
