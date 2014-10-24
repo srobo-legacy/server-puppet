@@ -215,7 +215,7 @@ class www::ide ( $git_root, $root_dir ) {
   # by the IDE.
   # The creation of the /etc/sr directory could be somewhere better; that can
   # be improved at a later date.
-  file { '/etc/sr/':
+  file { '/etc/sr':
     ensure => directory,
     owner => 'root',
     group => 'root',
