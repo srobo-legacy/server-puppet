@@ -88,13 +88,6 @@ class www::srweb ( $git_root, $web_root_dir ) {
     require => Vcsrepo[$web_root_dir],
   }
 
-  # Set the rewrite base
-  exec { 'rewritebase':
-    command => 'sed -i .htaccess -e "s#/~chris/srweb#/#"',
-    onlyif => "grep '~chris' '${web_root_dir}/.htaccess'",
-    cwd => $web_root_dir,
-    subscribe => Vcsrepo[$web_root_dir],
-  }
 #
 #  # Build the sitemap.xml
 #  $www_canonical_hostname = extlookup('www_canonical_hostname')
