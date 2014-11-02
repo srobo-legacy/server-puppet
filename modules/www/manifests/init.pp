@@ -79,11 +79,11 @@ class www( $git_root ) {
   }
 
   # Web facing user competition state interface, srobo.org/comp-api
-  class { 'www::comp-api':
-    git_root => $git_root,
-    root_dir => '/srv/srcomp-http',
-    require => User['wwwcontent'],
-  }
+  #class { 'www::comp-api':
+  #  git_root => $git_root,
+  #  root_dir => '/srv/srcomp-http',
+  #  require => User['wwwcontent'],
+  #}
 
   # Competition state vending for shepherds and arenas
   class { 'www::comp-display':
