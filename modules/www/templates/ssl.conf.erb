@@ -159,10 +159,10 @@ WSGISocketPrefix /var/run/wsgi
         </Directory>
 
 	# Pass accesses to /comp-api over to the Competition API in WSGI
-        WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
-        <Directory /srv/srcomp-http>
-            Require all granted
-        </Directory>
+    #   WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
+    #   <Directory /srv/srcomp-http>
+    #       Require all granted
+    #   </Directory>
 
 	# Pass accesses to /userman over to nemesis in WSGI
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
