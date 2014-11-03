@@ -22,7 +22,7 @@ class sr_site::trac ( $git_root ) {
 
   # A hacky way of initialising the trac database's character set
   file { '/tmp/trac.init':
-    ensure => present,
+    ensure  => 'present',
     content => 'ALTER DATABASE trac DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;',
     owner => 'root',
     group => 'root',
@@ -156,9 +156,9 @@ Visit http://trac.edgewall.org/ for more information.
   }
 
   file { '/var/www/trac/trac.wsgi':
-    ensure => present,
-    owner => root,
-    group => root,
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
     mode => '0644',
     source => 'puppet:///modules/sr_site/trac.wsgi',
   }
