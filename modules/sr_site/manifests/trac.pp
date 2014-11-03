@@ -172,6 +172,8 @@ Visit http://trac.edgewall.org/ for more information.
       trac-admin /srv/trac permission add anonymous XML_RPC; \
       touch /usr/local/var/sr/trac_perms_configured',
       provider => 'shell',
+      group   => 'root',
+      user    => 'apache',
       creates => '/usr/local/var/sr/trac_perms_configured',
       require => [ Exec['pop_db'], File[$trac_env_ini] ],
     }
