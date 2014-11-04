@@ -2,17 +2,10 @@
 
 class www::srweb ( $git_root, $web_root_dir ) {
 
-  # Use Smarty v2, which has different package name and location on F17 vs F20
-  $smarty_dir = $::operatingsystemrelease ? {
-    20 => '/usr/share/php/Smarty2/',
-    17 => '/usr/share/php/Smarty/',
-  }
-  $smarty_package = $::operatingsystemrelease ? {
-    20 => 'php-Smarty2',
-    17 => 'php-Smarty',
-  }
+  # Use Smarty v2
+  $smarty_dir = '/usr/share/php/Smarty2/'
 
-  package { $smarty_package:
+  package { 'php-Smarty2':
     ensure => latest,
     alias  => 'php-Smarty'
   }
