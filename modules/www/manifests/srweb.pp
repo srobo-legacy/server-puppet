@@ -3,9 +3,9 @@
 class www::srweb ( $git_root, $web_root_dir ) {
 
   # Use Smarty v2
-  $smarty_dir = '/usr/share/php/Smarty2/'
+  $smarty_dir = '/usr/share/php/Smarty/'
 
-  package { 'php-Smarty2':
+  package { 'php-Smarty':
     ensure => latest,
     alias  => 'php-Smarty'
   }
