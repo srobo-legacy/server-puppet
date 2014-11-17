@@ -222,7 +222,7 @@ class sr-site::openldap {
     group => 'ldap',
     mode => '0440',
     source => 'puppet:///modules/sr-site/ldap_acl.conf',
-    notify => Class['ldap::server::rebuild'],
+    notify => [Class['ldap::server::rebuild'],Service['slapd']]
   }
 
   # Load the initial LDAP db if one hasn't been yet.
