@@ -41,13 +41,15 @@ class sr-site::pipebot ( $git_root ) {
     require => Vcsrepo[$root_dir],
   }
 
-  # Also, some systemd goo to install the service.
-  file { '/etc/systemd/system/pipebot.service':
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
-    source => 'puppet:///modules/sr-site/pipebot.service',
+  if !$devmode {
+    # Also, some systemd goo to install the service.
+    file { '/etc/systemd/system/pipebot.service':
+      ensure => present,
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => 'puppet:///modules/sr-site/pipebot.service',
+    }
   }
 
   # Link in the systemd service to run in multi user mode.
