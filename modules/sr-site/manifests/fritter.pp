@@ -66,6 +66,7 @@ class sr-site::fritter ( $git_root ) {
     owner     => $fritter_user,
     group     => 'users',
     require   => [File[$home_dir],Ldapres[$fritter_ldap_dn]],
+    notify    => Service['fritter'],
   }
 
   # Local database for caching the emails until they're sent
