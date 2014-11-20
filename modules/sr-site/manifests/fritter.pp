@@ -86,6 +86,7 @@ class sr-site::fritter ( $git_root ) {
     ensure  => present,
     source  => "/srv/secrets/fritter/${fritter_privkey_name}",
     require => [File[$home_dir],Ldapres[$fritter_ldap_dn]],
+    notify    => Service['fritter'],
   }
 
   $fritter_pubkey_name = "${fritter_privkey_name}.pub"
@@ -94,6 +95,7 @@ class sr-site::fritter ( $git_root ) {
     ensure  => present,
     source  => "/srv/secrets/fritter/${fritter_pubkey_name}",
     require => [File[$home_dir],Ldapres[$fritter_ldap_dn]],
+    notify    => Service['fritter'],
   }
 
   # Fritter configuration is stored in local.ini; assign some variables
@@ -107,6 +109,7 @@ class sr-site::fritter ( $git_root ) {
     ensure  => present,
     content => template('sr-site/fritter_local.ini.erb'),
     require => [Vcsrepo[$root_dir],File[$home_dir],Ldapres[$fritter_ldap_dn]],
+    notify  => Service['fritter'],
   }
 
   # Configuration for LDAP connection
@@ -114,6 +117,7 @@ class sr-site::fritter ( $git_root ) {
   file { $fritter_srusers_ini:
     content => template('sr-site/fritter_srusers_local.ini.erb'),
     require => Vcsrepo[$root_dir],
+    notify  => Service['fritter'],
   }
 
   # Install the service
@@ -131,6 +135,7 @@ class sr-site::fritter ( $git_root ) {
                 Exec['create-fritter-sqlite-db'],
                 Ldapres[$fritter_ldap_dn],
                ],
+    notify  => Service['fritter'],
   }
 
   # Link in the systemd service to run in multi user mode.
