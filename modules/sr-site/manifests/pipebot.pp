@@ -33,6 +33,11 @@ class sr-site::pipebot ( $git_root ) {
   # will be templated into it.
   $pipebot_nick = extlookup('pipebot_nick')
   $pipebot_ident = extlookup('pipebot_ident')
+  if $devmode {
+    $pipebot_channel = "#srobo-bots"
+  } else {
+    $pipebot_channel = "#srobo"
+  }
   file { "${root_dir}/localconfig.py":
     ensure => present,
     owner => 'pipebot',
@@ -41,15 +46,13 @@ class sr-site::pipebot ( $git_root ) {
     require => Vcsrepo[$root_dir],
   }
 
-  if !$devmode {
-    # Also, some systemd goo to install the service.
-    file { '/etc/systemd/system/pipebot.service':
-      ensure => present,
-      owner => 'root',
-      group => 'root',
-      mode => '0644',
-      source => 'puppet:///modules/sr-site/pipebot.service',
-    }
+  # Also, some systemd goo to install the service.
+  file { '/etc/systemd/system/pipebot.service':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    source => 'puppet:///modules/sr-site/pipebot.service',
   }
 
   # Link in the systemd service to run in multi user mode.
@@ -67,11 +70,9 @@ class sr-site::pipebot ( $git_root ) {
     require => File['/etc/systemd/system/multi-user.target.wants/pipebot.service'],
   }
 
-  if !$devmode {
-    # And finally maintain pipebot being running.
-    service { 'pipebot':
-      ensure => running,
-      require => Exec['pipebot-systemd-load'],
-    }
+  # And finally maintain pipebot being running.
+  service { 'pipebot':
+    ensure => running,
+    require => Exec['pipebot-systemd-load'],
   }
 }
