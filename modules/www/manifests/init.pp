@@ -50,6 +50,13 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
+  # Community guidelines
+  class { 'www::community-guidelines':
+    git_root => $git_root,
+    web_root_dir => $web_root_dir,
+    require => [User['wwwcontent'], Class['www::srweb']],
+  }
+
   # phpBB forum, at srobo.org/forum
   class { 'www::phpbb':
     git_root => $git_root,
