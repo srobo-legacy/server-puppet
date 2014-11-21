@@ -1,8 +1,18 @@
 # The system which provides competitors with personalised media consent forms
 
-class www::mediaconsent( $web_root_dir ) {
+class www::mediaconsent( $git_root, $web_root_dir ) {
   $mcf_root = "${web_root_dir}/mediaconsent"
   $mcf_ldap_pw = extlookup('ldap_mediaconsent_user_pw')
+
+  vcsrepo { $mcf_root:
+    ensure    => latest,
+    provider  => git,
+    source    => "${git_root}/media-consent-access.git",
+    revision  => 'origin/master',
+    owner     => 'wwwcontent',
+    group     => 'apache',
+    require   => Vcsrepo[$web_root_dir],
+  }
 
   # Dependencies are identical to the ticket system, which we should depend on
 
@@ -29,6 +39,7 @@ class www::mediaconsent( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     content => template('www/mcf_local.ini.erb'),
+    require => VCSRepo[$mcf_root],
   }
 
   file {"${mcf_root}/tickets/sr/local.ini":
@@ -37,6 +48,7 @@ class www::mediaconsent( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     content => template('www/mcf_sr_local.ini.erb'),
+    require => VCSRepo[$mcf_root],
   }
 
   file {"${mcf_root}/tickets/ticket.key":
@@ -45,6 +57,7 @@ class www::mediaconsent( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     source => '/srv/secrets/mcfs/ticket.key',
+    require => VCSRepo[$mcf_root],
   }
 
   file {"${mcf_root}/pdfs":
@@ -52,6 +65,7 @@ class www::mediaconsent( $web_root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0770',
+    require => VCSRepo[$mcf_root],
   }
 
   file {"${mcf_root}/pdfs/.htaccess":
@@ -60,5 +74,6 @@ class www::mediaconsent( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     source => 'puppet:///modules/www/mcf/user_dir.htaccess',
+    require => VCSRepo[$mcf_root],
   }
 }
