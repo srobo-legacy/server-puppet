@@ -1,6 +1,16 @@
 # The system which provides competitors access to their competition tickets
 
-class www::tickets( $web_root_dir ) {
+class www::tickets( $git_root, $web_root_dir ) {
+  vcsrepo { "${web_root_dir}/tickets":
+    ensure    => latest,
+    provider  => git,
+    source    => "${git_root}/ticket-access.git",
+    revision  => 'origin/master',
+    owner     => 'wwwcontent',
+    group     => 'apache',
+    require   => Vcsrepo[$web_root_dir],
+  }
+
   $tickets_root = "${web_root_dir}/tickets/tickets"
 
   # The ticket system requires the python imaging library
@@ -39,6 +49,7 @@ class www::tickets( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     content => template('www/tickets_config.ini.erb'),
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
   file { $tickets_keyfile:
@@ -47,6 +58,7 @@ class www::tickets( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     source => '/srv/secrets/tickets/ticket.key',
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
   file {"${tickets_root}/webapi/users":
@@ -54,6 +66,7 @@ class www::tickets( $web_root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0770',
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
   file {"${tickets_root}/webapi/users/.htaccess":
@@ -62,6 +75,7 @@ class www::tickets( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     source => 'puppet:///modules/www/tickets/user_dir.htaccess',
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
 }
