@@ -50,6 +50,13 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
+  # Community guidelines
+  class { 'www::community_guidelines':
+    git_root => $git_root,
+    web_root_dir => $web_root_dir,
+    require => [User['wwwcontent'], Class['www::srweb']],
+  }
+
   # phpBB forum, at srobo.org/forum
   class { 'www::phpbb':
     git_root => $git_root,
@@ -99,12 +106,14 @@ class www( $git_root ) {
 
   # Ticket System
   class { 'www::tickets':
+    git_root => $git_root,
     web_root_dir => $web_root_dir,
     require => [Class['srweb'], Class['sr_site::Openldap']],
   }
 
   # Media Consent System
   class { 'www::mediaconsent':
+    git_root => $git_root,
     web_root_dir => $web_root_dir,
     require => [Class['srweb'], Class['sr_site::Openldap'], Class['tickets']],
   }

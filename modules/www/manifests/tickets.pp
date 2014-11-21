@@ -1,6 +1,18 @@
 # The system which provides competitors access to their competition tickets
 
-class www::tickets( $web_root_dir ) {
+class www::tickets( $git_root, $web_root_dir ) {
+  vcsrepo { "${web_root_dir}/tickets":
+    ensure    => latest,
+    provider  => git,
+    force     => true,
+    source    => "${git_root}/ticket-access.git",
+    # TODO: change to origin/master once a maintainer situation is in place
+    revision  => 'cafc4ae99707644a9f3fe26138e86c7048ced702',
+    owner     => 'wwwcontent',
+    group     => 'apache',
+    require   => Vcsrepo[$web_root_dir],
+  }
+
   $tickets_root = "${web_root_dir}/tickets/tickets"
 
   # The ticket system requires the python imaging library
@@ -31,6 +43,14 @@ class www::tickets( $web_root_dir ) {
     userpassword => extlookup('ldap_ticket_user_ssha_pw'),
   }
 
+  file {"${web_root_dir}/ticket-api":
+    ensure  => link,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    target  => "${tickets_root}/webapi",
+    require => VCSRepo[$web_root_dir],
+  }
+
   $tickets_keyfile = "${tickets_root}/ticket.key"
   $ldap_ticket_user_pw = extlookup('ldap_ticket_user_pw')
   file {"${tickets_root}/webapi/config.ini":
@@ -39,6 +59,7 @@ class www::tickets( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     content => template('www/tickets_config.ini.erb'),
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
   file { $tickets_keyfile:
@@ -47,6 +68,7 @@ class www::tickets( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     source => '/srv/secrets/tickets/ticket.key',
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
   file {"${tickets_root}/webapi/users":
@@ -54,6 +76,7 @@ class www::tickets( $web_root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0770',
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
   file {"${tickets_root}/webapi/users/.htaccess":
@@ -62,6 +85,7 @@ class www::tickets( $web_root_dir ) {
     group => 'apache',
     mode => '0640',
     source => 'puppet:///modules/www/tickets/user_dir.htaccess',
+    require => VCSRepo["${web_root_dir}/tickets"],
   }
 
 }
