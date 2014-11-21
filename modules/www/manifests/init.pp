@@ -106,6 +106,7 @@ class www( $git_root ) {
 
   # Ticket System
   class { 'www::tickets':
+    git_root => $git_root,
     web_root_dir => $web_root_dir,
     require => [Class['srweb'], Class['Sr-site::Openldap']],
   }
