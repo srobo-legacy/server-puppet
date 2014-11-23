@@ -21,6 +21,16 @@ class www::srweb ( $git_root, $web_root_dir ) {
     ensure => latest,
   }
 
+  # needed to build the dependencies
+  package { 'npm':
+    ensure => latest
+  } ~>
+  exec { 'install bower':
+    command => 'npm install -g bower',
+    path => ['/usr/bin', '/usr/local/bin'],
+    refreshonly => true
+  }
+
   # Install and run memcached for the plus plus speed.
   service { 'memcached':
     ensure => 'running',
@@ -48,6 +58,13 @@ class www::srweb ( $git_root, $web_root_dir ) {
     source => "${git_root}/srweb.git",
     revision => 'origin/master',
     require   => [ Package['php'], Package['php-Smarty'], ],
+  }
+
+  # build the bower dependencies
+  exec { 'install srweb dependencies':
+    command => 'bower install',
+    path => ['/usr/bin', '/usr/local/bin'],
+    subscribe => [VCSRepo[$web_root_dir], Exec['install bower']]
   }
 
   # srweb needs this directory to belong to apache
