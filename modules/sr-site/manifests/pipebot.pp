@@ -50,24 +50,22 @@ class sr-site::pipebot ( $git_root ) {
       mode => '0644',
       source => 'puppet:///modules/sr-site/pipebot.service',
     }
-  }
 
-  # Link in the systemd service to run in multi user mode.
-  file { '/etc/systemd/system/multi-user.target.wants/pipebot.service':
-    ensure => link,
-    target => '/etc/systemd/system/pipebot.service',
-    require => File['/etc/systemd/system/pipebot.service'],
-  }
+    # Link in the systemd service to run in multi user mode.
+    file { '/etc/systemd/system/multi-user.target.wants/pipebot.service':
+      ensure => link,
+      target => '/etc/systemd/system/pipebot.service',
+      require => File['/etc/systemd/system/pipebot.service'],
+    }
 
-  # systemd has to be reloaded before picking this up,
-  exec { 'pipebot-systemd-load':
-    provider => 'shell',
-    command => 'systemctl daemon-reload',
-    onlyif => 'systemctl --all | grep pipebot; if test $? = 0; then exit 1; fi; exit 0',
-    require => File['/etc/systemd/system/multi-user.target.wants/pipebot.service'],
-  }
+    # systemd has to be reloaded before picking this up,
+    exec { 'pipebot-systemd-load':
+      provider => 'shell',
+      command => 'systemctl daemon-reload',
+      onlyif => 'systemctl --all | grep pipebot; if test $? = 0; then exit 1; fi; exit 0',
+      require => File['/etc/systemd/system/multi-user.target.wants/pipebot.service'],
+    }
 
-  if !$devmode {
     # And finally maintain pipebot being running.
     service { 'pipebot':
       ensure => running,
