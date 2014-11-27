@@ -6,15 +6,8 @@ class www::httpd( $web_root_dir ) {
   $anonpw = extlookup('ldap_anon_user_pw')
 
   # Use apache + mod_ssl to serve, wsgi for python services
-  package { [ 'httpd', 'mod_ssl', 'mod_wsgi',]:
+  package { [ 'httpd', 'mod_ssl', 'mod_wsgi', 'mod_ldap' ]:
     ensure => latest,
-  }
-
-  # On F20, mod_ldap is a separate package
-  if $::operatingsystemrelease == 20 {
-    package { 'mod_ldap':
-      ensure => latest,
-    }
   }
 
  # Ensure /var/www belongs to wwwcontent, allowing vcsrepos to be cloned
