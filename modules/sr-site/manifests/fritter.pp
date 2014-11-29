@@ -77,7 +77,16 @@ class sr-site::fritter ( $git_root ) {
     creates => $fritter_sqlite_db,
     user    => $fritter_user,
     group   => 'users',
+    umask   => '0077', # ensure no read/write access by group/others
     require => [Vcsrepo[$root_dir],File[$home_dir],Ldapres[$fritter_ldap_dn]],
+  }
+
+  file { $fritter_sqlite_db:
+    # Just the defaults, though mostly mode = 0600
+    # This is here mostly to ensure any existing instances get the right
+    # permissions -- new ones should be covered by the umask in the creation
+    # above.
+    require => Exec['create-fritter-sqlite-db'],
   }
 
   $fritter_privkey_name = 'fritter_rsa'
