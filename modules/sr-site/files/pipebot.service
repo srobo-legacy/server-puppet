@@ -1,5 +1,5 @@
 [Unit]
-Description=Pipe from /tmp/hash-srobo to #srobo
+Description=Pipe from a fifo to #srobo
 
 [Service]
 User=pipebot
