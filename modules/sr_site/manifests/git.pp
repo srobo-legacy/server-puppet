@@ -2,7 +2,7 @@
 # to generate RSS feeds for pushes/commits, which were replaced by Gerrit, and
 # are thus commented out.
 
-class sr-site::git($git_root) {
+class sr_site::git($git_root) {
   # Git package is installed in the kickstart file,
 
   # Ldapres defaults,
@@ -78,7 +78,7 @@ class sr-site::git($git_root) {
     owner => 'gerrit',
     group => 'users',
     mode => '0644',
-    source => 'puppet:///modules/sr-site/srgit.png',
+    source => 'puppet:///modules/sr_site/srgit.png',
     require => File[$git_dir],
   }
 
@@ -110,7 +110,7 @@ class sr-site::git($git_root) {
 #    ensure => present,
 #    owner => 'root',
 #    mode => '0400',
-#    source => 'puppet:///modules/sr-site/python-pyrss2gen-1.0.0-2.2.noarch.rpm',
+#    source => 'puppet:///modules/sr_site/python-pyrss2gen-1.0.0-2.2.noarch.rpm',
 #    before => Package['python-pyrss2gen.noarch'],
 #  }
 

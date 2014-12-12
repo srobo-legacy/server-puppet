@@ -66,7 +66,7 @@ class www::ide ( $git_root, $root_dir ) {
     bindpw => extlookup('ldap_manager_pw'),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
-    require => Class['sr-site::openldap'],
+    require => Class['sr_site::openldap'],
     objectclass => ['inetOrgPerson', 'uidObject', 'posixAccount'],
     uid => $ide_user,
     cn => 'IDE account',

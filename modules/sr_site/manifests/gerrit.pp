@@ -1,6 +1,6 @@
 # Gerrit provides review of our commits as well as easy push access
 
-class sr-site::gerrit {
+class sr_site::gerrit {
 
   # Gerrit runs on java...
   package { ['java-1.7.0-openjdk']:
@@ -76,7 +76,7 @@ class sr-site::gerrit {
   file { '/home/gerrit/srdata/etc/mail':
     ensure => directory,
     recurse => true,
-    source => 'puppet:///modules/sr-site/gerritmail',
+    source => 'puppet:///modules/sr_site/gerritmail',
     owner => 'gerrit',
     group => 'users',
     mode => '0444',
@@ -114,7 +114,7 @@ class sr-site::gerrit {
     ensure => present,
     owner => 'root',
     group => 'root',
-    source => 'puppet:///modules/sr-site/gerritcodereview',
+    source => 'puppet:///modules/sr_site/gerritcodereview',
   }
 
   $www_canonical_hostname = extlookup('www_canonical_hostname')
@@ -133,7 +133,7 @@ class sr-site::gerrit {
     owner => 'gerrit',
     group => 'users',
     mode => '0644',
-    content => template('sr-site/gerrit.config.erb'),
+    content => template('sr_site/gerrit.config.erb'),
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
   }
@@ -145,7 +145,7 @@ class sr-site::gerrit {
     owner => 'gerrit',
     group => 'users',
     mode => '0600',
-    content => template('sr-site/secure.config.erb'),
+    content => template('sr_site/secure.config.erb'),
     require => Exec['install-gerrit'],
     notify => Service['gerrit'],
   }

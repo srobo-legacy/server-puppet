@@ -8,7 +8,7 @@
 # * 'streamEvents' (global)
 # * 'label-Verified' (at least within the repo it targets)
 
-class sr-site::fritter ( $git_root ) {
+class sr_site::fritter ( $git_root ) {
   # Create a home folder.
   # Note that because there is an LDAP user, we don't need a system user
   $fritter_user = 'fritter'
@@ -116,7 +116,7 @@ class sr-site::fritter ( $git_root ) {
   $fritter_ini = "${root_dir}/local.ini"
   file { $fritter_ini:
     ensure  => present,
-    content => template('sr-site/fritter_local.ini.erb'),
+    content => template('sr_site/fritter_local.ini.erb'),
     require => [Vcsrepo[$root_dir],File[$home_dir],Ldapres[$fritter_ldap_dn]],
     notify  => Service['fritter'],
   }
@@ -124,7 +124,7 @@ class sr-site::fritter ( $git_root ) {
   # Configuration for LDAP connection
   $fritter_srusers_ini = "${root_dir}/fritter/srusers/local.ini"
   file { $fritter_srusers_ini:
-    content => template('sr-site/fritter_srusers_local.ini.erb'),
+    content => template('sr_site/fritter_srusers_local.ini.erb'),
     require => Vcsrepo[$root_dir],
     notify  => Service['fritter'],
   }
@@ -135,7 +135,7 @@ class sr-site::fritter ( $git_root ) {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => 'puppet:///modules/sr-site/fritter.service',
+    source  => 'puppet:///modules/sr_site/fritter.service',
     require => [Vcsrepo[$root_dir],
                 File[$fritter_privkey],
                 File[$fritter_pubkey],

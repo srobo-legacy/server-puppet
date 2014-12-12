@@ -1,6 +1,6 @@
 # Pipebot emits things from a fifo into the #srobo IRC channel
 
-class sr-site::pipebot ( $git_root ) {
+class sr_site::pipebot ( $git_root ) {
   # For lack of a more appropriate user,
   user { 'pipebot':
     ensure => present,
@@ -39,7 +39,7 @@ class sr-site::pipebot ( $git_root ) {
     ensure => present,
     owner => 'pipebot',
     group => 'users',
-    content => template('sr-site/pipebot_localconfig.py.erb'),
+    content => template('sr_site/pipebot_localconfig.py.erb'),
     require => Vcsrepo[$root_dir],
   }
 
@@ -57,7 +57,7 @@ class sr-site::pipebot ( $git_root ) {
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => 'puppet:///modules/sr-site/pipebot.service',
+      source => 'puppet:///modules/sr_site/pipebot.service',
     }
 
     # Link in the systemd service to run in multi user mode.

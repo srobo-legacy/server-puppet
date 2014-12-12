@@ -1,6 +1,6 @@
 # Backups make sure that we have all the datas, even if we don't have the server
 
-class sr-site::backup ( $git_root ) {
+class sr_site::backup ( $git_root ) {
 
   # A checkout of the server backup git repo. The backup script has to exist at
   # a known location on the server so that we can configure sudo, so that the
@@ -21,14 +21,14 @@ class sr-site::backup ( $git_root ) {
     $www::phpbb::forum_db_name,
     $www::piwik::piwik_db_name,
     # Constants because hyphens in the names cause issues
-    'trac', # sr-site::trac::trac_db_name
-    'reviewdb', # sr-site::gerrit::gerrit_db_name
+    'trac', # sr_site::trac::trac_db_name
+    'reviewdb', # sr_site::gerrit::gerrit_db_name
   ]
   $list_of_dbs = join($all_dbs, ',')
   $ide_loc = $www::ide::root_dir
   $team_status_images_loc = $www::ide::team_status_imgs_live_dir
   $forum_attachments_loc = $www::phpbb::attachments_dir
-  $fritter_db_loc = "/home/fritter/fritter.sqlite" # sr-site::fritter::fritter_sqlite_db
+  $fritter_db_loc = "/home/fritter/fritter.sqlite" # sr_site::fritter::fritter_sqlite_db
   $nemesis_db_loc = $www::nemesis::nemesis_db
 
   # A list of users permitted to use backups. This list doesn't actually allow
@@ -49,7 +49,7 @@ class sr-site::backup ( $git_root ) {
     owner => 'root',
     group => 'root',
     mode => '0400',
-    content => template('sr-site/backup.ini.erb'),
+    content => template('sr_site/backup.ini.erb'),
     require => Vcsrepo[$backup_root],
   }
 

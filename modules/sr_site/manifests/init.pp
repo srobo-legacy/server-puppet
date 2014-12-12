@@ -2,7 +2,7 @@
 # we operate.
 
 # git_root: The root URL to access the SR git repositories
-class sr-site( $git_root ) {
+class sr_site( $git_root ) {
 
   # Default PATH
   Exec {
@@ -43,32 +43,32 @@ class sr-site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'sr-site::firewall':
+  class { 'sr_site::firewall':
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'sr-site::mysql':
+  class { 'sr_site::mysql':
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'sr-site::openldap':
+  class { 'sr_site::openldap':
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'sr-site::trac':
+  class { 'sr_site::trac':
     git_root => $git_root,
   }
 
-  class { 'sr-site::gerrit':
+  class { 'sr_site::gerrit':
     require => File['/usr/local/var/sr'],
   }
 
-  include sr-site::subversion
-  include sr-site::login
-  include sr-site::meta
-  include sr-site::ntpd
+  include sr_site::subversion
+  include sr_site::login
+  include sr_site::meta
+  include sr_site::ntpd
 
-  class { 'sr-site::git':
+  class { 'sr_site::git':
     git_root => $git_root,
   }
 
@@ -105,6 +105,6 @@ class sr-site( $git_root ) {
     owner => 'root',
     group => 'root',
     mode => '0755',
-    source => 'puppet:///modules/sr-site/journald.conf'
+    source => 'puppet:///modules/sr_site/journald.conf'
   }
 }

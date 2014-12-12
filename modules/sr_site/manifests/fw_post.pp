@@ -1,5 +1,5 @@
 
-class sr-site::fw_post {
+class sr_site::fw_post {
 
   firewall { '999 drop all':
     action  => 'drop',

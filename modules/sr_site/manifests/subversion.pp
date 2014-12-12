@@ -1,7 +1,7 @@
 # Subversion - which we used quite a large while ago. It's still kept around
 # as it contains a) useful historic data and b) possibly data we still use.
 
-class sr-site::subversion {
+class sr_site::subversion {
   # Install subversion package(s), using an imported subversion module
   class {'::subversion': # :: for global namespace
   }
@@ -48,7 +48,7 @@ class sr-site::subversion {
   # certain files, that are in SVN but shouldn't be public.
   file { '/srv/svn/sr/authfile':
     ensure => present,
-    source => 'puppet:///modules/sr-site/authfile',
+    source => 'puppet:///modules/sr_site/authfile',
     owner => 'svn',
     group => 'svn',
     mode => '0644',

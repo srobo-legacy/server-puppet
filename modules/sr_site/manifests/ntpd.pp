@@ -1,6 +1,6 @@
 # Run ntp so that the clock stays accurate
 
-class sr-site::ntpd {
+class sr_site::ntpd {
 
   package { [ 'ntp' ]:
     ensure => latest,

@@ -1,10 +1,10 @@
 # Trac configuration; currently mostly incomplete and distributed primarily as
 # a directory of goo. Can be developed to correctness in the future.
 
-class sr-site::trac ( $git_root ) {
+class sr_site::trac ( $git_root ) {
 
   # Trac needs mysql
-  require sr-site::mysql
+  require sr_site::mysql
 
   $mysql_trac_pw = extlookup('mysql_trac_pw')
   $trac_env_root = '/srv/trac'
@@ -82,7 +82,7 @@ class sr-site::trac ( $git_root ) {
   file { $trac_env_ini:
     ensure  => 'file',
     mode    => '0660',
-    content => template('sr-site/trac.ini.erb'),
+    content => template('sr_site/trac.ini.erb'),
     require => File[$trac_env_conf],
   }
 
@@ -94,7 +94,7 @@ class sr-site::trac ( $git_root ) {
   }
   file { "${trac_env_htdocs}/sr-trac.png":
     ensure => 'file',
-    source => 'puppet:///modules/sr-site/sr-trac.png',
+    source => 'puppet:///modules/sr_site/sr-trac.png',
     require => File[$trac_env_htdocs],
   }
 
@@ -123,7 +123,7 @@ class sr-site::trac ( $git_root ) {
   }
   file { "${trac_env_templates}/site.html":
     ensure => 'file',
-    content => template('sr-site/trac-site.html.erb'),
+    content => template('sr_site/trac-site.html.erb'),
     require => File[$trac_env_templates],
   }
 
@@ -160,7 +160,7 @@ Visit http://trac.edgewall.org/ for more information.
     owner => root,
     group => root,
     mode => '0644',
-    source => 'puppet:///modules/sr-site/trac.wsgi',
+    source => 'puppet:///modules/sr_site/trac.wsgi',
   }
 
   if $devmode {

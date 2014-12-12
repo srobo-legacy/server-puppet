@@ -1,6 +1,6 @@
 # Various things need mysql: PHPBB forums, Piwik, Gerrit, etc.
 
-class sr-site::mysql {
+class sr_site::mysql {
 
   # Install the mysql server
   class { 'mysql::server':

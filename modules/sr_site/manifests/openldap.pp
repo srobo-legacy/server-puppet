@@ -6,7 +6,7 @@
 # as some md5/digest related exception occurs from puppet. So, some juggling and
 # patching occurs around the ldap module.
 
-class sr-site::openldap {
+class sr_site::openldap {
   # Install both server and client packages for LDAP.
   class { 'ldap':
     # Yes, lint complains about these being quoted.
@@ -122,7 +122,7 @@ class sr-site::openldap {
   # groups and so forth. It also informs the NSS server about similar facts.
   file { '/etc/pam_ldap.conf':
     ensure => present,
-    content => template('sr-site/pam_ldap.conf.erb'),
+    content => template('sr_site/pam_ldap.conf.erb'),
     owner => 'root',
     group => 'root',
     mode => '0600',
@@ -221,7 +221,7 @@ class sr-site::openldap {
     owner => 'ldap',
     group => 'ldap',
     mode => '0440',
-    source => 'puppet:///modules/sr-site/ldap_acl.conf',
+    source => 'puppet:///modules/sr_site/ldap_acl.conf',
     notify => [Class['ldap::server::rebuild'],Service['slapd']]
   }
 

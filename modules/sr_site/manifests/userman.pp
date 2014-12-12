@@ -2,7 +2,7 @@
 # While not entirely needed on the live server, it's very useful,
 # especially on development badger instances
 
-class sr-site::userman ( $git_root ) {
+class sr_site::userman ( $git_root ) {
   # Checkout of userman's code.
   $root_dir = '/root/userman'
   vcsrepo { $root_dir:
@@ -22,7 +22,7 @@ class sr-site::userman ( $git_root ) {
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    content => template('sr-site/userman_srusers.ini.erb'),
+    content => template('sr_site/userman_srusers.ini.erb'),
     require => Vcsrepo[$root_dir],
   }
 }

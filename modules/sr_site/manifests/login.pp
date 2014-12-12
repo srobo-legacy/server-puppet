@@ -1,7 +1,7 @@
 # Configuration for anything to do with ssh and other authentication goo
 # involving shell access.
 
-class sr-site::login {
+class sr_site::login {
 
   # Group that the private key files in /etc/ssh are in
   group { 'ssh_keys':
@@ -11,7 +11,7 @@ class sr-site::login {
   # PAM configuration for SSHD, just passes control to the sr-auth stack.
   file { '/etc/pam.d/sshd':
     ensure => present,
-    source => 'puppet:///modules/sr-site/sshd',
+    source => 'puppet:///modules/sr_site/sshd',
     owner => 'root',
     group => 'root',
     mode => '0600',
@@ -24,7 +24,7 @@ class sr-site::login {
   # operations for local users.
   file { '/etc/pam.d/sr-auth':
     ensure => present,
-    source => 'puppet:///modules/sr-site/sr-auth',
+    source => 'puppet:///modules/sr_site/sr-auth',
     owner => 'root',
     group => 'root',
     mode => '0600',
@@ -38,7 +38,7 @@ class sr-site::login {
     owner => 'root',
     group => 'root',
     mode => '0440',
-    source => 'puppet:///modules/sr-site/sudoers',
+    source => 'puppet:///modules/sr_site/sudoers',
   }
 
   # Our SSH configuration; mostly the default, with the difference that root
@@ -48,7 +48,7 @@ class sr-site::login {
     owner => 'root',
     group => 'root',
     mode => '0600',
-    content => template('sr-site/sshd_config.erb'),
+    content => template('sr_site/sshd_config.erb'),
     notify => Service['sshd'],
   }
 

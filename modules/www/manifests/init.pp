@@ -100,13 +100,13 @@ class www( $git_root ) {
   # Ticket System
   class { 'www::tickets':
     web_root_dir => $web_root_dir,
-    require => [Class['srweb'], Class['Sr-site::Openldap']],
+    require => [Class['srweb'], Class['sr_site::Openldap']],
   }
 
   # Media Consent System
   class { 'www::mediaconsent':
     web_root_dir => $web_root_dir,
-    require => [Class['srweb'], Class['Sr-site::Openldap'], Class['tickets']],
+    require => [Class['srweb'], Class['sr_site::Openldap'], Class['tickets']],
   }
 
 

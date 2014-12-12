@@ -1,6 +1,6 @@
 # A wall of fire!
 
-class sr-site::firewall {
+class sr_site::firewall {
 
   # Install standard firewall arrangement, iptables, and disable firewalld
   # as it isn't useful for us here.
@@ -27,11 +27,11 @@ class sr-site::firewall {
     purge => true
   }
 
-  class { 'sr-site::fw_pre':
+  class { 'sr_site::fw_pre':
     require => Service['iptables'],
   }
 
-  class { 'sr-site::fw_post':
+  class { 'sr_site::fw_post':
     require => Service['iptables'],
   }
 }

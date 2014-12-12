@@ -1,5 +1,5 @@
 
-class sr-site::fw_pre {
+class sr_site::fw_pre {
 
   firewall { '000 accept all icmp':
     proto  => 'icmp',
