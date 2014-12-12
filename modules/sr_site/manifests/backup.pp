@@ -20,15 +20,14 @@ class sr_site::backup ( $git_root ) {
   $all_dbs = [
     $www::phpbb::forum_db_name,
     $www::piwik::piwik_db_name,
-    # Constants because hyphens in the names cause issues
-    'trac', # sr_site::trac::trac_db_name
-    'reviewdb', # sr_site::gerrit::gerrit_db_name
+    $sr_site::trac::trac_db_name,
+    $sr_site::gerrit::gerrit_db_name,
   ]
   $list_of_dbs = join($all_dbs, ',')
   $ide_loc = $www::ide::root_dir
   $team_status_images_loc = $www::ide::team_status_imgs_live_dir
   $forum_attachments_loc = $www::phpbb::attachments_dir
-  $fritter_db_loc = "/home/fritter/fritter.sqlite" # sr_site::fritter::fritter_sqlite_db
+  $fritter_db_loc = $sr_site::fritter::fritter_sqlite_db
   $nemesis_db_loc = $www::nemesis::nemesis_db
 
   # A list of users permitted to use backups. This list doesn't actually allow
