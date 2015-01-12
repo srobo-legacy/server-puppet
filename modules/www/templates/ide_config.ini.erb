@@ -6,6 +6,8 @@ ldap.team.prefix = "team-"
 ldap.read_all_group = "mentors"
 ldap.admin_group = "ide-admin"
 
+log.emitter = SyslogEmitter
+log.location = LOG_LOCAL1
 log.level = LOG_NOTICE
 
 keyfile = <%= @ide_key_file %>
