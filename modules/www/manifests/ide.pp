@@ -199,6 +199,16 @@ class www::ide ( $git_root, $root_dir ) {
     require => [File["${root_dir}/notifications"],File[ $ide_repos_root ]],
   }
 
+  # Syslog configuration, using local1
+  file { '/etc/rsyslog.d/ide.conf':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    source => 'puppet:///modules/www/ide-syslog.conf',
+    notify => Service['rsyslog'],
+  }
+
   cron { 'ide-cron':
     command => 'curl --insecure https://localhost/ide/control.php/cron/cron',
     hour => '3',
