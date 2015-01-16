@@ -1,0 +1,18 @@
+[core]
+nick        = srbot
+name        = Student Robotics' IRC Bot
+host        = irc.freenode.net
+port        = 6697
+use_ssl     = True
+verify_ssl  = True
+logdir      = /var/log/willie
+pid_dir     = /run/willie
+homedir     = <%= @home_dir %>
+
+# calc allows exec()ing of python
+# RSS doesn't appear to work (emits a config error)
+exclude     = calc,rss
+
+owner       = PeterJCLaw
+channels    = #srobo
+extra       = <%= @plugins_dir %>
