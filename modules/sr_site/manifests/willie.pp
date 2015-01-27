@@ -25,7 +25,7 @@ class sr_site::willie ($git_root) {
     ensure   => present,
     provider => 'git',
     source   => "${git_root}/srbot-plugins.git",
-    revision => 'origin/master',
+    revision => 'd26270d8293548e9a75dc83aec824c65977b6e0e',
     owner    => $user_name,
     group    => 'users',
     require  => Package['willie'],
