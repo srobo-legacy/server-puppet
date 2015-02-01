@@ -55,10 +55,19 @@ class sr_site::gerrit {
   exec { 'install-gerrit-all-projs':
     command => 'tar -xf /srv/secrets/gerrit/all_projs.tgz -C /home/gerrit/srdata/git && touch /home/gerrit/srdata/git/All-Projects.git/.srinstalled',
     provider => 'shell',
-    user => 'gerrit',
     creates => '/home/gerrit/srdata/git/All-Projects.git/.srinstalled',
-    notify => Service['gerrit'],
     require => Exec['install-gerrit'],
+  }
+
+  # Fix the permissions on the All-Project.git folder which we just broke
+  # by overwriting it as root
+  file { '/home/gerrit/srdata/git/All-Projects.git':
+    ensure  => directory,
+    owner   => 'gerrit',
+    group   => 'users',
+    recurse => true,
+    require => Exec['install-gerrit-all-projs'],
+    notify  => Service['gerrit'],
   }
 
   # Symlink the All-Projects git repo into the list of served repos. This is
