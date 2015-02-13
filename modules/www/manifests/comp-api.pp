@@ -9,11 +9,13 @@ class www::comp-api ( $git_root, $root_dir ) {
              'python-pip',
              # Flask runs our python WSGI things
              'python-flask',
+             # Virtualenv so we can install the srcomp stuff into one.
+             'python-virtualenv',
              # We use dateutil for timezone munging
              'python-dateutil' ]:
     ensure => present,
     notify => Service['httpd'],
-    before => Vcsrepo[$root_dir],
+    before => Exec['srcomp-venv'],
   }
 
   # Remove Flask from pip
@@ -25,16 +27,46 @@ class www::comp-api ( $git_root, $root_dir ) {
     before    => Package['python-flask'],
   }
 
-  # Main checkout of the codebase
-  vcsrepo { $root_dir:
-    ensure    => present,
-    provider  => git,
-    source    => "${git_root}/comp/srcomp-http.git",
-    revision  => 'origin/master',
-    owner     => 'wwwcontent',
-    group     => 'apache',
-    require   => Package['Flask', 'python-simplejson'],
-    notify    => Service['httpd'],
+  # Containing folder
+  file { $root_dir:
+    ensure  => directory,
+    force   => true,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+  }
+
+  # Virtual environment
+  $venv_dir = "${root_dir}/venv"
+  exec { 'srcomp-venv':
+    command => "virtualenv --system-site-packages --python=python2.7 '${venv_dir}'",
+    cwd     => $root_dir,
+    creates => $venv_dir,
+    path    => ['/usr/bin'],
+    user    => 'wwwcontent',
+    group   => 'apache',
+    require => [Package['python-virtualenv'],File[$root_dir]],
+  }
+
+  # requirements.txt for the whole application
+  $requirements_txt = "${root_dir}/requirements.txt"
+  file { $requirements_txt:
+    ensure  => present,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    content => template('www/comp-api-requirements.txt.erb'),
+    require => File[$root_dir],
+  }
+
+  # Install the application into the virtual env we created above
+  exec { 'srcomp-install':
+    command => "'${venv_dir}/bin/pip' install -r '${requirements_txt}'",
+    # The requirements.txt includes a bunch of git clones and it turns out
+    # that git tries to 'cd' back to its original location when done.
+    # Thus things fail if we leave the cwd as /root (the default).
+    cwd     => $root_dir,
+    user    => 'wwwcontent',
+    group   => 'apache',
+    require => [Exec['srcomp-venv'],File[$requirements_txt]],
   }
 
   # Syslog configuration, using local1
@@ -56,7 +88,7 @@ class www::comp-api ( $git_root, $root_dir ) {
     revision  => 'origin/master',
     owner     => 'wwwcontent',
     group     => 'apache',
-    require   => Vcsrepo[$root_dir],
+    require   => File[$root_dir],
   }
 
   # Update trigger and lock files
@@ -83,6 +115,6 @@ class www::comp-api ( $git_root, $root_dir ) {
     group   => 'apache',
     mode    => '0644',
     content => template('www/comp-api.wsgi.erb'),
-    require => Vcsrepo[$root_dir],
+    require => [File[$root_dir],Exec['srcomp-install']],
   }
 }
