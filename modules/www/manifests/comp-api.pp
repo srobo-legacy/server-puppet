@@ -5,8 +5,10 @@ class www::comp-api ( $git_root, $root_dir ) {
 
   # SimpleJSON so we can handle Decimal()s,
   package { ['python-simplejson',
-             # PIP so we can get Flask from it.
+             # PIP so we can remove Flask from it
              'python-pip',
+             # Flask runs our python WSGI things
+             'python-flask',
              # We use dateutil for timezone munging
              'python-dateutil' ]:
     ensure => present,
@@ -14,20 +16,13 @@ class www::comp-api ( $git_root, $root_dir ) {
     before => Vcsrepo[$root_dir],
   }
 
-  # Need more recent than version 0.8, which is all that's available in the F17 repos
-  # Ensure the Fedora-provided package is removed
-  package { 'python-flask':
-    ensure => absent,
-  }
-
-  # Get it from pip instead
+  # Remove Flask from pip
   package { ['Flask']:
-    ensure => present,
-    provider => pip,
-    require => [ Package['python-pip'],
-                 Package['python-flask'] ],
-    notify => Service['httpd'],
-    before => Vcsrepo[$root_dir],
+    ensure    => absent,
+    provider  => pip,
+    require   => [Package['python-pip']],
+    notify    => Service['httpd'],
+    before    => Package['python-flask'],
   }
 
   # Main checkout of the codebase
