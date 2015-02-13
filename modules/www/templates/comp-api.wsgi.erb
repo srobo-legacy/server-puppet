@@ -1,9 +1,6 @@
-import sys
-sys.path.insert(0, "<%= @root_dir %>")
 
-import config
-config.configure_logging("<%= @root_dir %>/logging-syslog.ini")
+from sr.comp.http import config, app as application
 
-from app import app as application
+config.configure_logging_relative("logging-syslog.ini")
 
 application.config["COMPSTATE"] = "<%= @compstate_dir %>"
