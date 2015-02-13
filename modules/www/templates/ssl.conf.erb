@@ -159,8 +159,12 @@ WSGISocketPrefix /var/run/wsgi
         </Directory>
 
         # Pass accesses to /comp-api over to the Competition API in WSGI
-        WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
-        <Directory /srv/srcomp-http>
+        WSGIDaemonProcess srcomp user=apache group=apache threads=25 maximum-requests=1000 \
+                          python-path=/srv/comp-api/venv/lib/python2.7/site-packages
+        WSGIScriptAlias /comp-api /srv/comp-api/comp-api.wsgi
+        <Directory /srv/comp-api>
+            WSGIProcessGroup srcomp
+            WSGIApplicationGroup %{GLOBAL}
             Require all granted
         </Directory>
 
