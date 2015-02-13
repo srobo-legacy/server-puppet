@@ -21,38 +21,38 @@ WSGISocketPrefix /var/run/wsgi
 
 # Primary configuration gunge for the main website.
 <VirtualHost *:443>
-	ServerName <%= @www_canonical_hostname %>:443
-	# Serve everything out of srweb by default.
-	DocumentRoot <%= @web_root_dir %>
+        ServerName <%= @www_canonical_hostname %>:443
+        # Serve everything out of srweb by default.
+        DocumentRoot <%= @web_root_dir %>
 
-	<Directory "<%= @web_root_dir %>">
-		Options All
-		AllowOverride All
-	</Directory>
+        <Directory "<%= @web_root_dir %>">
+                Options All
+                AllowOverride All
+        </Directory>
 
-	# Block various parts of the IDE being accessed externally
-	<LocationMatch "/ide/(config|notifications|repos|settings|uploads)">
-		Require all denied
-	</LocationMatch>
+        # Block various parts of the IDE being accessed externally
+        <LocationMatch "/ide/(config|notifications|repos|settings|uploads)">
+                Require all denied
+        </LocationMatch>
 
-	# Deny listing the zips
-	<Directory "<%= @web_root_dir %>/ide/zips">
-		Options -Indexes
+        # Deny listing the zips
+        <Directory "<%= @web_root_dir %>/ide/zips">
+                Options -Indexes
 
-		# Copied from IDE cyanide.git/resources/zips-htaccess commit c501109cc8b50.
-		# This is a hack to work around certain cases where IE8 is misconfigured.
-		# Apparently in some cases IE8 will die if not told to cache when connecting over ssl.
-		ExpiresDefault "access plus 6 seconds"
-		# Ensures the files are opened as a download
-		Header set Content-Disposition attachment
-	</Directory>
+                # Copied from IDE cyanide.git/resources/zips-htaccess commit c501109cc8b50.
+                # This is a hack to work around certain cases where IE8 is misconfigured.
+                # Apparently in some cases IE8 will die if not told to cache when connecting over ssl.
+                ExpiresDefault "access plus 6 seconds"
+                # Ensures the files are opened as a download
+                Header set Content-Disposition attachment
+        </Directory>
 
-	# Deny everyone userdirs, except explicitly configured accounts
-	UserDir disabled
-	# Voting user requires a public_html dir
-	UserDir enabled voting
+        # Deny everyone userdirs, except explicitly configured accounts
+        UserDir disabled
+        # Voting user requires a public_html dir
+        UserDir enabled voting
 
-	# Configure trac, and point it to serve out of /srv/trac
+        # Configure trac, and point it to serve out of /srv/trac
         WSGIDaemonProcess trac user=apache group=apache threads=25 maximum-requests=1000
         WSGIScriptAlias /trac /var/www/trac/trac.wsgi
 
@@ -62,31 +62,31 @@ WSGISocketPrefix /var/run/wsgi
                 Require all granted
         </Directory>
 
-	# To authenticate, trac has the user access /trac/login, allows apache
-	# to auth them, then gives them a session cookie. This config blob
-	# is copied in a number of other places.
+        # To authenticate, trac has the user access /trac/login, allows apache
+        # to auth them, then gives them a session cookie. This config blob
+        # is copied in a number of other places.
         <Location "/trac/login">
-		# Use basic password authentication against LDAP,
+                # Use basic password authentication against LDAP,
                 AuthType basic
                 AuthName "Student Robotics Trac"
                 AuthBasicProvider ldap
 
-		# Server location and search filter when looking for a user
+                # Server location and search filter when looking for a user
                 AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
-		# What user to bind as when performing authorization, i.e.
-		# after authentication.
+                # What user to bind as when performing authorization, i.e.
+                # after authentication.
                 AuthLDAPBindDN "uid=anon,ou=users,o=sr"
                 AuthLDAPBindPassword "<%= @anonpw %>"
 
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
 
-		<RequireAll>
-			# Trac users must be in the mentors group
-			Require ldap-group cn=mentors,ou=groups,o=sr
-			# Trac users must have authenticated.
-			Require valid-user
-		</RequireAll>
+                <RequireAll>
+                        # Trac users must be in the mentors group
+                        Require ldap-group cn=mentors,ou=groups,o=sr
+                        # Trac users must have authenticated.
+                        Require valid-user
+                </RequireAll>
         </Location>
 
         # Legacy SVN goo
@@ -105,14 +105,14 @@ WSGISocketPrefix /var/run/wsgi
                 AuthLDAPGroupAttributeIsDN off
 
                 Satisfy Any
-		# Only require that trac users are valid users; svn uses its own
-		# unpleasent authorization goo.
+                # Only require that trac users are valid users; svn uses its own
+                # unpleasent authorization goo.
                 Require valid-user
 
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 
-	# Voting scripts are run out of the voting users's public_html directory
+        # Voting scripts are run out of the voting users's public_html directory
         Redirect /voting /~voting/voting/
         <Location /~voting/voting>
                 AuthType basic
@@ -126,18 +126,18 @@ WSGISocketPrefix /var/run/wsgi
                 AuthLDAPGroupAttribute memberUid
                 AuthLDAPGroupAttributeIsDN off
 
-		<RequireAll>
-			Require ldap-group cn=mentors,ou=groups,o=sr
-			Require valid-user
-		</RequireAll>
+                <RequireAll>
+                        Require ldap-group cn=mentors,ou=groups,o=sr
+                        Require valid-user
+                </RequireAll>
         </Location>
 
-	<Directory /home/voting/public_html/voting>
-		AllowOverride All
-		Options Indexes
-	</Directory>
+        <Directory /home/voting/public_html/voting>
+                AllowOverride All
+                Options Indexes
+        </Directory>
 
-	# Allow for http cloning through the /git dir
+        # Allow for http cloning through the /git dir
         Alias /git /srv/git
         <Directory /srv/git>
                 Options Indexes
@@ -151,79 +151,79 @@ WSGISocketPrefix /var/run/wsgi
         RewriteEngine On
         RewriteRule ^/git/$ /cgit [PT]
 
-	# Forums
-	Redirect permanent /forums /forum
-	Alias /forum /var/www/phpbb/phpBB
+        # Forums
+        Redirect permanent /forums /forum
+        Alias /forum /var/www/phpbb/phpBB
         <Directory /var/www/phpbb/phpBB>
                 AllowOverride All
         </Directory>
 
-	# Pass accesses to /comp-api over to the Competition API in WSGI
+        # Pass accesses to /comp-api over to the Competition API in WSGI
         WSGIScriptAlias /comp-api /srv/srcomp-http/comp-api.wsgi
         <Directory /srv/srcomp-http>
             Require all granted
         </Directory>
 
-	# Pass accesses to /userman over to nemesis in WSGI
+        # Pass accesses to /userman over to nemesis in WSGI
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
         WSGIPassAuthorization on
         <Directory /srv/nemesis/nemesis>
             Require all granted
         </Directory>
 
-	# Proxy all requests to the /gerrit dir to the local server process
-	# gerrit is running. Highly unpleasent.
-	# It also requires some flags to tell apache not to rewrite the URLs
-	# going through
-	AllowEncodedSlashes On
-	ProxyPass /gerrit http://localhost:8081/gerrit nocanon
+        # Proxy all requests to the /gerrit dir to the local server process
+        # gerrit is running. Highly unpleasent.
+        # It also requires some flags to tell apache not to rewrite the URLs
+        # going through
+        AllowEncodedSlashes On
+        ProxyPass /gerrit http://localhost:8081/gerrit nocanon
 
-	########## SSL stuff below
+        ########## SSL stuff below
 
-	# Force users to use HTTPS again in the future
-	Header add Strict-Transport-Security "max-age=15768000"
+        # Force users to use HTTPS again in the future
+        Header add Strict-Transport-Security "max-age=15768000"
 
-	# Separate log files
-	ErrorLog logs/ssl_error_log
-	TransferLog logs/ssl_access_log
-	LogLevel warn
+        # Separate log files
+        ErrorLog logs/ssl_error_log
+        TransferLog logs/ssl_access_log
+        LogLevel warn
 
-	# Enable SSL
-	SSLEngine on
+        # Enable SSL
+        SSLEngine on
 
-	# Disable SSLv2 access by default:
-	SSLProtocol all -SSLv2
+        # Disable SSLv2 access by default:
+        SSLProtocol all -SSLv2
 
-	SSLCipherSuite RC4-SHA:AES128-SHA:ALL:!ADH:!EXP:!LOW:!MD5:!SSLV2:!NULL
+        SSLCipherSuite RC4-SHA:AES128-SHA:ALL:!ADH:!EXP:!LOW:!MD5:!SSLV2:!NULL
 
-	#   Server Certificate:
-	SSLCertificateFile /etc/pki/tls/certs/server.crt
+        #   Server Certificate:
+        SSLCertificateFile /etc/pki/tls/certs/server.crt
 
-	#   Server Private Key:
-	SSLCertificateKeyFile /etc/pki/tls/private/server.key
+        #   Server Private Key:
+        SSLCertificateKeyFile /etc/pki/tls/private/server.key
 
-	# Only install the certificate chain file on the production machine.
+        # Only install the certificate chain file on the production machine.
         <% if !@devmode then -%>
-	#   Server Certificate Chain:
-	SSLCertificateChainFile /etc/pki/tls/certs/comodo_bundle.crt
+        #   Server Certificate Chain:
+        SSLCertificateChainFile /etc/pki/tls/certs/comodo_bundle.crt
         <% end -%>
 
-	<Files ~ "\.(cgi|shtml|phtml|php3?)$">
-    		SSLOptions +StdEnvVars
-	</Files>
-	<Directory "/var/www/cgi-bin">
-		SSLOptions +StdEnvVars
-	</Directory>
+        <Files ~ "\.(cgi|shtml|phtml|php3?)$">
+                    SSLOptions +StdEnvVars
+        </Files>
+        <Directory "/var/www/cgi-bin">
+                SSLOptions +StdEnvVars
+        </Directory>
 
-	# SSL Protocol Adjustments:
-	SetEnvIf User-Agent ".*MSIE.*" \
-        	nokeepalive ssl-unclean-shutdown \
-        	downgrade-1.0 force-response-1.0
+        # SSL Protocol Adjustments:
+        SetEnvIf User-Agent ".*MSIE.*" \
+                nokeepalive ssl-unclean-shutdown \
+                downgrade-1.0 force-response-1.0
 
-	# Per-Server Logging:
-	# The home of a custom SSL log file. Use this when you want a
-	# compact non-error SSL logfile on a virtual host basis.
-	CustomLog logs/ssl_request_log \
-        	"%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %D"
+        # Per-Server Logging:
+        # The home of a custom SSL log file. Use this when you want a
+        # compact non-error SSL logfile on a virtual host basis.
+        CustomLog logs/ssl_request_log \
+                "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %D"
 </VirtualHost>
 
