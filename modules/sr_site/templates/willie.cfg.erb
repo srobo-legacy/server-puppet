@@ -18,3 +18,9 @@ nick_blocks = sr.*bot
 owner       = PeterJCLaw
 channels    = #srobo
 extra       = <%= @plugins_dir %>
+
+[url]
+# A comma separated list of regex patterns for which titles won't be shown
+# They're 'search'ed for, so we don't need to wrap in .*
+# Block localhost, anything by IPv4, IPv6, or specifies a port and the forums
+exclude=localhost,//\d+\.\d+\.\d+\.\d+,//\[?\d*:\d*,//[^/]+:.*/,forum
