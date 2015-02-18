@@ -11,6 +11,18 @@ class monitoring ( $git_root ) {
     ensure => installed,
   }
 
+  package { 'perl-Nagios-Plugin':
+    ensure => installed,
+  }
+
+  package { 'perl-Sort-Versions':
+    ensure => installed,
+  }
+
+  package {'perl-Readonly':
+    ensure => installed,
+  }
+
 # create a user to do the checking
   user { 'monitoring':
     ensure => present,
