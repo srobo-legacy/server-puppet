@@ -53,7 +53,7 @@ class sr_site::gerrit {
   # database of data due to group identification being done by some UUIDs.
   # Therefore a specific All-Projects.git has to be associated with the server.
   exec { 'install-gerrit-all-projs':
-    command => 'tar -xf /srv/secrets/gerrit/all_projs.tgz -C /home/gerrit/srdata/git; touch /home/gerrit/srdata/git/All-Projects.git/.srinstalled',
+    command => 'tar -xf /srv/secrets/gerrit/all_projs.tgz -C /home/gerrit/srdata/git && touch /home/gerrit/srdata/git/All-Projects.git/.srinstalled',
     provider => 'shell',
     user => 'gerrit',
     creates => '/home/gerrit/srdata/git/All-Projects.git/.srinstalled',
