@@ -10,7 +10,7 @@ class www::mediaconsent( $git_root, $web_root_dir ) {
     force     => true,
     source    => "${git_root}/media-consent-access.git",
     # TODO: change to origin/master once a maintainer situation is in place
-    revision  => '459cd626b83e96f471755ad6867602770d38eb9c',
+    revision  => 'origin/master',
     owner     => 'wwwcontent',
     group     => 'apache',
     require   => Vcsrepo[$web_root_dir],
