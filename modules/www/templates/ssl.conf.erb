@@ -196,9 +196,9 @@ WSGISocketPrefix /var/run/wsgi
         SSLEngine on
 
         # Disable SSLv2 access by default:
-        SSLProtocol all -SSLv2
+        SSLProtocol all -SSLv2 -SSLv3
 
-        SSLCipherSuite RC4-SHA:AES128-SHA:ALL:!ADH:!EXP:!LOW:!MD5:!SSLV2:!NULL
+        SSLCipherSuite ECDH:AES128-SHA:ALL:!ADH:!EXP:!LOW:!MD5:!SSLV2:!NULL:!RC4
 
         #   Server Certificate:
         SSLCertificateFile /etc/pki/tls/certs/server.crt
