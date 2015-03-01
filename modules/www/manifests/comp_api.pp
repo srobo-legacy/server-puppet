@@ -1,7 +1,7 @@
 # 'comp-api' is the web API to the SRComp library which contains information
 # about the state of the competition
 
-class www::comp-api ( $git_root, $root_dir ) {
+class www::comp_api ( $git_root, $root_dir ) {
 
   # SimpleJSON so we can handle Decimal()s,
   package { ['python-simplejson',
