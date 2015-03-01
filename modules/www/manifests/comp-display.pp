@@ -4,13 +4,8 @@ class www::comp-display( $git_root, $web_root_dir ) {
 
   # Arena Screens
   vcsrepo { "${web_root_dir}/screens":
-    ensure    => present,
+    ensure    => absent,
     provider  => git,
-    source    => "${git_root}/comp/srcomp-screens.git",
-    revision  => 'origin/master',
-    owner     => 'wwwcontent',
-    group     => 'apache',
-    require   => Vcsrepo[$web_root_dir],
   }
 
   # Information for shepherds
