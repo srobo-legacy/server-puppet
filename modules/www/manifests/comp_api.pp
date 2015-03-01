@@ -64,6 +64,8 @@ class www::comp_api ( $git_root, $root_dir ) {
     require   => Srcomp_repo['ranker'],
   }
 
+  # Note: the location of this checkout is used by the below template
+  # for the update script
   srcomp_repo { 'srcomp-http':
     git_root  => $git_root,
     root_dir  => $root_dir,
@@ -81,6 +83,37 @@ class www::comp_api ( $git_root, $root_dir ) {
     notify => Service['rsyslog'],
   }
 
+
+  # User for operating on the competition state
+  user { 'srcomp':
+    ensure      => present,
+    comment     => 'Compstate handling user',
+    shell       => '/bin/bash',
+    gid         => 'users',
+    managehome  => true,
+  }
+
+  $srcomp_home_dir = '/home/srcomp'
+  $srcomp_ssh_dir = "${srcomp_home_dir}/.ssh"
+
+  file { $srcomp_ssh_dir:
+    ensure  => directory,
+    owner   => 'srcomp',
+    group   => 'users',
+    mode    => '0755',
+    require => User['srcomp'],
+  }
+
+  file { "${srcomp_ssh_dir}/authorized_keys":
+    ensure  => file,
+    owner   => 'srcomp',
+    group   => 'users',
+    mode    => '0644',
+    # TODO: this should probably end up in hiera
+    source  => 'puppet:///modules/www/srcomp-authorized_keys',
+    require => [User['srcomp'],File[$srcomp_ssh_dir]],
+  }
+
   # Checkout of the competition state
   $compstate_dir = "${root_dir}/compstate"
   vcsrepo { $compstate_dir:
@@ -88,27 +121,43 @@ class www::comp_api ( $git_root, $root_dir ) {
     provider  => git,
     source    => "${git_root}/comp/sr2014-comp.git",
     revision  => 'origin/sr2015-format',
-    owner     => 'wwwcontent',
+    owner     => 'srcomp',
     group     => 'apache',
-    require   => File[$root_dir],
+    require   => [File[$root_dir],User['srcomp']],
+  }
+
+  # Update script, configured for direct use
+  # The location of the srcomp-http checkout. Would ideally have used
+  # something like Srcomp_repo['srcomp']::location but that doesn't work
+  $http_dir = "${root_dir}/srcomp-http"
+  file { "${srcomp_home_dir}/update":
+    ensure  => file,
+    owner   => 'srcomp',
+    group   => 'users',
+    # Only this user can run it
+    mode    => '0744',
+    # Uses $compstate_dir, $http_dir, $venv_dir
+    content => template('www/srcomp-update.erb'),
+    require => [Srcomp_repo['srcomp-http'],User['srcomp']],
   }
 
   # Update trigger and lock files
   file { "${compstate_dir}/.update-pls":
     ensure  => present,
-    owner   => 'wwwcontent',
+    owner   => 'srcomp',
     group   => 'apache',
     mode    => '0644',
-    require => Vcsrepo[$compstate_dir],
+    require => [Vcsrepo[$compstate_dir],User['srcomp']],
   }
   # The lock file is writable by apache so it can get a lock on it
   file { "${compstate_dir}/.update-lock":
     ensure  => present,
-    owner   => 'wwwcontent',
+    owner   => 'srcomp',
     group   => 'apache',
     mode    => '0664',
-    require => Vcsrepo[$compstate_dir],
+    require => [Vcsrepo[$compstate_dir],User['srcomp']],
   }
+
 
   # A WSGI config file for serving inside of apache.
   file { "${root_dir}/comp-api.wsgi":
