@@ -92,7 +92,7 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
-  # Competition state vending for shepherds and arenas
+  # Competition state vending for shepherds
   class { 'www::comp-display':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
