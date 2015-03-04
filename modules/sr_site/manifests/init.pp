@@ -99,6 +99,12 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
+  class { 'srcomp':
+    git_root => $git_root,
+    src_dir  => '/usr/local/src/srcomp',
+    venv_dir => '/var/lib/srcomp-venv'
+  }
+
   # Sanity stuff
   package { "rsyslog":
     ensure => latest,
