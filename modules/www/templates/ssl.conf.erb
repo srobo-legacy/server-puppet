@@ -160,7 +160,7 @@ WSGISocketPrefix /var/run/wsgi
 
         # Pass accesses to /comp-api over to the Competition API in WSGI
         WSGIDaemonProcess srcomp user=apache group=apache threads=25 maximum-requests=1000 \
-                          python-path=/srv/comp-api/venv/lib/python2.7/site-packages
+                          python-path=/var/lib/srcomp-venv/lib/python2.7/site-packages
         WSGIScriptAlias /comp-api /srv/comp-api/comp-api.wsgi
         <Directory /srv/comp-api>
             WSGIProcessGroup srcomp
@@ -230,4 +230,3 @@ WSGISocketPrefix /var/run/wsgi
         CustomLog logs/ssl_request_log \
                 "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %D"
 </VirtualHost>
-

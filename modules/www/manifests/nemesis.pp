@@ -9,7 +9,10 @@ class www::nemesis ( $git_root, $root_dir ) {
 
   $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
 
-  package { ['python-sqlite3dbm', 'python-ldap', 'python-unidecode']:
+  package { ['python-sqlite3dbm',
+             'python-ldap',
+             'python-unidecode',
+             'python-flask']:
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo[$root_dir],
@@ -23,9 +26,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     revision => 'origin/master',
     owner => 'wwwcontent',
     group => 'apache',
-    # Flask is installed by pip since comp-api needed a more recent version
-    # than the repos could provide. comp-api therefore provides the package.
-    require => Package['Flask'],
+    require => Package['python-flask'],
     notify => Service['httpd'],
   }
 
