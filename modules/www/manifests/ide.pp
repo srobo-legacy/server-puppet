@@ -152,22 +152,26 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
+  define repos_admin_script($name = $title, $dir, $command) {
+    file { "${dir}/${name}":
+      ensure  => present,
+      owner   => 'wwwcontent',
+      group   => 'apache',
+      mode    => '0744',
+      content => template('www/ide_repo_foreach.erb'),
+    }
+  }
+
   # All-repo integrity checking script for after crashes.
-  file { "${ide_repos_root}/fsck":
-    ensure => present,
-    owner => 'wwwcontent',
-    group => 'apache',
-    mode => '0744',
-    content => template('www/fsck.erb'),
+  repos_admin_script { 'fsck':
+    dir     => $ide_repos_root,
+    command => 'git fsck',
   }
 
   # Script for repacking/gcing user repos
-  file { "${ide_repos_root}/repack":
-    ensure => present,
-    owner => 'wwwcontent',
-    group => 'apache',
-    mode => '0744',
-    content => template('www/repack.erb'),
+  repos_admin_script { 'repack':
+    dir     => $ide_repos_root,
+    command => 'git gc --aggressive -q',
   }
 
   # Install backed up IDE copy unless data is already installed. This is based
