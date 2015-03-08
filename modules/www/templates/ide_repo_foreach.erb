@@ -6,5 +6,5 @@ find $REPOS -type d -name '*.git' | while read gdir
 do
     cd "$gdir"
     echo "$gdir"
-    git fsck
+    <%= @command %>
 done
