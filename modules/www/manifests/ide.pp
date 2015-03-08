@@ -157,6 +157,11 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => absent,
   }
 
+  # Remove old repack script
+  file { "${ide_repos_root}/repack":
+    ensure => absent,
+  }
+
   define repos_admin_script($dir, $command) {
     file { "${dir}/${name}":
       ensure  => present,
@@ -175,7 +180,7 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # Script for repacking/gcing user repos
-  repos_admin_script { 'repack':
+  repos_admin_script { 'repack-aggressive':
     dir     => $ide_repos_root,
     command => 'git gc --aggressive -q',
   }
