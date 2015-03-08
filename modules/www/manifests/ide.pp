@@ -169,7 +169,7 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # Script for repacking/gcing user repos
-  repos_admin_script { 'repack':
+  repos_admin_script { 'repack-aggressive':
     dir     => $ide_repos_root,
     command => 'git gc --aggressive -q',
   }
