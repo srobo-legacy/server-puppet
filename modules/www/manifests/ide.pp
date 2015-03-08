@@ -152,16 +152,6 @@ class www::ide ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
-  # Script for applying the desired configuration to all repos. Not done
-  # automatically, only when administratively desired.
-  file { "${ide_repos_root}/conf":
-    ensure => present,
-    owner => 'wwwcontent',
-    group => 'apache',
-    mode => '0744',
-    content => template('www/conf.erb'),
-  }
-
   # All-repo integrity checking script for after crashes.
   file { "${ide_repos_root}/fsck":
     ensure => present,
