@@ -174,6 +174,13 @@ class www::ide ( $git_root, $root_dir ) {
     command => 'git gc --aggressive -q',
   }
 
+  # Script for gcing user repos in the general case
+  $gc_script = "${ide_repos_root}/repack"
+  repos_admin_script { 'gc-all':
+    dir     => $ide_repos_root,
+    command => 'git gc -q',
+  }
+
   # Install backed up IDE copy unless data is already installed. This is based
   # on the assumption that all IDE data is in {config/settings/notifications}.
   exec { 'ide_copy':
@@ -209,6 +216,16 @@ class www::ide ( $git_root, $root_dir ) {
     minute => '14',
     user => 'root',
     require => Vcsrepo[$root_dir],
+  }
+
+  # Run git-gc on the IDE repos on Sunday mornings
+  cron { 'gc-ide-repos':
+    command   => $gc_script,
+    hour      => '4',
+    minute    => '7',
+    weekday   => '0',
+    user      => 'apache',
+    require   => File[$gc_script],
   }
 
   package{'zip':
