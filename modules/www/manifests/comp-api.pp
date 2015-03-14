@@ -28,7 +28,7 @@ class www::comp-api ( $root_dir ) {
     ensure    => present,
     provider  => git,
     source    => $ref_compstate,
-    revision  => 'origin/sr2015-format',
+    revision  => 'origin/master',
     owner     => 'srcomp',
     group     => 'apache',
     require   => [File[$root_dir],User['srcomp'],Vcsrepo[$ref_compstate]],
