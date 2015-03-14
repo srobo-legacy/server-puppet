@@ -29,14 +29,7 @@ class monitoring ( $git_root ) {
     comment => 'Monitoring User',
     shell => '/bin/bash',
     gid => 'users',
-  }
-
-  file { '/home/monitoring':
-    ensure => directory,
-    owner => 'monitoring',
-    group => 'users',
-    mode => '0700',
-    require => User['monitoring']
+    managehome => true,
   }
 
   file { '/home/monitoring/.ssh':

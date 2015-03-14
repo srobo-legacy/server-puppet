@@ -17,15 +17,7 @@ class www( $git_root ) {
     shell => '/bin/sh',
     gid => 'apache',
     require => Package['httpd'],
-  }
-
-  # Home dir needed so it can run cron jobs.
-  file { '/home/wwwcontent':
-    ensure  => directory,
-    owner   => 'wwwcontent',
-    group   => 'users',
-    mode    => '0711',
-    require => User['wwwcontent'],
+    managehome => true,
   }
 
   # Primary website served at https://studentrobotics.org. Other applications

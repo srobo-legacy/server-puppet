@@ -10,13 +10,6 @@ class www::voting ($git_root, $web_root_dir) {
 
   # Directories and user for 'voting' user; all with only traverse permission
   # for other users.
-  file { '/home/voting':
-    ensure  => directory,
-    owner   => 'voting',
-    group   => 'users',
-    mode    => '0711',
-    require => User['voting'],
-  }
 
   file { '/home/voting/public_html':
     ensure  => directory,
@@ -32,6 +25,7 @@ class www::voting ($git_root, $web_root_dir) {
     shell   => '/sbin/nologin',
     gid     => 'users',
     home    => '/home/voting',
+    managehome => true,
   }
 
   # Checkout of the voting scripts, for people to vote with.

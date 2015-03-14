@@ -61,16 +61,7 @@ class sr_site::backup ( $git_root ) {
     comment => 'Backup operations user',
     shell => '/bin/bash',
     gid => 'users',
-  }
-
-  # Backup's home dir.
-  $backup_home = '/home/backup'
-  file { $backup_home:
-    ensure => directory,
-    owner => 'backup',
-    group => 'users',
-    mode => '0700',
-    require => User['backup'],
+    managehome => true,
   }
 
   # Backup's ssh key dir.

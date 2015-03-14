@@ -13,16 +13,7 @@ class sr_site::gerrit {
     comment => 'Owner of all gerrit specific files/data',
     shell => '/bin/sh', # Has to log in successfully, as it runs java.
     gid => 'users',
-  }
-
-  # Gerrit stores a 'site' that it serves in a 'site directory', which we'll
-  # be keeping in its home directory. /srv might be more appropriate in the
-  # future.
-  file { '/home/gerrit':
-    ensure => directory,
-    owner => 'gerrit',
-    group => 'users',
-    require => User['gerrit'],
+    managehome => true,
   }
 
   # The entirety of gerrit is installed and served out of one 'war' file,

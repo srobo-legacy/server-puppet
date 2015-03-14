@@ -7,14 +7,7 @@ class sr_site::pipebot ( $git_root ) {
     comment => 'Pipe attendant',
     shell => '/sbin/nologin',
     gid => 'users',
-  }
-
-  file { '/home/pipebot':
-    ensure => directory,
-    owner => 'pipebot',
-    group => 'users',
-    mode => '0700',
-    require => User['pipebot'],
+    managehome => true,
   }
 
   # Checkout of pipebot's code.
