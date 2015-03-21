@@ -47,6 +47,7 @@ class sr_site::srcomp($git_root,
   }
 
   $srcomp_home_dir = '/home/srcomp'
+  $ref_compstate = "${srcomp_home_dir}/compstate.git"
   $srcomp_ssh_dir = "${srcomp_home_dir}/.ssh"
 
   file { $srcomp_ssh_dir:
@@ -87,6 +88,14 @@ class sr_site::srcomp($git_root,
     # Uses $compstate_dir, $http_dir, $venv_dir
     content => template('sr_site/srcomp-update.erb'),
     require => [Srcomp_repo['srcomp-http'],User['srcomp']],
+  }
+
+  vcsrepo { $ref_compstate:
+    ensure    => bare,
+    provider  => git,
+    source    => "${git_root}/comp/sr2014-comp.git",
+    user      => 'srcomp',
+    require   => User['srcomp'],
   }
 
   # Install Pip and Virtualenv.

@@ -1,7 +1,7 @@
 # 'comp-api' is the web API to the SRComp library which contains information
 # about the state of the competition
 
-class www::comp-api ( $git_root, $root_dir ) {
+class www::comp-api ( $root_dir ) {
 
   # Containing folder
   file { $root_dir:
@@ -23,14 +23,15 @@ class www::comp-api ( $git_root, $root_dir ) {
 
   # Checkout of the competition state
   $compstate_dir = "${root_dir}/compstate"
+  $ref_compstate = $sr_site::srcomp::ref_compstate
   vcsrepo { $compstate_dir:
     ensure    => present,
     provider  => git,
-    source    => "${git_root}/comp/sr2014-comp.git",
+    source    => $ref_compstate,
     revision  => 'origin/sr2015-format',
     owner     => 'srcomp',
     group     => 'apache',
-    require   => [File[$root_dir],User['srcomp']],
+    require   => [File[$root_dir],User['srcomp'],Vcsrepo[$ref_compstate]],
   }
 
   # Update trigger and lock files
