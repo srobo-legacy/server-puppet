@@ -1,0 +1,9 @@
+#!/bin/bash
+
+COMPSTATE="<%= @compstate_dir %>"
+VENV_DIR="<%= @venv_dir %>"
+HTTP_DIR="<%= @http_dir %>"
+
+echo About to update $COMPSTATE
+
+exec $VENV_DIR/bin/python $HTTP_DIR/update $COMPSTATE "$@"

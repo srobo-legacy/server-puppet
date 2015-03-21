@@ -39,10 +39,54 @@ class sr_site::srcomp($git_root,
 
   # A user to owner all SRComp related stuff.
   user { 'srcomp':
-    ensure  => present,
-    comment => 'Competition Software Owner',
-    shell   => '/sbin/nologin',
-    gid     => 'users',
+    ensure      => present,
+    comment     => 'Competition Software Owner',
+    gid         => 'users',
+    managehome  => true,
+    shell       => '/bin/bash',
+  }
+
+  $srcomp_home_dir = '/home/srcomp'
+  $srcomp_ssh_dir = "${srcomp_home_dir}/.ssh"
+
+  file { $srcomp_ssh_dir:
+    ensure  => directory,
+    owner   => 'srcomp',
+    group   => 'users',
+    mode    => '0700',
+    require => User['srcomp'],
+  }
+
+  file { "${srcomp_ssh_dir}/authorized_keys":
+    ensure  => file,
+    owner   => 'srcomp',
+    group   => 'users',
+    mode    => '0600',
+    # TODO: this should probably end up in hiera
+    source  => 'puppet:///modules/sr_site/srcomp-authorized_keys',
+    require => [User['srcomp'],File[$srcomp_ssh_dir]],
+  }
+
+  # The location of the srcomp-http checkout. Would ideally have used
+  # something like Srcomp_repo['srcomp']::location but that doesn't work
+  $http_dir = "${src_dir}/srcomp-http"
+
+  # The location of the live compstate. Would ideally get this from the
+  # www::comp-api class, but that gets complicated since the name contains
+  # a hyphen, and since it fixes the parse ordering of the classes.
+  # TODO: restructure things so this is injected from the top down?
+  $compstate_dir = '/srv/comp-api/compstate'
+
+  # Update script, configured for direct use (via the above two variables)
+  file { "${srcomp_home_dir}/update":
+    ensure  => file,
+    owner   => 'srcomp',
+    group   => 'users',
+    # Only this user can run it
+    mode    => '0744',
+    # Uses $compstate_dir, $http_dir, $venv_dir
+    content => template('sr_site/srcomp-update.erb'),
+    require => [Srcomp_repo['srcomp-http'],User['srcomp']],
   }
 
   # Install Pip and Virtualenv.
