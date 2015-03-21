@@ -28,15 +28,15 @@ class www::comp-api ( $git_root, $root_dir ) {
     provider  => git,
     source    => "${git_root}/comp/sr2014-comp.git",
     revision  => 'origin/sr2015-format',
-    owner     => 'wwwcontent',
+    owner     => 'srcomp',
     group     => 'apache',
-    require   => File[$root_dir],
+    require   => [File[$root_dir],User['srcomp']],
   }
 
   # Update trigger and lock files
   file { "${compstate_dir}/.update-pls":
     ensure  => present,
-    owner   => 'wwwcontent',
+    owner   => 'srcomp',
     group   => 'apache',
     mode    => '0644',
     require => Vcsrepo[$compstate_dir],
@@ -44,7 +44,7 @@ class www::comp-api ( $git_root, $root_dir ) {
   # The lock file is writable by apache so it can get a lock on it
   file { "${compstate_dir}/.update-lock":
     ensure  => present,
-    owner   => 'wwwcontent',
+    owner   => 'srcomp',
     group   => 'apache',
     mode    => '0664',
     require => Vcsrepo[$compstate_dir],
