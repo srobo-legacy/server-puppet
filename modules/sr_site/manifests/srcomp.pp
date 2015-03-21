@@ -19,19 +19,27 @@ class sr_site::srcomp($git_root,
     ensure      => present,
     comment     => 'Competition Software Owner',
     gid         => 'users',
-    managehome  => true,
     shell       => '/bin/bash',
   }
 
   $srcomp_home_dir = '/home/srcomp'
+  $ref_compstate = "${srcomp_home_dir}/compstate.git"
   $srcomp_ssh_dir = "${srcomp_home_dir}/.ssh"
+
+  file { $srcomp_home_dir:
+    ensure  => directory,
+    owner   => 'srcomp',
+    group   => 'users',
+    mode    => '0700',
+    require => User['srcomp'],
+  }
 
   file { $srcomp_ssh_dir:
     ensure  => directory,
     owner   => 'srcomp',
     group   => 'users',
     mode    => '0700',
-    require => User['srcomp'],
+    require => [User['srcomp'],File[$srcomp_home_dir]],
   }
 
   file { "${srcomp_ssh_dir}/authorized_keys":
@@ -63,7 +71,7 @@ class sr_site::srcomp($git_root,
     mode    => '0744',
     # Uses $compstate_dir, $http_dir, $venv_dir
     content => template('sr_site/srcomp-update.erb'),
-    require => [Srcomp_repo['srcomp-http'],User['srcomp']],
+    require => [Srcomp_repo['srcomp-http'],User['srcomp'],File[$srcomp_home_dir]],
   }
 
   # All exec's should be run as srcomp
@@ -94,6 +102,14 @@ class sr_site::srcomp($git_root,
       refreshonly => true,
       subscribe   => Vcsrepo["${src_dir}/${title}"],
     }
+  }
+
+  vcsrepo { $ref_compstate:
+    ensure    => bare,
+    provider  => git,
+    source    => "${git_root}/comp/sr2014-comp.git",
+    user      => 'srcomp',
+    require   => [User['srcomp'],File[$srcomp_home_dir]],
   }
 
   # Install Pip and Virtualenv.
