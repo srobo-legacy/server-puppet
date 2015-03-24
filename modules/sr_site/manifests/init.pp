@@ -77,6 +77,12 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
+  class { 'srcomp':
+    git_root => $git_root,
+    src_dir  => '/usr/local/src/srcomp',
+    venv_dir => '/var/lib/srcomp-venv'
+  }
+
   # Web stuff
   class { 'www':
     git_root => $git_root,
@@ -97,12 +103,6 @@ class sr_site( $git_root ) {
 
   class { 'willie':
     git_root => $git_root,
-  }
-
-  class { 'srcomp':
-    git_root => $git_root,
-    src_dir  => '/usr/local/src/srcomp',
-    venv_dir => '/var/lib/srcomp-venv'
   }
 
   # Sanity stuff
