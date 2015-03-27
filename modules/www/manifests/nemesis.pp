@@ -16,7 +16,6 @@ class www::nemesis ( $git_root, $root_dir ) {
     ensure  => present,
     notify  => Service['httpd'],
     before  => Vcsrepo[$root_dir],
-    require => Package['Flask']
   }
 
   # Main checkout of the Nemesis codebase
