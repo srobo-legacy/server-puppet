@@ -9,11 +9,6 @@ class www::nemesis ( $git_root, $root_dir ) {
 
   $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
 
-  package { 'Flask':
-    ensure   => absent,
-    provider => 'pip'
-  }
-
   package { ['python-sqlite3dbm',
              'python-ldap',
              'python-unidecode',
