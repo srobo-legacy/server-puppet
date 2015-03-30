@@ -167,7 +167,7 @@ class www::ide ( $git_root, $root_dir ) {
       ensure  => present,
       owner   => 'wwwcontent',
       group   => 'apache',
-      mode    => '0744',
+      mode    => '0754',
       # Uses ide_repos_root from the outer scope
       content => template('www/ide_repo_foreach.erb'),
     }
@@ -183,6 +183,14 @@ class www::ide ( $git_root, $root_dir ) {
   repos_admin_script { 'repack-aggressive':
     dir     => $ide_repos_root,
     command => 'git gc --aggressive -q',
+  }
+
+  # Script for gcing user repos in the general case
+  $gc_script_name = 'gc-all'
+  $gc_script = "${ide_repos_root}/${gc_script_name}"
+  repos_admin_script { $gc_script_name:
+    dir     => $ide_repos_root,
+    command => 'git gc -q',
   }
 
   # Install backed up IDE copy unless data is already installed. This is based
@@ -220,6 +228,16 @@ class www::ide ( $git_root, $root_dir ) {
     minute => '14',
     user => 'root',
     require => Vcsrepo[$root_dir],
+  }
+
+  # Run git-gc on the IDE repos on Sunday mornings
+  cron { 'gc-ide-repos':
+    command   => $gc_script,
+    hour      => '4',
+    minute    => '7',
+    weekday   => '0',
+    user      => 'apache',
+    require   => File[$gc_script],
   }
 
   package{'zip':
