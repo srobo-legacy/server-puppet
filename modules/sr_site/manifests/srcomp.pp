@@ -120,7 +120,7 @@ class sr_site::srcomp($git_root,
   }
 
   # Yaml loading acceleration
-  package { 'libyaml-devel':
+  package { ['libyaml-devel', 'gcc']:
     ensure  => present,
     before  => [Srcomp_repo['srcomp'],Exec['install-srcomp-requirements']],
   }
