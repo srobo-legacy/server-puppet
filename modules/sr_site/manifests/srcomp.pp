@@ -100,7 +100,8 @@ class sr_site::srcomp($git_root,
       path        => ['/usr/bin', '/usr/share/bin'],
       notify      => Service['httpd'],
       refreshonly => true,
-      subscribe   => Vcsrepo["${src_dir}/${title}"],
+      subscribe   => [Vcsrepo["${src_dir}/${title}"],
+                      Exec['install-srcomp-requirements']],
     }
   }
 
