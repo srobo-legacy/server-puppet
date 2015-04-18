@@ -1,0 +1,99 @@
+
+LoadModule ssl_module modules/mod_ssl.so
+Listen 8443
+
+#   Pass Phrase Dialog:
+SSLPassPhraseDialog exec:/usr/libexec/httpd-ssl-pass-dialog
+
+#   Inter-Process Session Cache:
+SSLSessionCache         shmcb:/var/cache/mod_ssl/scache(512000)
+SSLSessionCacheTimeout  300
+
+#   Pseudo Random Number Generator (PRNG):
+SSLRandomSeed startup file:/dev/urandom  256
+SSLRandomSeed connect builtin
+
+# Use "SSLCryptoDevice" to enable any supported hardware
+SSLCryptoDevice builtin
+
+# Relocate WSGI daemon sockets
+WSGISocketPrefix /var/run/wsgi
+
+# Primary configuration gunge for the main website.
+<VirtualHost *:8443>
+	ServerName <%= @www_canonical_hostname %>:8443
+
+	DocumentRoot <%= @web_root_dir %>
+
+	<Directory "<%= @web_root_dir %>">
+                Options All
+                AllowOverride All
+        </Directory>
+
+
+        # Block various parts of the IDE being accessed externally
+        <LocationMatch "/ide/(config|notifications|repos|settings|uploads)">
+                Require all denied
+        </LocationMatch>
+
+        # Deny listing the zips
+	<Directory "<%= @web_root_dir %>/ide/zips">
+                Options -Indexes
+
+                # Copied from IDE cyanide.git/resources/zips-htaccess commit c501109cc8b50.
+                # This is a hack to work around certain cases where IE8 is misconfigured.
+                # Apparently in some cases IE8 will die if not told to cache when connecting over ssl.
+                ExpiresDefault "access plus 6 seconds"
+                # Ensures the files are opened as a download
+                Header set Content-Disposition attachment
+        </Directory>
+
+        # Deny everyone userdirs, except explicitly configured accounts
+        UserDir disabled
+        # Voting user requires a public_html dir
+        UserDir enabled voting
+
+        # Force users to use HTTPS again in the future
+        Header add Strict-Transport-Security "max-age=15768000"
+
+        # Separate log files
+        ErrorLog logs/ide_ssl_error_log
+        TransferLog logs/ide_ssl_access_log
+        LogLevel warn
+
+        # Enable SSL
+        SSLEngine on
+
+        # Disable SSLv2 access by default:
+        SSLProtocol all -SSLv2 -SSLv3
+
+        SSLCipherSuite ECDH:AES128-SHA:ALL:!ADH:!EXP:!LOW:!MD5:!SSLV2:!NULL:!RC4
+
+        #   Server Certificate:
+        SSLCertificateFile /etc/pki/tls/certs/server.crt
+
+        #   Server Private Key:
+        SSLCertificateKeyFile /etc/pki/tls/private/server.key
+
+        # Only install the certificate chain file on the production machine.
+                #   Server Certificate Chain:
+        SSLCertificateChainFile /etc/pki/tls/certs/comodo_bundle.crt
+        
+        <Files ~ "\.(cgi|shtml|phtml|php3?)$">
+                    SSLOptions +StdEnvVars
+        </Files>
+        <Directory "/var/www/cgi-bin">
+                SSLOptions +StdEnvVars
+        </Directory>
+
+        # SSL Protocol Adjustments:
+        SetEnvIf User-Agent ".*MSIE.*" \
+                nokeepalive ssl-unclean-shutdown \
+                downgrade-1.0 force-response-1.0
+
+        # Per-Server Logging:
+        # The home of a custom SSL log file. Use this when you want a
+        # compact non-error SSL logfile on a virtual host basis.
+        CustomLog logs/ide_ssl_request_log \
+                "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %D"
+</VirtualHost>
