@@ -66,5 +66,8 @@ class www::ide_httpd ($git_root, $root_dir) {
   service { 'httpd-ide':
     ensure  => stopped,
     require => Exec['httpd-ide-systemd-load'],
+    subscribe => [Package['httpd'],
+                  File['/etc/httpd/conf/ide.conf'],
+                  File['/etc/httpd/conf.ide.d/ssl.conf']],
   }
 }
