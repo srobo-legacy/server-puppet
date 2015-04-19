@@ -1,6 +1,8 @@
 
+Listen <%= @service_port_no %>
+
+<% if @serve_over_ssl then -%>
 LoadModule ssl_module modules/mod_ssl.so
-Listen 443
 
 #   Pass Phrase Dialog:
 SSLPassPhraseDialog exec:/usr/libexec/httpd-ssl-pass-dialog
@@ -15,13 +17,14 @@ SSLRandomSeed connect builtin
 
 # Use "SSLCryptoDevice" to enable any supported hardware
 SSLCryptoDevice builtin
+<% end -%>
 
 # Relocate WSGI daemon sockets
 WSGISocketPrefix /var/run/wsgi
 
 # Primary configuration gunge for the main website.
-<VirtualHost *:443>
-        ServerName <%= @www_canonical_hostname %>:443
+<VirtualHost *:<%= @service_port_no %>>
+        ServerName <%= @www_canonical_hostname %>:<%= @service_port_no %>
         # Serve everything out of srweb by default.
         DocumentRoot <%= @web_root_dir %>
 
@@ -185,13 +188,16 @@ WSGISocketPrefix /var/run/wsgi
         ########## SSL stuff below
 
         # Force users to use HTTPS again in the future
+	# Use regardless of whether we're serving over SSL: whatever parses
+	# these headers should be getting it over SSL, no excuses.
         Header add Strict-Transport-Security "max-age=15768000"
 
         # Separate log files
-        ErrorLog logs/ssl_error_log
-        TransferLog logs/ssl_access_log
+        ErrorLog logs/main_error_log
+        TransferLog logs/main_access_log
         LogLevel warn
 
+<% if @serve_over_ssl then -%>
         # Enable SSL
         SSLEngine on
 
@@ -218,6 +224,7 @@ WSGISocketPrefix /var/run/wsgi
         <Directory "/var/www/cgi-bin">
                 SSLOptions +StdEnvVars
         </Directory>
+<% end -%>
 
         # SSL Protocol Adjustments:
         SetEnvIf User-Agent ".*MSIE.*" \
@@ -227,6 +234,6 @@ WSGISocketPrefix /var/run/wsgi
         # Per-Server Logging:
         # The home of a custom SSL log file. Use this when you want a
         # compact non-error SSL logfile on a virtual host basis.
-        CustomLog logs/ssl_request_log \
+        CustomLog logs/main_request_log \
                 "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %D"
 </VirtualHost>

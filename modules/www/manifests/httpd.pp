@@ -1,6 +1,11 @@
 # Primary webserver configuration. The server part that is, not what gets served
 
 class www::httpd( $web_root_dir ) {
+  # Set some overall configuration for the main apache webserver
+  # Change with extreme caution!
+  $serve_over_ssl = true
+  $service_port_no = 443
+
   # Webserver binds to LDAP for certain auth/authz operations; use the
   # anon user + password to do that.
   $anonpw = extlookup('ldap_anon_user_pw')
