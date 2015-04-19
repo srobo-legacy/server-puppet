@@ -8,6 +8,10 @@ class www( $git_root ) {
     web_root_dir => $web_root_dir,
   }
 
+  class { 'www::nginx_rproxy':
+    require => Class['www::httpd'],
+  }
+
   # We shouldn't let apache own any web content, lest it be able to edit
   # content rather than just serve it. So, all web content that doesn't have
   # a more appropriate user gets owned by wwwcontent (with group=apache).
