@@ -36,4 +36,31 @@ class www::ide_httpd ($git_root, $root_dir) {
     ensure => present,
     content => template('www/php.conf.erb'),
   }
+
+  # File to enable php in the ide specific httpd
+  file { "/lib/systemd/system/httpd-ide.service":
+    ensure => present,
+    source => 'puppet:///modules/www/httpd-ide.service',
+    mode => '644',
+    require => [File["/etc/httpd/conf.ide.d/php.conf"],
+                File["/etc/httpd/conf.ide.d/ssl.conf"],
+                File["/etc/httpd/conf.ide.d"]],
+    notify => Exec['httpd-ide-systemd-load'],
+  }
+
+  # Lifted from fritter,
+  # systemd has to be reloaded before picking this up,
+  exec { 'httpd-ide-systemd-load':
+    provider  => 'shell',
+    command   => 'systemctl daemon-reload',
+    onlyif    => 'systemctl --all | grep httpd-ide.service; if test $? = 0; then exit 1; fi; exit 0',
+    require   => File['/lib/systemd/system/httpd-ide.service'],
+  }
+
+  # In this initial configuration, ensure it is stopped. One can then start it
+  # at will and exercise it a bit.
+  service { 'httpd-ide':
+    ensure  => stopped,
+    require => Exec['httpd-ide-systemd-load'],
+  }
 }
