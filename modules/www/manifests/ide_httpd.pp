@@ -4,6 +4,11 @@
 # to compete with the rest of the website.
 
 class www::ide_httpd ($git_root, $root_dir) {
+  # Set some overall configuration for the IDE apache webserver
+  # Change with extreme caution!
+  $serve_over_ssl = true
+  $service_port_no = 8001
+
   # No additional packages are required
 
   # Pull in relevant variables

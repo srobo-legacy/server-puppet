@@ -1,6 +1,8 @@
 
+Listen <%= @service_port_no %>
+
+<% if @serve_over_ssl then -%>
 LoadModule ssl_module modules/mod_ssl.so
-Listen 8443
 
 #   Pass Phrase Dialog:
 SSLPassPhraseDialog exec:/usr/libexec/httpd-ssl-pass-dialog
@@ -15,13 +17,14 @@ SSLRandomSeed connect builtin
 
 # Use "SSLCryptoDevice" to enable any supported hardware
 SSLCryptoDevice builtin
+<% end -%>
 
 # Relocate WSGI daemon sockets
 WSGISocketPrefix /var/run/wsgi
 
 # Primary configuration gunge for the main website.
-<VirtualHost *:8443>
-	ServerName <%= @www_canonical_hostname %>:8443
+<VirtualHost *:<%= @service_port_no %>>
+        ServerName <%= @www_canonical_hostname %>:<%= @service_port_no %>
 
 	DocumentRoot <%= @web_root_dir %>
 
@@ -61,6 +64,7 @@ WSGISocketPrefix /var/run/wsgi
         TransferLog logs/ide_ssl_access_log
         LogLevel warn
 
+<% if @serve_over_ssl then -%>
         # Enable SSL
         SSLEngine on
 
@@ -87,6 +91,7 @@ WSGISocketPrefix /var/run/wsgi
         <Directory "/var/www/cgi-bin">
                 SSLOptions +StdEnvVars
         </Directory>
+<% end -%>
 
         # SSL Protocol Adjustments:
         SetEnvIf User-Agent ".*MSIE.*" \
