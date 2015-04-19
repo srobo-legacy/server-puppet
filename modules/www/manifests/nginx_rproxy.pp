@@ -27,5 +27,6 @@ class www::nginx_rproxy ()
     ensure => running,
     enable => true,
     subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf']],
+    require => [Service['httpd'], Service['httpd-ide']],
   }
 }
