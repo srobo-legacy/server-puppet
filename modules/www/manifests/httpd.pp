@@ -3,8 +3,8 @@
 class www::httpd( $web_root_dir ) {
   # Set some overall configuration for the main apache webserver
   # Change with extreme caution!
-  $serve_over_ssl = true
-  $service_port_no = 443
+  $serve_over_ssl = false
+  $service_port_no = 8000
 
   # Webserver binds to LDAP for certain auth/authz operations; use the
   # anon user + password to do that.

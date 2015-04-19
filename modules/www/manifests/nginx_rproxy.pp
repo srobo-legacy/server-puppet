@@ -24,8 +24,8 @@ class www::nginx_rproxy ()
   # Configure service. Keep initially stopped until deployment situation
   # confirmed
   service { 'nginx':
-    ensure => stopped,
-    enable => false,
+    ensure => running,
+    enable => true,
     subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf']],
   }
 }
