@@ -6,6 +6,10 @@
 class www::ide_httpd ($git_root, $root_dir) {
   # No additional packages are required
 
+  # Pull in relevant variables
+  $www_canonical_hostname = extlookup('www_canonical_hostname')
+  $www_base_hostname = extlookup('www_base_hostname')
+
   File {
     owner => 'root',
     group => 'root',
