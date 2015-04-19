@@ -76,8 +76,10 @@ WSGISocketPrefix /var/run/wsgi
         SSLCertificateKeyFile /etc/pki/tls/private/server.key
 
         # Only install the certificate chain file on the production machine.
-                #   Server Certificate Chain:
+        <% if !@devmode then -%>
+        #   Server Certificate Chain:
         SSLCertificateChainFile /etc/pki/tls/certs/comodo_bundle.crt
+        <% end -%>
         
         <Files ~ "\.(cgi|shtml|phtml|php3?)$">
                     SSLOptions +StdEnvVars
