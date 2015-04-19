@@ -25,7 +25,7 @@ class www::nginx_rproxy ()
   # confirmed
   service { 'nginx':
     ensure => stopped,
-    enable => true,
+    enable => false,
     subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf']],
   }
 }
