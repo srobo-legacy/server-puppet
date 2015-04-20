@@ -21,12 +21,33 @@ class www::nginx_rproxy ()
     require => Package[ 'nginx' ],
   }
 
+  # Remash server certificate file into a format that nginx likes
+  # In devmode, just don't cat in the bundle file
+  if !$devmode {
+    exec { 'nginx-mangle-cert':
+      command => 'cat server.crt comodo_bundle.crt > server-nginx.crt',
+      provider => 'shell',
+      creates => '/etc/pki/tls/certs/server-nginx.crt',
+      cwd => '/etc/pki/tls/certs',
+      subscribe => [File['server.crt'], File['cert_chain']],
+    }
+  } else {
+    exec { 'nginx-mangle-cert':
+      command => 'cat server.crt > server-nginx.crt',
+      provider => 'shell',
+      creates => '/etc/pki/tls/certs/server-nginx.crt',
+      cwd => '/etc/pki/tls/certs',
+      subscribe => File['server.crt'],
+    }
+  }
+
   # Configure service. Keep initially stopped until deployment situation
   # confirmed
   service { 'nginx':
     ensure => running,
     enable => true,
-    subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf']],
-    require => [Service['httpd'], Service['httpd-ide']],
+    subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf'],
+                  Service['httpd'], Service['httpd-ide'],
+                  Exec['nginx-mangle-cert']],
   }
 }
