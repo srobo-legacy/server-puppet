@@ -65,11 +65,13 @@ http {
 
 	# Send all traffic to the local apache httpd servers
         location / {
-		proxy_pass http://localhost:8000/;
+		proxy_pass http://127.0.0.1:8000/;
+		proxy_pass_request_headers      on;
         }
 
         location /ide/ {
-		proxy_pass http://localhost:8001/ide/;
+		proxy_pass http://127.0.0.1:8001/ide/;
+		proxy_pass_request_headers      on;
         }
 
         # redirect server error pages to the static page /40x.html
