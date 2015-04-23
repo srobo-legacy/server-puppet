@@ -6,7 +6,7 @@
 class www::ide_httpd ($git_root, $root_dir) {
   # Set some overall configuration for the IDE apache webserver
   # Change with extreme caution!
-  $serve_over_ssl = false
+  $serve_over_ssl = true
   $service_port_no = 8001
 
   # No additional packages are required
@@ -69,8 +69,8 @@ class www::ide_httpd ($git_root, $root_dir) {
   # In this initial configuration, ensure it is stopped. One can then start it
   # at will and exercise it a bit.
   service { 'httpd-ide':
-    ensure  => running,
-    enable => true,
+    ensure  => stopped,
+    enable => false,
     require => Exec['httpd-ide-systemd-load'],
     subscribe => [Package['httpd'],
                   File['/etc/httpd/conf/ide.conf'],
