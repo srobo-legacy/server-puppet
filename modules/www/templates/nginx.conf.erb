@@ -45,11 +45,11 @@ http {
 
     server {
         listen       443 ssl;
-	server_name  <%= @www_cannonical_hostname %>;
+	server_name  <%= @www_canonical_hostname %>;
 	# Everything is redirected away from here
 	root         /var/www/html;
 	# These two paths are hard-coded in SRs config files everywhere
-        ssl_certificate     /etc/pki/tls/certs/server.crt;
+        ssl_certificate     /etc/pki/tls/certs/server-nginx.crt;
         ssl_certificate_key /etc/pki/tls/private/server.key;
 	# NB: doesn't feature SSL3. Is the nginx default.
         ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
@@ -65,23 +65,25 @@ http {
 
 	# Send all traffic to the local apache httpd servers
         location / {
-		proxy_pass http://localhost:8000/;
+		proxy_pass http://127.0.0.1:8000/;
+		proxy_pass_request_headers      on;
         }
 
         location /ide/ {
-		proxy_pass http://localhost:8001/ide/;
+		proxy_pass http://127.0.0.1:8001/ide/;
+		proxy_pass_request_headers      on;
         }
 
         # redirect server error pages to the static page /40x.html
         #
-        error_page  404              /404.html;
-        location = /40x.html {
-        }
+        #error_page  404              /404.html;
+        #location = /40x.html {
+        #}
 
         # redirect server error pages to the static page /50x.html
         #
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-        }
+        #error_page   500 502 503 504  /50x.html;
+        #location = /50x.html {
+        #}
     }
 }
