@@ -19,6 +19,7 @@ class sr_site::srcomp($git_root,
     ensure      => present,
     comment     => 'Competition Software Owner',
     gid         => 'users',
+    uid         => '3002',
     shell       => '/bin/bash',
   }
 
