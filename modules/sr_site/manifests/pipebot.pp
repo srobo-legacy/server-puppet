@@ -29,8 +29,8 @@ class sr_site::pipebot ( $git_root ) {
     require => File['/home/pipebot'],
   }
 
-  # Site-local configuration is stored in local.ini; assign some variables that
-  # will be templated into it.
+  # Site-local configuration is stored in localconfig.py; assign some
+  # variables that will be templated into it.
   $pipe_dir = "/var/run/irc"
   $pipe_path = "/tmp/hash-srobo" # "$pipe_dir/hash-srobo"
   $pipebot_nick = extlookup('pipebot_nick')
