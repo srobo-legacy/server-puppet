@@ -7,9 +7,15 @@ After=network.target
 [Service]
 Type=simple
 User=willie
-PIDFile=/run/willie/willie.pid
+# Run ExecStartPre with root-permissions so we can make the 'irc' folder
+# which we use for our pipe
+PermissionsStartOnly=true
+ExecStartPre=-/usr/bin/mkdir <%= @pipe_dir %>
+ExecStartPre=/usr/bin/chown -R willie <%= @pipe_dir %>
+# Run ExecStart with User=willie
 ExecStart=/usr/bin/willie -c <%= @config_path %> --quiet
 ExecStop=/bin/kill -USR1 $MAINPID
+PIDFile=/run/willie/willie.pid
 Restart=on-failure
 RestartPreventExitStatus=2
 RestartSec=30

@@ -10,6 +10,10 @@ class sr_site::willie ($git_root) {
   $home_dir  = '/var/lib/willie'
   $user_name = 'willie'
 
+  # Willie also acts as pipebot
+  $pipe_dir  = '/var/run/irc'
+  $pipe_path = "${pipe_dir}/hash-srobo"
+
   # Defaults for files
   File {
     owner   => 'willie',
@@ -25,7 +29,7 @@ class sr_site::willie ($git_root) {
     ensure   => present,
     provider => 'git',
     source   => "${git_root}/srbot-plugins.git",
-    revision => 'd26270d8293548e9a75dc83aec824c65977b6e0e',
+    revision => 'ce7c86a52b6b3ffe73eb59677a31cc8b263ab91d',
     owner    => $user_name,
     group    => 'users',
     require  => Package['willie'],
