@@ -17,7 +17,6 @@ events {
 }
 
 
-
 http {
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
@@ -45,15 +44,15 @@ http {
 
     server {
         listen       443 ssl;
-	server_name  <%= @www_canonical_hostname %>;
-	# Everything is redirected away from here
-	root         /var/www/html;
-	# These two paths are hard-coded in SRs config files everywhere
+        server_name  <%= @www_canonical_hostname %>;
+        # Everything is redirected away from here
+        root         /var/www/html;
+        # These two paths are hard-coded in SRs config files everywhere
         ssl_certificate     /etc/pki/tls/certs/server-nginx.crt;
         ssl_certificate_key /etc/pki/tls/private/server.key;
-	# NB: doesn't feature SSL3. Is the nginx default.
+        # NB: doesn't feature SSL3. Is the nginx default.
         ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-	# Default aside from disabling RC4
+        # Default aside from disabling RC4
         ssl_ciphers         HIGH:!aNULL:!MD5:!RC4;
 
         #charset koi8-r;
@@ -65,21 +64,21 @@ http {
 
 	# Send all traffic to the local apache httpd servers
         location / {
-		proxy_pass http://<%= @www_canonical_hostname %>:8000/;
-		proxy_pass_request_headers      on;
-		proxy_set_header X-Real-IP                $remote_addr;
-		proxy_set_header X-Forwarded-For    $remote_addr;
-		proxy_set_header X-Forwarded-Proto https;
-		proxy_set_header Host                        $host;
+            proxy_pass http://<%= @www_canonical_hostname %>:8000/;
+            proxy_pass_request_headers on;
+            proxy_set_header X-Real-IP          $remote_addr;
+            proxy_set_header X-Forwarded-For    $remote_addr;
+            proxy_set_header X-Forwarded-Proto  https;
+            proxy_set_header Host               $host;
         }
 
         location /ide/ {
-		proxy_pass http://<%= @www_canonical_hostname %>:8001/ide/;
-		proxy_pass_request_headers      on;
-		proxy_set_header X-Real-IP                $remote_addr;
-		proxy_set_header X-Forwarded-For    $remote_addr;
-		proxy_set_header X-Forwarded-Proto https;
-		proxy_set_header Host                        $host;
+            proxy_pass http://<%= @www_canonical_hostname %>:8001/ide/;
+            proxy_pass_request_headers on;
+            proxy_set_header X-Real-IP          $remote_addr;
+            proxy_set_header X-Forwarded-For    $remote_addr;
+            proxy_set_header X-Forwarded-Proto  https;
+            proxy_set_header Host               $host;
         }
 
         # redirect server error pages to the static page /40x.html
