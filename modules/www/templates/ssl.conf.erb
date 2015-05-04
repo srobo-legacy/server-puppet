@@ -178,13 +178,6 @@ WSGISocketPrefix /var/run/wsgi
             Require all granted
         </Directory>
 
-        # Proxy all requests to the /gerrit dir to the local server process
-        # gerrit is running. Highly unpleasent.
-        # It also requires some flags to tell apache not to rewrite the URLs
-        # going through
-        AllowEncodedSlashes On
-        ProxyPass /gerrit http://localhost:8081/gerrit nocanon
-
         ########## SSL stuff below
 
         # Force users to use HTTPS again in the future
