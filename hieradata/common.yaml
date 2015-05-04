@@ -1,0 +1,7 @@
+---
+
+pipebot_nick: srpipebot-dev
+pipebot_ident: srpipebot-dev
+
+www_base_hostname: %{::fqdn}
+www_canonical_hostname: %{::fqdn}
