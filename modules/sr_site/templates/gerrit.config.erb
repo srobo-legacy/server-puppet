@@ -47,3 +47,23 @@
 	hostname = localhost
 	database = <%= @gerrit_db_name %>
 	username = gerrit
+
+[commentlink "trac"]
+	match = "#(\\d+)"
+	link = https://www.studentrobotics.org/trac/ticket/$1
+
+[commentlink "cgit"]
+	match = "#(.+)"
+	link = https://www.studentrobotics.org/cgit/$1
+
+[commentlink "budget-line"]
+	match = "#(.+)"
+	link = https://www.studentrobotics.org/cgit/budget.git/tree/$1.yaml
+
+[commentlink "budget"]
+	match = "#(.+)"
+	link = https://www.studentrobotics.org/cgit/budget.git/tree/$1.yaml
+
+[commentlink "gerrit"]
+	match = "#(\\d+)"
+	link = https://www.studentrobotics.org/gerrit/$1
