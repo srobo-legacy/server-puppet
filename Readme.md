@@ -13,3 +13,14 @@ https://www.studentrobotics.org/trac/wiki/ServerConfig
 0. Have ruby
 1. `bundle install`
 2. `bundle exec rake lint`
+
+##Vagrant Setup
+
+0. Clone the dummy-secrets alongside this repo (`git clone git://srobo.org/server/dummy-secrets.git ../dummy-secrets`)
+1. Install VirtualBox, usually in your distro's repos, or https://www.virtualbox.org/wiki/Downloads
+2. Install Vagrant, usually in your distro's repos, or http://www.vagrantup.com/downloads.html
+3. Run `vagrant up --provision`
+4. Wait a while, depending on your internet connection
+5. Run `vagrant ssh` to log into the box. You have passwordless sudo from the
+   vagrant user to root. In case you need to know the password it's 'vagrant'.
+6. Point your browser at <https://sr-vm> to see the website the VM is hosting.
