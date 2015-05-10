@@ -26,8 +26,8 @@ class www::httpd( $web_root_dir ) {
 
   # Load some configuration for httpd.conf. Sets up the general web server
   # operation, number of processes, etc
-  $www_canonical_hostname = extlookup('www_canonical_hostname')
-  $www_base_hostname = extlookup('www_base_hostname')
+  $www_canonical_hostname = hiera('www_canonical_hostname')
+  $www_base_hostname = hiera('www_base_hostname')
   file { 'httpd.conf':
     path => '/etc/httpd/conf/httpd.conf',
     owner => root,
