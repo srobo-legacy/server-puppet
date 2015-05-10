@@ -24,3 +24,7 @@ extra       = <%= @plugins_dir %>
 # They're 'search'ed for, so we don't need to wrap in .*
 # Block localhost, anything by IPv4, IPv6, or specifies a port and the forums
 exclude=localhost,//\d+\.\d+\.\d+\.\d+,//\[?\d*:\d*,//[^/]+:.*/,forum
+
+[srpipe]
+channel=#srobo
+pipe_path=<%= @pipe_path %>

@@ -31,8 +31,7 @@ class sr_site::pipebot ( $git_root ) {
 
   # Site-local configuration is stored in localconfig.py; assign some
   # variables that will be templated into it.
-  $pipe_dir = "/var/run/irc"
-  $pipe_path = "/tmp/hash-srobo" # "$pipe_dir/hash-srobo"
+  $pipe_path = "/tmp/hash-srobo"
   $pipebot_nick = extlookup('pipebot_nick')
   $pipebot_ident = extlookup('pipebot_ident')
   file { "${root_dir}/localconfig.py":
@@ -41,13 +40,6 @@ class sr_site::pipebot ( $git_root ) {
     group => 'users',
     content => template('sr_site/pipebot_localconfig.py.erb'),
     require => Vcsrepo[$root_dir],
-  }
-
-  file { $pipe_dir:
-    ensure  => 'directory',
-    owner   => 'root',
-    group   => 'users',
-    mode    => '0664',
   }
 
   if !$devmode {
