@@ -67,7 +67,7 @@ class sr_site::trac ( $git_root ) {
   }
 
   # Install the trac config file
-  $www_canonical_hostname = extlookup('www_canonical_hostname')
+  $www_canonical_hostname = hiera('www_canonical_hostname')
   # Yes, it really does re-use the gerrit email credential
   $trac_email_pw = extlookup('gerrit_email_pw')
   $trac_email_user = extlookup('gerrit_email_user')

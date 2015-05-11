@@ -83,7 +83,7 @@ class www::srweb ( $git_root, $web_root_dir ) {
 
 #
 #  # Build the sitemap.xml
-#  $www_canonical_hostname = extlookup('www_canonical_hostname')
+#  $www_canonical_hostname = hiera('www_canonical_hostname')
 #  exec { 'build-sitemap':
 #    command => "${web_root_dir}/createsitemap.sh 'https://${www_canonical_hostname}'",
 #    cwd => $web_root_dir,
