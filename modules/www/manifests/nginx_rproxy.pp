@@ -5,7 +5,7 @@
 
 class www::nginx_rproxy ()
 {
-  $www_canonical_hostname = extlookup('www_canonical_hostname')
+  $www_canonical_hostname = hiera('www_canonical_hostname')
 
   # Install nginx
   package { 'nginx':

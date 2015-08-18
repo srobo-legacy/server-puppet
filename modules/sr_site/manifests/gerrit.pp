@@ -117,7 +117,7 @@ class sr_site::gerrit {
     source => 'puppet:///modules/sr_site/gerritcodereview',
   }
 
-  $www_canonical_hostname = extlookup('www_canonical_hostname')
+  $www_canonical_hostname = hiera('www_canonical_hostname')
   $ldap_manager_pw = extlookup('ldap_manager_pw')
   $gerrit_db_name = 'reviewdb'
   $gerrit_db_pw = extlookup('gerrit_db_pw')
