@@ -44,7 +44,7 @@ class sr_site::trac ( $git_root ) {
 
   # Populate the database, but only run if a given table doesn't exist
   exec { 'pop_db':
-    command => "mysql -u trac --password='${mysql_trac_pw}' trac < /srv/secrets/mysql/trac.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/trac_installed",
+    command => "mysql -u '${trac_db_user}' --password='${mysql_trac_pw}' trac < /srv/secrets/mysql/trac.db && touch /usr/local/var/sr/trac_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/trac_installed',
     require => Mysql::Db['trac'],
