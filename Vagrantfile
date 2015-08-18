@@ -1,7 +1,6 @@
 Vagrant.configure("2") do |config|
 
-    config.vm.box = "chef/fedora-20"
-    config.vm.box_url = "https://vagrantcloud.com/chef/boxes/fedora-20/versions/1.0.0/providers/virtualbox.box"
+    config.vm.box = "box-cutter/fedora22"
 
     config.vm.provider "virtualbox" do |v|
         # The box defaults to 512, things are smoother if we have more
@@ -22,6 +21,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision "puppet" do |puppet|
         puppet.hiera_config_path    = "hiera.yaml"
+        puppet.environment_path     = "."
         puppet.manifests_path       = "manifests"
         puppet.manifest_file        = "sr-dev.pp"
         puppet.module_path          = "modules"
