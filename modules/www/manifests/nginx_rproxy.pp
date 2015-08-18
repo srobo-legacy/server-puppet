@@ -1,6 +1,6 @@
 # Configuration to install nginx and get it to reverse-proxy to the local
 # apache instance(s). Distributes traffic to the main website, and to the IDE,
-# to different apache servers. The reasonf or this is load balancing; see the
+# to different apache servers. The reason for this is load balancing; see the
 # email 'Server Performance' 18/04/15 on srobo-devel
 
 class www::nginx_rproxy ()
