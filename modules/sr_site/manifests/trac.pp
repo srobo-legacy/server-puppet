@@ -168,12 +168,14 @@ Visit http://trac.edgewall.org/ for more information.
     # When in devmode, make all authenticated users TRAC_ADMINs
     # and give everyone access to XML_RPC
     exec { 'dev_perms':
-      command => 'trac-admin /srv/trac permission add authenticated TRAC_ADMIN; \
-      trac-admin /srv/trac permission add anonymous XML_RPC; \
+      # sudo to apache to avoid creating a log file it later can't read
+      # but run the command as root so we can create the installed flag file
+      command => 'sudo -u apache trac-admin /srv/trac permission add authenticated TRAC_ADMIN; \
+      sudo -u apache trac-admin /srv/trac permission add anonymous XML_RPC; \
       touch /usr/local/var/sr/trac_perms_configured',
       provider => 'shell',
       group   => 'root',
-      user    => 'apache',
+      user    => 'root',
       creates => '/usr/local/var/sr/trac_perms_configured',
       require => [ Exec['pop_db'], File[$trac_env_ini] ],
     }
