@@ -2,73 +2,147 @@
 pipebot_nick: srpipebot-dev
 pipebot_ident: srpipebot-dev
 
+# Base DNS name for the site being hosted, for example 'studentrobotics.org' or 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or git.) are based on this name.
 www_base_hostname: "%{::fqdn}"
+
+# 'Canonical' website address, which all website URLs should be based upon, i.e.  'www.studentrobotics.org'. Consider this the 'proper' name of the website, as opposed to the base DNS name.
 www_canonical_hostname: "%{::fqdn}"
 
 # Imported from common.csv, and recategorised:
 
 # Misc auth
+
+# Deprecated, should be removed
 shell-users: "uid=anon: ou=users: o=sr": "uid=lolwat: ou=users: o=sr"
+
+# List of OpenPGP user ID's to encrypt backups with. Takes the form of a list of email addresses, comma seperated, all inside a "" quote, i.e. "a@b,c@d,e@f". Better configuration approach would be welcome.  CAUTION: backups will fail if a user is listed here without additional signing, see puppet's backup.pp
 backup_keys: jmorse@studentrobotics.org
+
 
 # MySQL
 
+# MySQL password for 'root' account. Plaintext.
 mysql_rootpw: 123456
+
+# MySQL password for trac's account. Plaintext.
 mysql_trac_pw: 123456
 
+
 # LDAP
+
+# Password for the cn=Manager,o=sr account in LDAP, equivalent to the root LDAP account.  Plaintext.
 ldap_manager_pw: 123456
+
+# Password for the 'anon LDAP' account. Plaintext.
 ldap_anon_user_pw: 123456
+
+# Password for anon account, but in LDAP's internal format for the userPassword attribute.  Use 'slappasswd' to generate this value, and ensure it's always sync'd with ldap_anon_user_pw
 ldap_anon_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+
+# Password for the 'ticket LDAP' account. Plaintext.
 ldap_ticket_user_pw: 123456
+
+# Password for ticket account, but in LDAP's internal format for the userPassword attribute.  See ldap_anon_user_ssha_pw.
 ldap_ticket_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+
+# Password for the MCF LDAP account. Plaintext.
 ldap_mediaconsent_user_pw: 123456
+
+# Password for ticket account, but in LDAP's internal format for the userPassword attribute.  See ldap_anon_user_ssha_pw.
 ldap_mediaconsent_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
 
+
 # PhpBB
+
+# Name for phpBB's MySQL account
 phpbb_sql_user: phpbb_sr2013
+
+# Password for phpBB's MySQL account. Plaintext.
 phpbb_sql_pw: 123456
+
 
 # IDE
 
+# Secret key for the IDE to encrypt its cookies with. Takes 256 bits of entropy, encoded in Base64.
 ide_cookie_key: ptDx0VR4dN0ZDKZdqF4zzlF7DI6XWDZRDP0mXLsPdVw=
+
+# UID attribute for the IDE's LDAP account.
 ide_ldap_user_uid: ide
+
+# Password for IDE's LDAP account. Plaintext.
 ide_ldap_user_pw: 123456
+
+# Password for IDE's LDAP account, in LDAP internal form. See ldap_anon_user_ssha_pw
 ide_ldap_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+
 
 # Piwik
 
+# Name for piwik's MySQL account
 piwik_sql_user: piwik_user
+
+# Password for piwik's MySQL account. Plaintext.
 piwik_sql_pw: 123456
+
+# Account name for the 'admin' piwik user, who can log into piwik's web interface and administrate things.
 piwik_admin_user: admin
+
+# Password for piwik's 'admin' user. An MD5, encoded to hexidecimal characters.
 piwik_admin_md5_pw: e10adc3949ba59abbe56e057f20f883e
+
+# Email address for piwik admin account. No idea where this crops up in piwik, sorry
 piwik_admin_email: info@studentrobotics.org
+
 
 # Pipebot
 
 pipebot_nick: srpipebot-dev
 pipebot_ident: srpipebot-dev
 
+
 # Gerrit
 
+# Password for Gerrit's MySQL account. Plaintext.
 gerrit_db_pw: 123456
+
+# Secret key used by gerrit to authenticate email confirmations. I'm uncertain of the format, but in deployment it appears to be 26 bytes of entropy encoded in base64.
 gerrit_email_key: ponies
+
+# SMTP server for Gerrit to send emails by
 gerrit_email_smtp: ponies
+
+# Full (name@domain) email address for Gerrit to send emails as.
 gerrit_email_user: ponies
+
+# Password for Gerrit's email account. Plaintext.
 gerrit_email_pw: ponies
+
 
 # Nemesis
 
+# Curiously undocumented, but guessable
 nemesis_mail_smtp: ponies
 nemesis_mail_user: ponies
 nemesis_mail_pw: ponies
 nemesis_mail_from: ponies
 
+
 # Fritter
 
+# SMTP server for fritter to send emails by
 fritter_mail_smtp: ponies
+
+# Username for fritter to auth with (for gmail based systems, username@domain)
 fritter_mail_user: ponies
+
+# Plaintext emaili account password
 fritter_mail_pw: ponies
+
+# Email address for fritter mail to have the 'From:' field set to. The format is: 'Some Name <mail@addr>', as you'll find in most popular email clients
 fritter_mail_from: Student Robotics Example <info@example.com>
+
+# Plaintext password for fritter ldap account
 fritter_ldap_user_pw: 123456
+
+# Fritter ldap user password, encoded as SSHA
 fritter_ldap_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
