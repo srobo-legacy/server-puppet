@@ -4,3 +4,71 @@ pipebot_ident: srpipebot-dev
 
 www_base_hostname: "%{::fqdn}"
 www_canonical_hostname: "%{::fqdn}"
+
+# Imported from common.csv, and recategorised:
+
+# Misc auth
+shell-users: "uid=anon: ou=users: o=sr": "uid=lolwat: ou=users: o=sr"
+backup_keys: jmorse@studentrobotics.org
+
+# MySQL
+
+mysql_rootpw: 123456
+mysql_trac_pw: 123456
+
+# LDAP
+ldap_manager_pw: 123456
+ldap_anon_user_pw: 123456
+ldap_anon_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+ldap_ticket_user_pw: 123456
+ldap_ticket_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+ldap_mediaconsent_user_pw: 123456
+ldap_mediaconsent_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+
+# PhpBB
+phpbb_sql_user: phpbb_sr2013
+phpbb_sql_pw: 123456
+
+# IDE
+
+ide_cookie_key: ptDx0VR4dN0ZDKZdqF4zzlF7DI6XWDZRDP0mXLsPdVw=
+ide_ldap_user_uid: ide
+ide_ldap_user_pw: 123456
+ide_ldap_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
+
+# Piwik
+
+piwik_sql_user: piwik_user
+piwik_sql_pw: 123456
+piwik_admin_user: admin
+piwik_admin_md5_pw: e10adc3949ba59abbe56e057f20f883e
+piwik_admin_email: info@studentrobotics.org
+
+# Pipebot
+
+pipebot_nick: srpipebot-dev
+pipebot_ident: srpipebot-dev
+
+# Gerrit
+
+gerrit_db_pw: 123456
+gerrit_email_key: ponies
+gerrit_email_smtp: ponies
+gerrit_email_user: ponies
+gerrit_email_pw: ponies
+
+# Nemesis
+
+nemesis_mail_smtp: ponies
+nemesis_mail_user: ponies
+nemesis_mail_pw: ponies
+nemesis_mail_from: ponies
+
+# Fritter
+
+fritter_mail_smtp: ponies
+fritter_mail_user: ponies
+fritter_mail_pw: ponies
+fritter_mail_from: Student Robotics Example <info@example.com>
+fritter_ldap_user_pw: 123456
+fritter_ldap_user_ssha_pw: {SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3
