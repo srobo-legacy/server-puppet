@@ -174,13 +174,13 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # All-repo integrity checking script for after crashes.
-  repos_admin_script { 'fsck':
+  www::ide::repos_admin_script { 'fsck':
     dir     => $ide_repos_root,
     command => 'git fsck',
   }
 
   # Script for repacking/gcing user repos
-  repos_admin_script { 'repack-aggressive':
+  www::ide::repos_admin_script { 'repack-aggressive':
     dir     => $ide_repos_root,
     command => 'git gc --aggressive -q',
   }
@@ -188,7 +188,7 @@ class www::ide ( $git_root, $root_dir ) {
   # Script for gcing user repos in the general case
   $gc_script_name = 'gc-all'
   $gc_script = "${ide_repos_root}/${gc_script_name}"
-  repos_admin_script { $gc_script_name:
+  www::ide::repos_admin_script { $gc_script_name:
     dir     => $ide_repos_root,
     command => 'git gc -q',
   }
