@@ -90,7 +90,7 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'backup':
+  class { 'sr_site::backup':
     git_root => $git_root,
   }
 
