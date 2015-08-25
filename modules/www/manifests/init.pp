@@ -41,7 +41,7 @@ class www( $git_root ) {
   }
 
   # Python 2.7.5 docs -- version match the python on the BBs
-  class { 'www::python-docs':
+  class { 'www::python_docs':
     web_root_dir => $web_root_dir,
     version => '2.7.5',
     require => [User['wwwcontent'], Class['srweb']],
@@ -97,13 +97,13 @@ class www( $git_root ) {
   }
 
   # Web facing user competition state interface, srobo.org/comp-api
-  class { 'www::comp-api':
+  class { 'www::comp_api':
     root_dir => '/srv/comp-api',
     require => User['wwwcontent'],
   }
 
   # Competition state vending for shepherds
-  class { 'www::comp-display':
+  class { 'www::comp_display':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
     require => User['wwwcontent'],
