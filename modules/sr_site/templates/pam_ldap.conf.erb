@@ -100,6 +100,8 @@ pam_login_attribute uid
 
 # Group to enforce membership of
 # jmorse: Configured to be the 'shell-users' group in puppet.
+# Note that membership of this group is manually configured,
+# it's not something that's deployed with puppet.
 pam_groupdn <%= @logingroupdn %>
 
 # Group member attribute

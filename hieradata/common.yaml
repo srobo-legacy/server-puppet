@@ -12,9 +12,6 @@ www_canonical_hostname: "%{::fqdn}"
 
 # Misc auth
 
-# Deprecated, should be removed
-shell-users: "uid=anon: ou=users: o=sr": "uid=lolwat: ou=users: o=sr"
-
 # List of OpenPGP user ID's to encrypt backups with. Takes the form of a list of email addresses, comma seperated, all inside a "" quote, i.e. "a@b,c@d,e@f". Better configuration approach would be welcome.  CAUTION: backups will fail if a user is listed here without additional signing, see puppet's backup.pp
 backup_keys: jmorse@studentrobotics.org
 
