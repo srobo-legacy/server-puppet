@@ -94,7 +94,7 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'pipebot':
+  class { 'sr_site::pipebot':
     git_root => $git_root,
   }
 
