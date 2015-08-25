@@ -7,6 +7,10 @@
 # patching occurs around the ldap module.
 
 class sr_site::openldap {
+  $ldap_manager_pw = hiera('ldap_manager_pw')
+  $ldap_anon_user_ssha_pw = hiera('ldap_anon_user_ssha_pw')
+  $ldap_anon_user_pw = hiera('ldap_anon_user_pw')
+
   # Install both server and client packages for LDAP.
   class { 'ldap':
     # Yes, lint complains about these being quoted.
@@ -28,7 +32,7 @@ class sr_site::openldap {
     ensure => 'present',
     basedn => 'o=sr',
     rootdn => 'cn=Manager', # basedn is jammed on the front of this.
-    rootpw => extlookup('ldap_manager_pw'), # Manager password is in common.csv
+    rootpw => $ldap_manager_pw, # Manager password is in common.csv
   }
 
   # Give some config options to the client configuration. I think some of these
@@ -43,7 +47,7 @@ class sr_site::openldap {
   # Configure connection information for barfing LDAP data into the db.
   Ldapres {
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup('ldap_manager_pw'),
+    bindpw => $ldap_manager_pw,
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     require => Class['ldap'],
@@ -89,7 +93,7 @@ class sr_site::openldap {
     uidnumber => '2043',
     gidnumber => '1999',
     homedirectory => '/home/anon',
-    userpassword => extlookup('ldap_anon_user_ssha_pw'),
+    userpassword => $ldap_anon_user_ssha_pw,
   }
 
   # A file to contain the ldap manager password; don't really know what it's
@@ -97,7 +101,7 @@ class sr_site::openldap {
   # ldap commands without providing the password on the command line or stdin.
   file { '/etc/ldap.secret':
     ensure => present,
-    content => extlookup('ldap_manager_pw'),
+    content => $ldap_manager_pw,
     owner => 'root',
     group => 'root',
     mode => '0600',
@@ -109,7 +113,7 @@ class sr_site::openldap {
   $serverhostname = 'localhost'
   $basedn = 'o=sr'
   $anonbinddn = 'uid=anon,ou=users,o=sr'
-  $anonbindpw = extlookup('ldap_anon_user_pw')
+  $anonbindpw = $ldap_anon_user_pw
   $managerdn = 'cn=Manager,o=sr'
   $logingroupname = 'shell-users'
   $groupdn = 'ou=groups,o=sr'
