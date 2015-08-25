@@ -3,7 +3,7 @@
 class sr_site::gerrit {
 
   # Gerrit runs on java...
-  package { ['java-1.7.0-openjdk']:
+  package { ['java-1.8.0-openjdk']:
     ensure => present,
   }
 
@@ -43,7 +43,7 @@ class sr_site::gerrit {
   # not attached to an interactive terminal when run. We can then configure
   # config files by other means!
   exec { 'install-gerrit':
-    require => [Exec['download-gerrit'], Package['java-1.7.0-openjdk']],
+    require => [Exec['download-gerrit'], Package['java-1.8.0-openjdk']],
     user => 'gerrit',
     command => "java -jar '${gerrit_war}' init --no-auto-start -d /home/gerrit/srdata",
     creates => '/home/gerrit/srdata',
