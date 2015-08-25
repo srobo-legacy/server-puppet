@@ -17,7 +17,7 @@ class sr_site::userman ( $git_root ) {
 
   # local configuration is stored in local.ini
   $local_ini = "${root_dir}/sr/local.ini"
-  $ldap_manager_pw = extlookup('ldap_manager_pw')
+  $ldap_manager_pw = hiera('ldap_manager_pw')
   file { $local_ini:
     owner   => 'root',
     group   => 'root',
