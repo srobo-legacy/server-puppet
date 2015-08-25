@@ -22,14 +22,14 @@ class sr_site::fritter ( $git_root ) {
 
   # LDAP user
   $fritter_ldap_user  = $fritter_user
-  $fritter_ldap_pw    = extlookup('fritter_ldap_user_pw')
+  $fritter_ldap_pw    = hiera('fritter_ldap_user_pw')
   $fritter_ldap_group = "ou=users,o=sr"
   $fritter_ldap_dn    = "uid=${fritter_ldap_user},${fritter_ldap_group}"
   ldapres { $fritter_ldap_dn:
     ensure          => present,
     objectclass     => ['inetOrgPerson', 'uidObject', 'posixAccount'],
     binddn          => 'cn=Manager,o=sr',
-    bindpw          => extlookup('ldap_manager_pw'),
+    bindpw          => hiera('ldap_manager_pw'),
     ldapserverhost  => 'localhost',
     ldapserverport  => '389',
     uid             => $fritter_ldap_user,
@@ -38,7 +38,7 @@ class sr_site::fritter ( $git_root ) {
     uidnumber       => '3001',
     gidnumber       => '1999',
     homedirectory   => $home_dir,
-    userpassword    => extlookup('fritter_ldap_user_ssha_pw'),
+    userpassword    => hiera('fritter_ldap_user_ssha_pw'),
     require         => Ldapres[$fritter_ldap_group],
     # Signal to that we need to refresh LDAP/user caches
     notify          => Exec['ldap-groups-flushed'],
@@ -109,10 +109,10 @@ class sr_site::fritter ( $git_root ) {
 
   # Fritter configuration is stored in local.ini; assign some variables
   # that will be templated into it.
-  $fritter_mail_smtp = extlookup('fritter_mail_smtp')
-  $fritter_mail_user = extlookup('fritter_mail_user')
-  $fritter_mail_pw   = extlookup('fritter_mail_pw')
-  $fritter_mail_from = extlookup('fritter_mail_from')
+  $fritter_mail_smtp = hiera('fritter_mail_smtp')
+  $fritter_mail_user = hiera('fritter_mail_user')
+  $fritter_mail_pw   = hiera('fritter_mail_pw')
+  $fritter_mail_from = hiera('fritter_mail_from')
   $fritter_ini = "${root_dir}/local.ini"
   file { $fritter_ini:
     ensure  => present,
