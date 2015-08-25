@@ -67,7 +67,6 @@ class sr_site( $git_root ) {
   include sr_site::subversion
   include sr_site::login
   include sr_site::meta
-  include sr_site::ntpd
 
   class { 'sr_site::git':
     git_root => $git_root,
