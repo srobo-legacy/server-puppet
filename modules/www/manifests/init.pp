@@ -44,7 +44,7 @@ class www( $git_root ) {
   class { 'www::python_docs':
     web_root_dir => $web_root_dir,
     version => '2.7.5',
-    require => [User['wwwcontent'], Class['srweb']],
+    require => [User['wwwcontent'], Class['www::srweb']],
   }
 
   # Voting scripts, at srobo.org/~voting/voting
@@ -72,21 +72,21 @@ class www( $git_root ) {
   class { 'www::ide':
     git_root => $git_root,
     root_dir => "${web_root_dir}/ide",
-    require => [User['wwwcontent'], Class['srweb']],
+    require => [User['wwwcontent'], Class['www::srweb']],
   }
 
   # A httpd server specifically for the IDE
   class { 'www::ide_httpd':
     git_root => $git_root,
     root_dir => "${web_root_dir}/ide",
-    require => [User['wwwcontent'], Class['srweb']],
+    require => [User['wwwcontent'], Class['www::srweb']],
   }
 
   # Piwik, for getting information about visitors, srobo.org/piwik
   class { 'www::piwik':
     git_root => $git_root,
     root_dir => "${web_root_dir}/piwik",
-    require => [User['wwwcontent'], Class['srweb']],
+    require => [User['wwwcontent'], Class['www::srweb']],
   }
 
   # Web facing user managment interface, srobo.org/userman
@@ -111,21 +111,21 @@ class www( $git_root ) {
 
   class { 'www::teamgit':
     ide_root_dir => "${web_root_dir}/ide",
-    require => Class['ide'],
+    require => Class['www::ide'],
   }
 
   # Ticket System
   class { 'www::tickets':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => [Class['srweb'], Class['sr_site::Openldap']],
+    require => [Class['www::srweb'], Class['sr_site::Openldap']],
   }
 
   # Media Consent System
   class { 'www::mediaconsent':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => [Class['srweb'], Class['sr_site::Openldap'], Class['tickets']],
+    require => [Class['www::srweb'], Class['sr_site::Openldap'], Class['www::tickets']],
   }
 
 

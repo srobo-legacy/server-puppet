@@ -28,7 +28,7 @@ class www::ide ( $git_root, $root_dir ) {
     source => "${git_root}/cyanide.git",
     revision => 'origin/master',
     user =>'wwwcontent',
-    require => Class['srweb'],
+    require => Class['www::srweb'],
   }
 
   # Secret key for encrypting IDE cookies, protecting against users twiddling
@@ -123,7 +123,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Class['srweb'],
+    require => Class['www::srweb'],
   }
 
   # Install team status images from backup.
