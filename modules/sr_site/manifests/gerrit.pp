@@ -118,13 +118,13 @@ class sr_site::gerrit {
   }
 
   $www_canonical_hostname = hiera('www_canonical_hostname')
-  $ldap_manager_pw = extlookup('ldap_manager_pw')
+  $ldap_manager_pw = hiera('ldap_manager_pw')
   $gerrit_db_name = 'reviewdb'
-  $gerrit_db_pw = extlookup('gerrit_db_pw')
-  $gerrit_email_key = extlookup('gerrit_email_key')
-  $gerrit_email_pw = extlookup('gerrit_email_pw')
-  $gerrit_email_user = extlookup('gerrit_email_user')
-  $gerrit_email_smtp = extlookup('gerrit_email_smtp')
+  $gerrit_db_pw = hiera('gerrit_db_pw')
+  $gerrit_email_key = hiera('gerrit_email_key')
+  $gerrit_email_pw = hiera('gerrit_email_pw')
+  $gerrit_email_user = hiera('gerrit_email_user')
+  $gerrit_email_smtp = hiera('gerrit_email_smtp')
 
   # Primary gerrit config goo. All the major themes in gerrit are configured
   # in this file.
