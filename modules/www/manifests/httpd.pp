@@ -8,7 +8,7 @@ class www::httpd( $web_root_dir ) {
 
   # Webserver binds to LDAP for certain auth/authz operations; use the
   # anon user + password to do that.
-  $anonpw = extlookup('ldap_anon_user_pw')
+  $anonpw = hiera('ldap_anon_user_pw')
 
   # Use apache + mod_ssl to serve, wsgi for python services
   package { [ 'httpd', 'mod_ssl', 'mod_wsgi', 'mod_ldap' ]:
