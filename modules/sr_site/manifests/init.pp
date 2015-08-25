@@ -98,11 +98,11 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'userman':
+  class { 'sr_site::userman':
     git_root => $git_root,
   }
 
-  class { 'willie':
+  class { 'sr_site::willie':
     git_root => $git_root,
   }
 
