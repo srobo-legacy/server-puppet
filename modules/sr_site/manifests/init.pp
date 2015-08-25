@@ -57,7 +57,8 @@ class sr_site( $git_root ) {
 
   class { 'sr_site::trac':
     git_root => $git_root,
-    require => File['/usr/local/var/sr'],
+    require => [File['/usr/local/var/sr'],
+		Class['www']],
   }
 
   class { 'sr_site::gerrit':
