@@ -19,8 +19,8 @@ class www::piwik ( $git_root, $root_dir ) {
   }
 
   # Database for storing piwiks end user data.
-  $piwik_user = extlookup('piwik_sql_user')
-  $piwik_pw = extlookup('piwik_sql_pw')
+  $piwik_user = hiera('piwik_sql_user')
+  $piwik_pw = hiera('piwik_sql_pw')
   $piwik_db_name = 'piwik'
   mysql::db { $piwik_db_name:
     user => $piwik_user,
@@ -39,9 +39,9 @@ class www::piwik ( $git_root, $root_dir ) {
 
   # Piwik web config file - database connection details, as well as an MD5 of
   # the 'admin' password for logging into the web interface.
-  $piwik_admin_user = extlookup('piwik_admin_user')
-  $piwik_admin_md5_pw = extlookup('piwik_admin_md5_pw')
-  $piwik_admin_email = extlookup('piwik_admin_email')
+  $piwik_admin_user = hiera('piwik_admin_user')
+  $piwik_admin_md5_pw = hiera('piwik_admin_md5_pw')
+  $piwik_admin_email = hiera('piwik_admin_email')
   file { "${root_dir}/config/config.ini.php":
     ensure => present,
     owner => 'wwwcontent',
