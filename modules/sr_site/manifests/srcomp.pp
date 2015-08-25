@@ -170,18 +170,18 @@ class sr_site::srcomp($git_root,
   }
 
   # Install our custom stuff.
-  srcomp_repo { 'ranker':
+  sr_site::srcomp::srcomp_repo { 'ranker':
     git_root => $git_root,
     src_dir  => $src_dir,
     venv_dir => $venv_dir,
   }
-  srcomp_repo { 'srcomp':
+  sr_site::srcomp::srcomp_repo { 'srcomp':
     git_root => $git_root,
     src_dir  => $src_dir,
     venv_dir => $venv_dir,
     require  => Srcomp_repo['ranker'],
   }
-  srcomp_repo { 'srcomp-http':
+  sr_site::srcomp::srcomp_repo { 'srcomp-http':
     git_root => $git_root,
     src_dir  => $src_dir,
     venv_dir => $venv_dir,

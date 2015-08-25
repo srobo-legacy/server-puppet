@@ -78,7 +78,7 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'srcomp':
+  class { 'sr_site::srcomp':
     git_root => $git_root,
     src_dir  => '/usr/local/src/srcomp',
     venv_dir => '/var/lib/srcomp-venv'
