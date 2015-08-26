@@ -145,6 +145,18 @@ class sr_site::openldap {
     require => File['/etc/pam_ldap.conf'],
   }
 
+  # nslcd has a slightly different format to pam_ldap, but still very similar,
+  # which is fairly annoying.
+  file { '/etc/nslcd.conf':
+    ensure => present,
+    content => template('sr_site/nslcd.conf.erb'),
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
+    require => File['/etc/ldap.secret'],
+    notify => Service['nslcd'],
+  }
+
   # Ensure that the login group exists in ldap. No configuration of its member
   # attributes, that counts as data.
   ldapres { $logingroupdn:
