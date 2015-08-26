@@ -151,7 +151,7 @@ class sr_site::openldap {
     ensure => present,
     cn => $logingroupname,
     objectclass => 'posixGroup',
-    gidnumber => 3046,
+    gidnumber => '3046',
     notify => Exec['ldap-groups-flushed'],
     require => Ldapres[$groupdn],
   }
@@ -162,7 +162,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'srusers',
     objectclass => 'posixGroup',
-    gidnumber => 1999,
+    gidnumber => '1999',
     notify => Exec['ldap-groups-flushed'],
     require => Ldapres[$groupdn],
   }
@@ -172,7 +172,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'mentors',
     objectclass => 'posixGroup',
-    gidnumber => 2001,
+    gidnumber => '2001',
     # Don't enable memberuid, or puppet will try to manage it. Without memberuid
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
@@ -186,7 +186,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'media-consent',
     objectclass => 'posixGroup',
-    gidnumber => 2002,
+    gidnumber => '2002',
     # Don't enable memberuid, or puppet will try to manage it. Without memberuid
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
@@ -200,7 +200,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'withdrawn',
     objectclass => 'posixGroup',
-    gidnumber => 2003,
+    gidnumber => '2003',
     # Don't enable memberuid, or puppet will try to manage it.
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],
