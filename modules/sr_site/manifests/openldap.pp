@@ -229,6 +229,14 @@ class sr_site::openldap {
     refreshonly => true,
   }
 
+  # Similar, but for passwd
+  exec { 'ldap-passwd-flushed':
+    command => '/sbin/nscd -i passwd',
+    require => [Class['ldap'], Service['nscd']],
+    refreshonly => true,
+  }
+
+
   # Install the ACL data in a random temporary directory that the ldap module
   # uses to populate the ACL directory. Can't use ldap's ACL facility because
   # of internal exceptions.

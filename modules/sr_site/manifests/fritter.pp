@@ -41,7 +41,7 @@ class sr_site::fritter ( $git_root ) {
     userpassword    => hiera('fritter_ldap_user_ssha_pw'),
     require         => Ldapres[$fritter_ldap_group],
     # Signal to that we need to refresh LDAP/user caches
-    notify          => Exec['ldap-groups-flushed'],
+    notify          => [Exec['ldap-groups-flushed'],Exec['ldap-passwd-flushed']],
   }
 
   # Defaults for files
@@ -49,7 +49,7 @@ class sr_site::fritter ( $git_root ) {
     owner   => $fritter_user,
     group   => 'users',
     mode    => '0600',
-    require => Ldapres[$fritter_ldap_dn],
+    require => [Ldapres[$fritter_ldap_dn],Exec['ldap-passwd-flushed']],
   }
 
   file { $home_dir:
