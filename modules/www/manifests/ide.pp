@@ -220,6 +220,7 @@ class www::ide ( $git_root, $root_dir ) {
     mode => '0644',
     source => 'puppet:///modules/www/ide-syslog.conf',
     notify => Service['rsyslog'],
+    require => Package['rsyslog']
   }
 
   cron { 'ide-cron':

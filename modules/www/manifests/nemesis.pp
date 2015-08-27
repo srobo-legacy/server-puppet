@@ -89,6 +89,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     mode => '0644',
     source => 'puppet:///modules/www/nemesis-syslog.conf',
     notify => Service['rsyslog'],
+    require => Package['rsyslog'],
   }
 
   # Configurate nemesis with the ability to send emails.

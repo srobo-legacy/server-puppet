@@ -19,6 +19,7 @@ class www::comp_api ( $root_dir ) {
     mode => '0644',
     source => 'puppet:///modules/www/comp-api-syslog.conf',
     notify => Service['rsyslog'],
+    require => Package['rsyslog'],
   }
 
   # Checkout of the competition state
