@@ -7,6 +7,10 @@
 # patching occurs around the ldap module.
 
 class sr_site::openldap {
+  $ldap_manager_pw = hiera('ldap_manager_pw')
+  $ldap_anon_user_ssha_pw = hiera('ldap_anon_user_ssha_pw')
+  $ldap_anon_user_pw = hiera('ldap_anon_user_pw')
+
   # Install both server and client packages for LDAP.
   class { 'ldap':
     # Yes, lint complains about these being quoted.
@@ -28,7 +32,7 @@ class sr_site::openldap {
     ensure => 'present',
     basedn => 'o=sr',
     rootdn => 'cn=Manager', # basedn is jammed on the front of this.
-    rootpw => extlookup('ldap_manager_pw'), # Manager password is in common.csv
+    rootpw => $ldap_manager_pw, # Manager password is in common.csv
   }
 
   # Give some config options to the client configuration. I think some of these
@@ -43,7 +47,7 @@ class sr_site::openldap {
   # Configure connection information for barfing LDAP data into the db.
   Ldapres {
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup('ldap_manager_pw'),
+    bindpw => $ldap_manager_pw,
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     require => Class['ldap'],
@@ -89,7 +93,7 @@ class sr_site::openldap {
     uidnumber => '2043',
     gidnumber => '1999',
     homedirectory => '/home/anon',
-    userpassword => extlookup('ldap_anon_user_ssha_pw'),
+    userpassword => $ldap_anon_user_ssha_pw,
   }
 
   # A file to contain the ldap manager password; don't really know what it's
@@ -97,7 +101,7 @@ class sr_site::openldap {
   # ldap commands without providing the password on the command line or stdin.
   file { '/etc/ldap.secret':
     ensure => present,
-    content => extlookup('ldap_manager_pw'),
+    content => $ldap_manager_pw,
     owner => 'root',
     group => 'root',
     mode => '0600',
@@ -109,7 +113,7 @@ class sr_site::openldap {
   $serverhostname = 'localhost'
   $basedn = 'o=sr'
   $anonbinddn = 'uid=anon,ou=users,o=sr'
-  $anonbindpw = extlookup('ldap_anon_user_pw')
+  $anonbindpw = $ldap_anon_user_pw
   $managerdn = 'cn=Manager,o=sr'
   $logingroupname = 'shell-users'
   $groupdn = 'ou=groups,o=sr'
@@ -141,13 +145,25 @@ class sr_site::openldap {
     require => File['/etc/pam_ldap.conf'],
   }
 
+  # nslcd has a slightly different format to pam_ldap, but still very similar,
+  # which is fairly annoying.
+  file { '/etc/nslcd.conf':
+    ensure => present,
+    content => template('sr_site/nslcd.conf.erb'),
+    owner => 'root',
+    group => 'root',
+    mode => '0600',
+    require => File['/etc/ldap.secret'],
+    notify => Service['nslcd'],
+  }
+
   # Ensure that the login group exists in ldap. No configuration of its member
   # attributes, that counts as data.
   ldapres { $logingroupdn:
     ensure => present,
     cn => $logingroupname,
     objectclass => 'posixGroup',
-    gidnumber => 3046,
+    gidnumber => '3046',
     notify => Exec['ldap-groups-flushed'],
     require => Ldapres[$groupdn],
   }
@@ -158,7 +174,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'srusers',
     objectclass => 'posixGroup',
-    gidnumber => 1999,
+    gidnumber => '1999',
     notify => Exec['ldap-groups-flushed'],
     require => Ldapres[$groupdn],
   }
@@ -168,7 +184,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'mentors',
     objectclass => 'posixGroup',
-    gidnumber => 2001,
+    gidnumber => '2001',
     # Don't enable memberuid, or puppet will try to manage it. Without memberuid
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
@@ -182,7 +198,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'media-consent',
     objectclass => 'posixGroup',
-    gidnumber => 2002,
+    gidnumber => '2002',
     # Don't enable memberuid, or puppet will try to manage it. Without memberuid
     # all puppet will do is ensure that cn=mentors exists, without attempting
     # to configure who's a member
@@ -196,7 +212,7 @@ class sr_site::openldap {
     ensure => present,
     cn => 'withdrawn',
     objectclass => 'posixGroup',
-    gidnumber => 2003,
+    gidnumber => '2003',
     # Don't enable memberuid, or puppet will try to manage it.
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],
@@ -212,6 +228,14 @@ class sr_site::openldap {
     require => [Class['ldap'], Service['nscd']],
     refreshonly => true,
   }
+
+  # Similar, but for passwd
+  exec { 'ldap-passwd-flushed':
+    command => '/sbin/nscd -i passwd',
+    require => [Class['ldap'], Service['nscd']],
+    refreshonly => true,
+  }
+
 
   # Install the ACL data in a random temporary directory that the ldap module
   # uses to populate the ACL directory. Can't use ldap's ACL facility because

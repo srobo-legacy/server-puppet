@@ -39,7 +39,7 @@ class sr_site::backup ( $git_root ) {
   #
   # Note that all backup keys must also be (locally) signed by the root user.
   # Failure to do this will make backup fail.
-  $backup_crypt_keys = extlookup('backup_keys')
+  $backup_crypt_keys = hiera('backup_keys')
 
   # Config file for mapping puppet configuration goo into the backup script.
   # Quite a lot of improvement could go on here.

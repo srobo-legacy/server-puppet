@@ -31,7 +31,7 @@ class www::tickets( $git_root, $web_root_dir ) {
     ensure => present,
     objectclass => ['inetOrgPerson', 'uidObject', 'posixAccount'],
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup('ldap_manager_pw'),
+    bindpw => hiera('ldap_manager_pw'),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     uid => 'tickets',
@@ -40,7 +40,7 @@ class www::tickets( $git_root, $web_root_dir ) {
     uidnumber => '2413',
     gidnumber => '1999',
     homedirectory => '/home/tickets',
-    userpassword => extlookup('ldap_ticket_user_ssha_pw'),
+    userpassword => hiera('ldap_ticket_user_ssha_pw'),
   }
 
   file {"${web_root_dir}/ticket-api":
@@ -52,7 +52,7 @@ class www::tickets( $git_root, $web_root_dir ) {
   }
 
   $tickets_keyfile = "${tickets_root}/ticket.key"
-  $ldap_ticket_user_pw = extlookup('ldap_ticket_user_pw')
+  $ldap_ticket_user_pw = hiera('ldap_ticket_user_pw')
   file {"${tickets_root}/webapi/config.ini":
     ensure => present,
     owner => 'wwwcontent',

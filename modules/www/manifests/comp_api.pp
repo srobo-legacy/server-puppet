@@ -1,7 +1,7 @@
 # 'comp-api' is the web API to the SRComp library which contains information
 # about the state of the competition
 
-class www::comp-api ( $root_dir ) {
+class www::comp_api ( $root_dir ) {
 
   # Containing folder
   file { $root_dir:
@@ -19,6 +19,7 @@ class www::comp-api ( $root_dir ) {
     mode => '0644',
     source => 'puppet:///modules/www/comp-api-syslog.conf',
     notify => Service['rsyslog'],
+    require => Package['rsyslog'],
   }
 
   # Checkout of the competition state

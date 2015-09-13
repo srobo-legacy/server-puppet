@@ -12,7 +12,7 @@ class www::teamgit( $ide_root_dir ) {
     source => 'puppet:///modules/www/team_repos_conf_builder.py',
   }
 
-  $anonpw = extlookup('ldap_anon_user_pw')
+  $anonpw = hiera('ldap_anon_user_pw')
   file { '/usr/local/bin/team_repos_conf_template.conf':
     ensure => present,
     owner => 'root',

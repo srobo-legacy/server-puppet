@@ -32,8 +32,8 @@ class sr_site::pipebot ( $git_root ) {
   # Site-local configuration is stored in localconfig.py; assign some
   # variables that will be templated into it.
   $pipe_path = "/tmp/hash-srobo"
-  $pipebot_nick = extlookup('pipebot_nick')
-  $pipebot_ident = extlookup('pipebot_ident')
+  $pipebot_nick = hiera('pipebot_nick')
+  $pipebot_ident = hiera('pipebot_ident')
   file { "${root_dir}/localconfig.py":
     ensure => present,
     owner => 'pipebot',

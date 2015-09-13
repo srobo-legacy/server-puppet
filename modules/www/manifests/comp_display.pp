@@ -1,6 +1,6 @@
 # Various forms of output of competition related information
 
-class www::comp-display( $git_root, $web_root_dir ) {
+class www::comp_display( $git_root, $web_root_dir ) {
 
   # Arena Screens
   vcsrepo { "${web_root_dir}/screens":

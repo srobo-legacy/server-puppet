@@ -71,7 +71,7 @@ class sr_site::srcomp($git_root,
     mode    => '0744',
     # Uses $compstate_dir, $http_dir, $venv_dir
     content => template('sr_site/srcomp-update.erb'),
-    require => [Srcomp_repo['srcomp-http'],User['srcomp'],File[$srcomp_home_dir]],
+    require => [Sr_site::Srcomp::Srcomp_repo['srcomp-http'],User['srcomp'],File[$srcomp_home_dir]],
   }
 
   # All exec's should be run as srcomp
@@ -123,7 +123,7 @@ class sr_site::srcomp($git_root,
   # Yaml loading acceleration
   package { ['libyaml-devel', 'gcc']:
     ensure  => present,
-    before  => [Srcomp_repo['srcomp'],Exec['install-srcomp-requirements']],
+    before  => [Sr_site::Srcomp::Srcomp_repo['srcomp'],Exec['install-srcomp-requirements']],
   }
 
   # Create a virtual environment to hold the various Python modules.
@@ -170,21 +170,21 @@ class sr_site::srcomp($git_root,
   }
 
   # Install our custom stuff.
-  srcomp_repo { 'ranker':
+  sr_site::srcomp::srcomp_repo { 'ranker':
     git_root => $git_root,
     src_dir  => $src_dir,
     venv_dir => $venv_dir,
   }
-  srcomp_repo { 'srcomp':
+  sr_site::srcomp::srcomp_repo { 'srcomp':
     git_root => $git_root,
     src_dir  => $src_dir,
     venv_dir => $venv_dir,
-    require  => Srcomp_repo['ranker'],
+    require  => Sr_site::Srcomp::Srcomp_repo['ranker'],
   }
-  srcomp_repo { 'srcomp-http':
+  sr_site::srcomp::srcomp_repo { 'srcomp-http':
     git_root => $git_root,
     src_dir  => $src_dir,
     venv_dir => $venv_dir,
-    require  => Srcomp_repo['srcomp'],
+    require  => Sr_site::Srcomp::Srcomp_repo['srcomp'],
   }
 }

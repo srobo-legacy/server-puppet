@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder "hieradata", "/etc/puppet/hieradata"
 
     # Bootstrap
+    config.vm.provision "shell", inline: "grep 'obsoletes=0' /etc/dnf/dnf.conf || echo 'obsoletes=0' >> /etc/dnf/dnf.conf"
     config.vm.provision "shell", inline: "yum install -y puppet git"
 
     config.vm.provision "puppet" do |puppet|

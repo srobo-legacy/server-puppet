@@ -6,7 +6,7 @@ class sr_site::trac ( $git_root ) {
   # Trac needs mysql
   require sr_site::mysql
 
-  $mysql_trac_pw = extlookup('mysql_trac_pw')
+  $mysql_trac_pw = hiera('mysql_trac_pw')
   $trac_env_root = '/srv/trac'
 
   package { ['trac', 'MySQL-python', 'python-pygments', 'trac-xmlrpc-plugin']:
@@ -69,9 +69,9 @@ class sr_site::trac ( $git_root ) {
   # Install the trac config file
   $www_canonical_hostname = hiera('www_canonical_hostname')
   # Yes, it really does re-use the gerrit email credential
-  $trac_email_pw = extlookup('gerrit_email_pw')
-  $trac_email_user = extlookup('gerrit_email_user')
-  $trac_email_smtp = extlookup('gerrit_email_smtp')
+  $trac_email_pw = hiera('gerrit_email_pw')
+  $trac_email_user = hiera('gerrit_email_user')
+  $trac_email_smtp = hiera('gerrit_email_smtp')
   $trac_db_string = "mysql://${trac_db_user}:${mysql_trac_pw}@${trac_db_host}/${trac_db_name}"
   $trac_env_conf = "${trac_env_root}/conf"
   file { $trac_env_conf:

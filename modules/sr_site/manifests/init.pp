@@ -57,7 +57,8 @@ class sr_site( $git_root ) {
 
   class { 'sr_site::trac':
     git_root => $git_root,
-    require => File['/usr/local/var/sr'],
+    require => [File['/usr/local/var/sr'],
+		Class['www']],
   }
 
   class { 'sr_site::gerrit':
@@ -67,18 +68,17 @@ class sr_site( $git_root ) {
   include sr_site::subversion
   include sr_site::login
   include sr_site::meta
-  include sr_site::ntpd
 
   class { 'sr_site::git':
     git_root => $git_root,
   }
 
   # Sends emails to LDAP groups
-  class { 'fritter':
+  class { 'sr_site::fritter':
     git_root => $git_root,
   }
 
-  class { 'srcomp':
+  class { 'sr_site::srcomp':
     git_root => $git_root,
     src_dir  => '/usr/local/src/srcomp',
     venv_dir => '/var/lib/srcomp-venv'
@@ -90,19 +90,19 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'backup':
+  class { 'sr_site::backup':
     git_root => $git_root,
   }
 
-  class { 'pipebot':
+  class { 'sr_site::pipebot':
     git_root => $git_root,
   }
 
-  class { 'userman':
+  class { 'sr_site::userman':
     git_root => $git_root,
   }
 
-  class { 'willie':
+  class { 'sr_site::willie':
     git_root => $git_root,
   }
 

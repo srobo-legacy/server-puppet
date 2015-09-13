@@ -2,7 +2,7 @@
 
 class www::mediaconsent( $git_root, $web_root_dir ) {
   $mcf_root = "${web_root_dir}/mediaconsent"
-  $mcf_ldap_pw = extlookup('ldap_mediaconsent_user_pw')
+  $mcf_ldap_pw = hiera('ldap_mediaconsent_user_pw')
 
   vcsrepo { $mcf_root:
     ensure    => latest,
@@ -23,7 +23,7 @@ class www::mediaconsent( $git_root, $web_root_dir ) {
     ensure => present,
     objectclass => ['inetOrgPerson', 'uidObject', 'posixAccount'],
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup('ldap_manager_pw'),
+    bindpw => hiera('ldap_manager_pw'),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     uid => 'mediaconsent',
@@ -32,7 +32,7 @@ class www::mediaconsent( $git_root, $web_root_dir ) {
     uidnumber => '3000',
     gidnumber => '1999',
     homedirectory => '/home/mediaconsent',
-    userpassword => extlookup('ldap_mediaconsent_user_ssha_pw'),
+    userpassword => hiera('ldap_mediaconsent_user_ssha_pw'),
   }
 
   file {"${mcf_root}/tickets/local.ini":

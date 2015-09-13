@@ -18,4 +18,4 @@
 	url = git://srobo.org/server/ldapres.git
 [submodule "modules/subversion"]
 	path = modules/subversion
-	url = git://github.com/duritong/puppet-subversion.git
+	url = git://github.com/jmorse/puppet-subversion.git

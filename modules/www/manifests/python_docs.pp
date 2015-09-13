@@ -1,6 +1,6 @@
 # Create a clone of python's docs on our website.
 
-class www::python-docs ( $web_root_dir, $version ) {
+class www::python_docs ( $web_root_dir, $version ) {
 
   # Install python docs unless they're already there.
   # We use the name of the archive we're passed as part of the already-there

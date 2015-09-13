@@ -3,8 +3,8 @@
 class www::phpbb ( $git_root, $root_dir ) {
   # MySQL database configuration
   $forum_db_name = 'phpbb_sr2014'
-  $forum_user = extlookup('phpbb_sql_user')
-  $forum_pw = extlookup('phpbb_sql_pw')
+  $forum_user = hiera('phpbb_sql_user')
+  $forum_pw = hiera('phpbb_sql_pw')
 
   # We require the bindings between php and mysql to work
   package { 'php-mysqlnd':

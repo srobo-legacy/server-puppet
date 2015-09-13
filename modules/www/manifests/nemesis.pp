@@ -89,13 +89,14 @@ class www::nemesis ( $git_root, $root_dir ) {
     mode => '0644',
     source => 'puppet:///modules/www/nemesis-syslog.conf',
     notify => Service['rsyslog'],
+    require => Package['rsyslog'],
   }
 
   # Configurate nemesis with the ability to send emails.
-  $nemesis_mail_smtp = extlookup('nemesis_mail_smtp')
-  $nemesis_mail_user = extlookup('nemesis_mail_user')
-  $nemesis_mail_pw   = extlookup('nemesis_mail_pw')
-  $nemesis_mail_from = extlookup('nemesis_mail_from')
+  $nemesis_mail_smtp = hiera('nemesis_mail_smtp')
+  $nemesis_mail_user = hiera('nemesis_mail_user')
+  $nemesis_mail_pw   = hiera('nemesis_mail_pw')
+  $nemesis_mail_from = hiera('nemesis_mail_from')
   file { "${root_dir}/nemesis/local.ini":
     ensure => present,
     content => template('www/nemesis_local.ini.erb'),
@@ -109,7 +110,7 @@ class www::nemesis ( $git_root, $root_dir ) {
   # Idealy this should not be using the LDAP manager account. An even more idea
   # situation would trac ticket #1053 to be applied. Until then, use the LDAP
   # manager account.
-  $ldap_manager_pw = extlookup('ldap_manager_pw')
+  $ldap_manager_pw = hiera('ldap_manager_pw')
   file { "${root_dir}/nemesis/libnemesis/libnemesis/srusers/local.ini":
     ensure => present,
     content => template('www/nemesis_srusers.ini.erb'),

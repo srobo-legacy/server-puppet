@@ -28,7 +28,7 @@ class www::ide ( $git_root, $root_dir ) {
     source => "${git_root}/cyanide.git",
     revision => 'origin/master',
     user =>'wwwcontent',
-    require => Class['srweb'],
+    require => Class['www::srweb'],
   }
 
   # Secret key for encrypting IDE cookies, protecting against users twiddling
@@ -38,7 +38,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0640',
-    content => extlookup('ide_cookie_key'),
+    content => hiera('ide_cookie_key'),
     require => Vcsrepo[$root_dir],
   }
 
@@ -48,7 +48,7 @@ class www::ide ( $git_root, $root_dir ) {
   $team_status_dir = "${root_dir}/settings/team-status"
   $team_status_imgs_dir = "${root_dir}/uploads/team-status"
   $team_status_imgs_live_dir = "${root_dir}/../images/teams"
-  $ide_ldap_pw = extlookup('ide_ldap_user_pw')
+  $ide_ldap_pw = hiera('ide_ldap_user_pw')
   file { "${root_dir}/config/local.ini":
     ensure => present,
     owner => 'wwwcontent',
@@ -59,11 +59,11 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # IDE ldap user has general read access to ou=groups,o=sr.
-  $ide_user = extlookup('ide_ldap_user_uid')
+  $ide_user = hiera('ide_ldap_user_uid')
   ldapres { "uid=${ide_user},ou=users,o=sr":
     ensure => present,
     binddn => 'cn=Manager,o=sr',
-    bindpw => extlookup('ldap_manager_pw'),
+    bindpw => hiera('ldap_manager_pw'),
     ldapserverhost => 'localhost',
     ldapserverport => '389',
     require => Class['sr_site::openldap'],
@@ -74,7 +74,7 @@ class www::ide ( $git_root, $root_dir ) {
     uidnumber => '2323',
     gidnumber => '1999', # srusers
     homedirectory => '/home/ide',
-    userpassword => extlookup('ide_ldap_user_ssha_pw'),
+    userpassword => hiera('ide_ldap_user_ssha_pw'),
   }
 
   # Zips directory contains generated zips, unsuprisingly. To be writeable
@@ -123,7 +123,7 @@ class www::ide ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Class['srweb'],
+    require => Class['www::srweb'],
   }
 
   # Install team status images from backup.
@@ -174,13 +174,13 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # All-repo integrity checking script for after crashes.
-  repos_admin_script { 'fsck':
+  www::ide::repos_admin_script { 'fsck':
     dir     => $ide_repos_root,
     command => 'git fsck',
   }
 
   # Script for repacking/gcing user repos
-  repos_admin_script { 'repack-aggressive':
+  www::ide::repos_admin_script { 'repack-aggressive':
     dir     => $ide_repos_root,
     command => 'git gc --aggressive -q',
   }
@@ -188,7 +188,7 @@ class www::ide ( $git_root, $root_dir ) {
   # Script for gcing user repos in the general case
   $gc_script_name = 'gc-all'
   $gc_script = "${ide_repos_root}/${gc_script_name}"
-  repos_admin_script { $gc_script_name:
+  www::ide::repos_admin_script { $gc_script_name:
     dir     => $ide_repos_root,
     command => 'git gc -q',
   }
@@ -220,6 +220,7 @@ class www::ide ( $git_root, $root_dir ) {
     mode => '0644',
     source => 'puppet:///modules/www/ide-syslog.conf',
     notify => Service['rsyslog'],
+    require => Package['rsyslog']
   }
 
   cron { 'ide-cron':
