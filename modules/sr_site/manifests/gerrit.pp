@@ -240,6 +240,7 @@ class sr_site::gerrit {
   # The gerrit service, depends on many things.
   service { 'gerrit':
     ensure => running,
+    enable => true,
     require => [
       Exec['install-gerrit-mysql-connector'],
       Exec['install-gerrit-ssh-goo'],
