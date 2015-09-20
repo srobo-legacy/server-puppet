@@ -3,7 +3,8 @@
 class sr_site::gerrit {
 
   # Gerrit runs on java...
-  package { ['java-1.8.0-openjdk']:
+  package { ['java-1.8.0-openjdk',
+             'mysql-connector-java']:
     ensure => present,
   }
 
@@ -47,6 +48,13 @@ class sr_site::gerrit {
     user => 'gerrit',
     command => "java -jar '${gerrit_war}' init --no-auto-start -d /home/gerrit/srdata",
     creates => '/home/gerrit/srdata',
+  }
+
+  file { 'mysql-connector',
+    path    => '/home/gerrit/srdata/libs/mysql-connector-java.jar',
+    ensure  => 'link',
+    target  => '/usr/share/java/mysql-connector-java.jar',
+    require => [Exec['install-gerrit'], Package['mysql-connector-java']],
   }
 
   # The gerrit 'All-projects' project is intimitely associated with a particular
@@ -217,16 +225,6 @@ class sr_site::gerrit {
     notify => Service['gerrit'],
   }
 
-  # Download and install the java goo to link up gerrit and mysql. I couldn't
-  # find an automated way to do this in the gerrit installation process, it'd
-  # be cleaner if that were possible.
-  exec { 'install-gerrit-mysql-connector':
-    command => 'curl http://repo2.maven.org/maven2/mysql/mysql-connector-java/5.1.10/mysql-connector-java-5.1.10.jar > /home/gerrit/srdata/lib/tmpdownload; echo "517e19ba790cceee31148c30a887155e  /home/gerrit/srdata/lib/tmpdownload" | md5sum -c; if test $? = 1; then exit 1; fi; mv /home/gerrit/srdata/lib/tmpdownload /home/gerrit/srdata/lib/mysql-connector-java-5.1.10.jar',
-    creates => '/home/gerrit/srdata/lib/mysql-connector-java-5.1.10.jar',
-    user => 'gerrit',
-    require => Exec['install-gerrit'],
-  }
-
   # Download and install the java goo to allow Gerrit to do crypto stuff, like
   # its SSHD service. Once more, making this use gerrit's own installation
   # process would be a hell of a lot better than this.
@@ -242,10 +240,10 @@ class sr_site::gerrit {
     ensure => running,
     enable => true,
     require => [
-      Exec['install-gerrit-mysql-connector'],
       Exec['install-gerrit-ssh-goo'],
       Exec['install-gerrit'],
       Exec['install-gerrit-service'],
+      File['mysql-connector'],
       Mysql::Db['reviewdb'],
       File['/etc/default/gerritcodereview'],
       File['/home/gerrit/srdata/etc/gerrit.config'],
