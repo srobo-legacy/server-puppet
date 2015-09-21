@@ -172,12 +172,11 @@ WSGISocketPrefix /var/run/wsgi
         </Directory>
 
         # Pass accesses to /userman over to nemesis in WSGI
-	# Disabled 02/07/15 due to CVE-2014-4616
-        #WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
-        #WSGIPassAuthorization on
-        #<Directory /srv/nemesis/nemesis>
-        #    Require all granted
-        #</Directory>
+        WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
+        WSGIPassAuthorization on
+        <Directory /srv/nemesis/nemesis>
+            Require all granted
+        </Directory>
 
         ########## SSL stuff below
 
