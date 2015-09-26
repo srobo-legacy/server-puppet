@@ -1,18 +1,17 @@
 <?php
-// phpBB 3.0.x auto-generated configuration file
-// Do not change anything in this file!
+// phpBB 3.1.x auto-generated configuration file
 // jmorse - phpBB's DB connection is configured here. Straightforward.
-$dbms = 'mysql';
+$dbms = 'phpbb\\db\\driver\\mysql';
 $dbhost = 'localhost';
 $dbport = '';
 $dbname = '<%= @forum_db_name %>';
 $dbuser = '<%= @forum_user %>';
 $dbpasswd = '<%= @forum_pw %>';
 $table_prefix = 'phpbb_';
-$acm_type = 'file';
-$load_extensions = '';
+$phpbb_adm_relative_path = 'adm/';
+$acm_type = 'phpbb\\cache\\driver\\file';
 
 @define('PHPBB_INSTALLED', true);
+// @define('PHPBB_DISPLAY_LOAD_TIME', true);
 // @define('DEBUG', true);
-// @define('DEBUG_EXTRA', true);
-?>
+// @define('DEBUG_CONTAINER', true);

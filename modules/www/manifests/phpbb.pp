@@ -13,15 +13,13 @@ class www::phpbb ( $git_root, $root_dir ) {
     alias  => 'php-mysql',
   }
 
-  # Checkout of the phpbb installation, with SRs patches against phpbb. One
-  # of these is to delete the installation directory, which is mandatory before
-  # the forum will start serving.
+  # Checkout of the phpbb sources
   vcsrepo { $root_dir:
     ensure => present,
     user => 'wwwcontent',
     provider => git,
-    source => "${git_root}/sr-phpbb3.git",
-    revision => 'origin/master',
+    source => 'https://github.com/phpbb/phpbb.git',
+    revision => 'release-3.1.6',
     require => Package[ 'php', 'php-mysql' ],
   }
 
@@ -50,6 +48,56 @@ class www::phpbb ( $git_root, $root_dir ) {
     mode => '0640',
     content => template('www/forum_config.php.erb'),
     require => Vcsrepo[$root_dir],
+  }
+
+  # Remove the install directory since we're restoring from a database
+  # dump instead. Needed before the forums will serve the actual forums.
+  file { "${root_dir}/phpBB/install":
+    ensure  => absent,
+    force   => true,
+    require => Vcsrepo[$root_dir],
+  }
+
+  # The style we want
+  archive { 'phpbb-prosilver_se-style':
+    ensure        => present,
+    url           => 'https://www.phpbb.com/customise/db/download/119406',
+    extension     => 'zip',
+    digest_string => 'c2743e19b5e98261a301e107fecedd8c',
+    digest_type   => 'md5',
+    user          => 'wwwcontent',
+    target        => "${root_dir}/phpBB/styles",
+    # where it downloads the file to, also where it puts the .md5 file
+    src_target    => $root_dir,
+    require       => Vcsrepo[$root_dir],
+  }
+
+  # Our custom extensions
+  $extensions_dir = "${root_dir}/phpBB/ext/sr"
+  file { $extensions_dir:
+    ensure  => directory,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    mode    => '0755',
+    require => Vcsrepo[$root_dir],
+  }
+
+  vcsrepo { "${extensions_dir}/pipebot":
+    ensure    => present,
+    user      => 'wwwcontent',
+    provider  => git,
+    source    => 'https://github.com/PeterJCLaw/pipebot-phpbb.git',
+    revision  => 'origin/master',
+    require   => File[$extensions_dir],
+  }
+
+  vcsrepo { "${extensions_dir}/etc":
+    ensure    => present,
+    user      => 'wwwcontent',
+    provider  => git,
+    source    => 'https://github.com/PeterJCLaw/phpbb-ext-sr-etc.git',
+    revision  => 'origin/master',
+    require   => File[$extensions_dir],
   }
 
   # Directory for storing forum attachments.

@@ -19,3 +19,6 @@
 [submodule "modules/subversion"]
 	path = modules/subversion
 	url = git://github.com/jmorse/puppet-subversion.git
+[submodule "modules/archive"]
+	path = modules/archive
+	url = git://github.com/camptocamp/puppet-archive.git
