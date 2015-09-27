@@ -86,7 +86,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     ensure    => present,
     user      => 'wwwcontent',
     provider  => git,
-    source    => 'https://github.com/PeterJCLaw/pipebot-phpbb.git',
+    source    => "${git_root}/phpbb-ext-sr-pipebot.git",
     revision  => 'origin/master',
     require   => File[$extensions_dir],
   }
@@ -95,7 +95,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     ensure    => present,
     user      => 'wwwcontent',
     provider  => git,
-    source    => 'https://github.com/PeterJCLaw/phpbb-ext-sr-etc.git',
+    source    => "${git_root}/phpbb-ext-sr-etc.git",
     revision  => 'origin/master',
     require   => File[$extensions_dir],
   }
