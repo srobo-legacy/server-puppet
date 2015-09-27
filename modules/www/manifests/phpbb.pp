@@ -50,6 +50,18 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
+  exec { 'phpbb-composer-install':
+    command     => '/usr/bin/php ../composer.phar install',
+    provider    => 'shell',
+    cwd         => "${root_dir}/phpBB",
+    user        => 'wwwcontent',
+    group       => 'apache',
+    environment => [ 'HOME=/home/wwwcontent', ],
+    refreshonly => true,
+    subscribe   => Vcsrepo[$root_dir],
+    require     => File['/home/wwwcontent'],
+  }
+
   # Remove the install directory since we're restoring from a database
   # dump instead. Needed before the forums will serve the actual forums.
   file { "${root_dir}/phpBB/install":
