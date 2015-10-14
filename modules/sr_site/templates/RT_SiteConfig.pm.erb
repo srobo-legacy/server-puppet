@@ -1,0 +1,50 @@
+# Any configuration directives you include  here will override 
+# RT's default configuration file, RT_Config.pm
+#
+# To include a directive here, just copy the equivalent statement
+# from RT_Config.pm and change the value. We've included a single
+# sample value below.
+#
+# This file is actually a perl module, so you can include valid
+# perl code, as well.
+#
+# The converse is also true, if this file isn't valid perl, you're
+# going to run into trouble. To check your SiteConfig file, use
+# this command:
+#
+#   perl -c /etc/rt/RT_SiteConfig.pm
+#
+# You must restart your webserver after making changes to this file.
+
+Set($rtname, 'studentrobotics.org');
+Set($Organization, "studentrobotics.org");
+Set($WebDomain, "www.studentrobotics.org");
+Set($WebPort, 8001);
+Set($WebPath, '/rt');
+Set($Timezone, "Europe/London");
+
+Set($DatabaseType, "mysql");
+Set($DatabaseHost,   "localhost");
+Set($DatabaseRTHost, "localhost");
+Set($DatabaseUser, "rt_user");
+Set($DatabaseAdmin, "rt_user");
+Set($DatabasePassword, "lolwat");
+Set($DatabaseName, q{rt4});
+
+Set($OwnerEmail, 'jmorse@studentrobotics.org');
+
+# Default; to remind everyone this is being pumped via sendmail
+Set($MailCommand, "sendmailpipe");
+# Possibly set outgoing mail addr
+#Set($SetOutgoingMailFrom, 0);
+#Set($DefaultMailPrecedence, "bulk");
+#Set($DefaultErrorMailPrecedence, "bulk");
+#Set($SendmailArguments, "-oi");
+#Set($SendmailBounceArguments, '-f "<>"');
+
+# You must install Plugins on your own, this is only an example
+# of the correct syntax to use when activating them:
+#     Plugin( "RT::Extension::SLA" );
+#     Plugin( "RT::Authen::ExternalAuth" );
+
+1;
