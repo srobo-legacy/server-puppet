@@ -16,22 +16,22 @@
 #
 # You must restart your webserver after making changes to this file.
 
-Set($rtname, 'studentrobotics.org');
-Set($Organization, "studentrobotics.org");
-Set($WebDomain, "www.studentrobotics.org");
+Set($rtname, '<%= www_base_hostname %>');
+Set($Organization, "<%= www_canonical_hostname %>");
+Set($WebDomain, "<%= www_canonical_hostname %>");
 Set($WebPort, 8001);
 Set($WebPath, '/rt');
 Set($Timezone, "Europe/London");
 
 Set($DatabaseType, "mysql");
-Set($DatabaseHost,   "localhost");
-Set($DatabaseRTHost, "localhost");
-Set($DatabaseUser, "rt_user");
-Set($DatabaseAdmin, "rt_user");
-Set($DatabasePassword, "lolwat");
-Set($DatabaseName, q{rt4});
+Set($DatabaseHost,   "<%= @rt_db_host %>");
+Set($DatabaseRTHost, "<%= @rt_db_host %>");
+Set($DatabaseUser, "<%= @rt_db_user %>");
+Set($DatabaseAdmin, "<%= @rt_db_user %>");
+Set($DatabasePassword, "<%= @mysql_db_pw %>");
+Set($DatabaseName, q{<%= @rt_db_name %>});
 
-Set($OwnerEmail, 'jmorse@studentrobotics.org');
+Set($OwnerEmail, 'jmorse@<%= www_base_hostname %>');
 
 # Default; to remind everyone this is being pumped via sendmail
 Set($MailCommand, "sendmailpipe");
