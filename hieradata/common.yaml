@@ -24,6 +24,8 @@ mysql_rootpw: '123456'
 # MySQL password for trac's account. Plaintext.
 mysql_trac_pw: '123456'
 
+# MySQL password for rt's account. Plaintext.
+mysql_rt_pw: '123456'
 
 # LDAP
 
