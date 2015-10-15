@@ -50,4 +50,25 @@ class sr_site::requesttracker ( ) {
     # XXX unimplemented, restore from backup.
   }
 
+###############################################################################
+
+  # Mail gateway specific configuration
+  package { ['fetchmail', 'procmail']:
+    ensure => present,
+  }
+
+  # We require an RT user to perform these actions.
+  user { 'rt':
+    ensure => present,
+    comment => 'Request tracker user',
+    shell => '/bin/sh',
+    gid => 'users',
+  }
+
+  file { '/home/rt':
+    ensure => directory,
+    owner => 'rt',
+    group => 'users',
+    require => User['rt'],
+  }
 }
