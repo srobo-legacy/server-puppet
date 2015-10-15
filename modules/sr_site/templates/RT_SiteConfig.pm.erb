@@ -16,9 +16,9 @@
 #
 # You must restart your webserver after making changes to this file.
 
-Set($rtname, '<%= www_base_hostname %>');
-Set($Organization, "<%= www_canonical_hostname %>");
-Set($WebDomain, "<%= www_canonical_hostname %>");
+Set($rtname, '<%= @www_base_hostname %>');
+Set($Organization, "<%= @www_canonical_hostname %>");
+Set($WebDomain, "<%= @www_canonical_hostname %>");
 Set($WebPort, 8001);
 Set($WebPath, '/rt');
 Set($Timezone, "Europe/London");
@@ -31,7 +31,7 @@ Set($DatabaseAdmin, "<%= @rt_db_user %>");
 Set($DatabasePassword, "<%= @mysql_db_pw %>");
 Set($DatabaseName, q{<%= @rt_db_name %>});
 
-Set($OwnerEmail, 'jmorse@<%= www_base_hostname %>');
+Set($OwnerEmail, 'jmorse@<%= @www_base_hostname %>');
 
 # Default; to remind everyone this is being pumped via sendmail
 Set($MailCommand, "sendmailpipe");
