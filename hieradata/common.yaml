@@ -131,6 +131,9 @@ nemesis_mail_from: ponies
 # SMTP server for fritter to send emails by
 fritter_mail_smtp: ponies
 
+# IMAP server to read fritter mail from
+fritter_mail_imap: imap.example.com
+
 # Username for fritter to auth with (for gmail based systems, username@domain)
 fritter_mail_user: ponies
 

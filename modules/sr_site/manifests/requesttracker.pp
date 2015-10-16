@@ -71,4 +71,18 @@ class sr_site::requesttracker ( ) {
     group => 'users',
     require => User['rt'],
   }
+
+  # Load credentials and address for the RT mailbox. Right now it's fritter.
+  $rt_mail_addr = hiera('fritter_mail_user')
+  $rt_mail_pw = hiera('fritter_mail_pw')
+  $rt_mail_imap = hiera('fritter_mail_imap')
+
+  # Install a fetchmail configuration for getting RT mail
+  file { '/home/rt/.fetchmailrc':
+    ensure => present,
+    owner => 'rt',
+    group => 'users',
+    mode => '600',
+    content => template('sr_site/rt_fetchmail.erb'),
+  }
 }
