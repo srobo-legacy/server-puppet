@@ -55,7 +55,7 @@ http {
         # Default aside from disabling RC4
         ssl_ciphers         HIGH:!aNULL:!MD5:!RC4:!EXPORT;
 	# Use a unique DH key
-        ssl_dhparam         /etc/pki/tls/dhparam.pem
+        ssl_dhparam         /etc/pki/tls/dhparams.pem;
         #charset koi8-r;
 
         #access_log  /var/log/nginx/host.access.log  main;
