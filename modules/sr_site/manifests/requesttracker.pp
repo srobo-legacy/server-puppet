@@ -32,8 +32,8 @@ class sr_site::requesttracker ( ) {
   file { '/etc/rt/RT_SiteConfig.pm':
     ensure => present,
     owner => 'root',
-    group => 'root',
-    mode => '664',
+    group => 'apache',
+    mode => '640',
     content => template('sr_site/RT_SiteConfig.pm.erb'),
   }
 
