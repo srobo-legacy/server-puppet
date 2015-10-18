@@ -169,7 +169,7 @@ class sr_site::fritter ( $git_root ) {
   }
 
   cron { 'fritter-cron':
-    command => "${root_dir}/fritter-cron > /dev/null 2>&1",
+    command => "${root_dir}/fritter-cron",
     minute => '*/5',
     user => $fritter_user,
     require => [Vcsrepo[$root_dir],
