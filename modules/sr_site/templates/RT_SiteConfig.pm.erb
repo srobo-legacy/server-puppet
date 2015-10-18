@@ -35,6 +35,7 @@ Set($OwnerEmail, 'jmorse@<%= @www_base_hostname %>');
 
 # Default; to remind everyone this is being pumped via sendmail
 Set($MailCommand, "sendmailpipe");
+Set($SendmailPath, "/usr/sbin/sendmail.postfix");
 # Possibly set outgoing mail addr
 #Set($SetOutgoingMailFrom, 0);
 #Set($DefaultMailPrecedence, "bulk");
