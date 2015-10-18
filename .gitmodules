@@ -22,3 +22,6 @@
 [submodule "modules/archive"]
 	path = modules/archive
 	url = git://github.com/camptocamp/puppet-archive.git
+[submodule "modules/cpan"]
+	path = modules/cpan
+	url = https://github.com/meltwater/puppet-cpan.git
