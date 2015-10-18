@@ -28,6 +28,10 @@ class sr_site::requesttracker ( ) {
   $rt_admin_address = hiera('rt_admin_address')
   $default_rt_address = hiera('default_rt_address')
 
+  # Load ldap fudge
+  $anon_account = 'uid=anon,ou=users,o=sr'
+  $anonpw = hiera('ldap_anon_user_pw')
+
   # Specify general config: connection params etc
   file { '/etc/rt/RT_SiteConfig.pm':
     ensure => present,

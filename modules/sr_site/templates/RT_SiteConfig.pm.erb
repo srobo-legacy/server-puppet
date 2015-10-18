@@ -49,6 +49,40 @@ Set($SendmailPath, "/usr/sbin/sendmail.postfix");
 # tells RT because we're reverse-proxying it.
 Set($CanonicalizeRedirectURLs, "https://<%= @www_canonical_hostname %>");
 
+# LDAP configuration -- group data sync
+
+Plugin('RT::Extension::LDAPImport');
+
+# Host is always local
+Set($LDAPHost, 'localhost');
+
+Set($LDAPUser, '<%= @anon_account %>');
+Set($LDAPPassword, '<%= @anonpw %>');
+Set($LDAPBase, 'o=sr');
+# Unclear what varaibles go in this filter...
+Set($LDAPFilter, '(&(uid = users))');
+
+# Map username to be the uid, emails, and for the real person name to be
+# their firstname then surname.
+Set($LDAPMapping, {Name         => 'uid',
+                   EmailAddress => 'mail',
+                   RealName     => [qw(/cn sn/)]});
+# Identify users imported from LDAP with this group
+Set($LDAPGroupName, 'LDAPUsers');
+# Always overwrite RT data with LDAP data
+Set($LDAPUpdateUsers, 1);
+
+# Sync groups from LDAP into RT
+
+Set($LDAPGroupBase, 'ou=groups,o=sr');
+# Filter for groups. This could match all groups, but it seems unwise to
+# duplicate it into RT. So, we'll explicitly match what we want to go into
+# RT.
+Set($LDAPGroupFilter, '(&(cn=mentors))');
+Set($LDAPGroupMapping, {Name               => 'cn',
+                        Member_Attr        => 'memberUid',
+                        Member_Attr_Value  => 'dn' });
+
 # You must install Plugins on your own, this is only an example
 # of the correct syntax to use when activating them:
 #     Plugin( "RT::Extension::SLA" );
