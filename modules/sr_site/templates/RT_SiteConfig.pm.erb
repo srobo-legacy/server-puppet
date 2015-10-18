@@ -45,6 +45,10 @@ Set($SendmailPath, "/usr/sbin/sendmail.postfix");
 #Set($SendmailArguments, "-oi");
 #Set($SendmailBounceArguments, '-f "<>"');
 
+# Configure what the canonical redirect URL should be. This is not what apache
+# tells RT because we're reverse-proxying it.
+Set($CanonicalizeRedirectURLs, "https://<%= @www_canonical_hostname %>");
+
 # You must install Plugins on your own, this is only an example
 # of the correct syntax to use when activating them:
 #     Plugin( "RT::Extension::SLA" );
