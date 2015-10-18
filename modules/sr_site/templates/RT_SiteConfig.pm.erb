@@ -49,6 +49,16 @@ Set($SendmailPath, "/usr/sbin/sendmail.postfix");
 # tells RT because we're reverse-proxying it.
 Set($CanonicalizeRedirectURLs, "https://<%= @www_canonical_hostname %>");
 
+# Authentication
+
+# Use REMOTE_USER env variable for authentication
+Set($WebRemoteUserAuth, 1);
+# Check it for every request
+Set($WebRemoteUserContinuous, 1);
+# AUTOMAGICALLY import users who we haven't seen before, but who have been
+# authenticated
+Set($WebRemoteUserAutocreate, 1);
+
 # LDAP configuration -- group data sync
 
 Plugin('RT::Extension::LDAPImport');
