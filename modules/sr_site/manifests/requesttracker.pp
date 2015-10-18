@@ -72,6 +72,14 @@ class sr_site::requesttracker ( ) {
     require => User['rt'],
   }
 
+  # Dir to filter mail in
+  file { '/home/rt/Mail':
+    ensure => directory,
+    owner => 'rt',
+    group => 'users',
+    require => File['/home/rt'],
+  }
+
   # Load credentials and address for the RT mailbox. Right now it's fritter.
   $rt_mail_addr = hiera('fritter_mail_user')
   $rt_mail_pw = hiera('fritter_mail_pw')
