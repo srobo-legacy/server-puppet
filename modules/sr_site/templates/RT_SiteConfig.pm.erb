@@ -31,7 +31,9 @@ Set($DatabaseAdmin, "<%= @rt_db_user %>");
 Set($DatabasePassword, "<%= @mysql_db_pw %>");
 Set($DatabaseName, q{<%= @rt_db_name %>});
 
-Set($OwnerEmail, 'jmorse@<%= @www_base_hostname %>');
+Set($OwnerEmail, '<%= @rt_admin_address %>');
+
+Set($CorrespondAddress, '<%= @default_rt_address %>');
 
 # Default; to remind everyone this is being pumped via sendmail
 Set($MailCommand, "sendmailpipe");

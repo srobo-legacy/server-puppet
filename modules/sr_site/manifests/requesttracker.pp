@@ -25,6 +25,9 @@ class sr_site::requesttracker ( ) {
     grant => ['all'],
   }
 
+  $rt_admin_address = hiera('rt_admin_address')
+  $default_rt_address = hiera('default_rt_address')
+
   # Specify general config: connection params etc
   file { '/etc/rt/RT_SiteConfig.pm':
     ensure => present,
