@@ -1,0 +1,6 @@
+poll <%= @rt_mail_imap %> protocol imap:
+        user "<%= @rt_mail_addr %>"
+        password "<%= @rt_mail_pw %>"
+        fetchlimit 1 # Debugging
+        keep
+        ssl
