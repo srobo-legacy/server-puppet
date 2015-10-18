@@ -93,4 +93,70 @@ class sr_site::requesttracker ( ) {
     mode => '600',
     content => template('sr_site/rt_fetchmail.erb'),
   }
+
+  #############################################################################
+
+  # Outbound mail configuration. The summary for this is: "Sendmail. Not even
+  # once".
+
+  package { ['postfix', 'postfix-perl-scripts', 'cyrus-sasl-plain']:
+    ensure => present,
+  }
+
+  $rt_mail_smtp = hiera('fritter_mail_smtp')
+
+  # Install postfix main config file.
+  file { '/etc/postfix/main.cf':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    content => template('sr_site/postfix_main.cf.erb'),
+  }
+
+  # Additionally, install some policy / credential tables. First, the policy
+  # file that says to always connect to gmail with TLS, and to verify that
+  # the given certificate is verified.
+  file { '/etc/postfix/tls_policy':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '644',
+    content => template('sr_site/postfix_tls_policy.erb'),
+  }
+
+  # Credentials for logging into gmail
+  file { '/etc/postfix/sasl_passwd':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '400',
+    content => template('sr_site/postfix_sasl_passwd.erb'),
+  }
+
+  # Rebuild mail maps for each of these
+  exec { 'tls-postmap-rebuild':
+    command => 'postmap /etc/postfix/tls_policy',
+    user => root,
+    group => root,
+    subscribe => File['/etc/postfix/tls_policy'],
+    refreshonly => true,
+    path => '/usr/bin:/usr/sbin',
+  }
+
+  exec { 'passwd-postmap-rebuild':
+    command => 'postmap /etc/postfix/sasl_passwd',
+    user => root,
+    group => root,
+    subscribe => File['/etc/postfix/sasl_passwd'],
+    refreshonly => true,
+    path => '/usr/bin:/usr/sbin',
+  }
+
+  # Register existance of postfix service
+  service { 'postfix':
+    ensure => running,
+    subscribe => [Exec['tls-postmap-rebuild'], Exec['passwd-postmap-rebuild']],
+  }
+
 }
