@@ -66,6 +66,20 @@ class sr_site::requesttracker ( ) {
     notify => Service['httpd'],
   }
 
+  # In a massively vicious sequence of events, we need an external module for
+  # the RT <=> LDAP bridging software. We have to install from CPAN; there are
+  # puppet modules for this, but they don't support fedora (quel suprise). So..
+  package { 'cpan':
+    ensure => present,
+  }
+
+  exec { 'install-rt-ldap-bridge':
+    command => 'yes | cpan -i RT::Extension::LDAPImport && touch /usr/local/var/sr/cpan_ldap_installed',
+    provider => shell,
+    creates  => '/usr/local/var/sr/cpan_ldap_installed',
+    require => Package['cpan'],
+  }
+
 ###############################################################################
 
   # Mail gateway specific configuration
