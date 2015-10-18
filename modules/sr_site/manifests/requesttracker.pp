@@ -143,7 +143,6 @@ class sr_site::requesttracker ( ) {
     user => root,
     group => root,
     subscribe => File['/etc/postfix/tls_policy'],
-    refreshonly => true,
     path => '/usr/bin:/usr/sbin',
   }
 
@@ -152,7 +151,6 @@ class sr_site::requesttracker ( ) {
     user => root,
     group => root,
     subscribe => File['/etc/postfix/sasl_passwd'],
-    refreshonly => true,
     path => '/usr/bin:/usr/sbin',
   }
 
