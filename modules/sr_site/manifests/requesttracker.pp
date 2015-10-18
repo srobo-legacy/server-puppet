@@ -53,6 +53,15 @@ class sr_site::requesttracker ( ) {
     # XXX unimplemented, restore from backup.
   }
 
+  # RT installs it's own config file in the http configuration; however we
+  # want to configure it ourselves, so delete that and restart apache if
+  # necessary.
+  file { '/etc/httpd/conf.d/rt.conf':
+    ensure => absent,
+    require => Package['rt'],
+    notify => Service['httpd'],
+  }
+
 ###############################################################################
 
   # Mail gateway specific configuration
