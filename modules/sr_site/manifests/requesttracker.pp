@@ -99,6 +99,19 @@ class sr_site::requesttracker ( ) {
                 File['/usr/share/perl5/vendor_perl/RT/Generated.pm']],
   }
 
+  # Install cron job for importing user and group data. As a result, any changes
+  # to user config (of ldap data) will be wiped overnight.
+  # Run this as root: it should run as someone else. But, it can't be apache,
+  # and we'd need to let a third group (but not everyone) read the site
+  # config. So run with root for now.
+  cron { 'rt-sync-cron':
+    command => '/usr/local/lib/rtplugins/RT-Extension-LDAPImport/bin/rtldapimport --import',
+    user => 'root',
+    hour => '4',
+    minute => '51',
+    require => Exec['install-rt-ldap-bridge'],
+  }
+
 ###############################################################################
 
   # Mail gateway specific configuration
