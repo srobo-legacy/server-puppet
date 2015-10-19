@@ -76,7 +76,7 @@ Set($LDAPFilter, '(&(objectClass=posixAccount)(!(uid=*_*)))');
 # their firstname then surname.
 Set($LDAPMapping, {Name         => 'uid',
                    EmailAddress => 'mail',
-                   RealName     => [qw(/cn sn/)]});
+                   RealName     => ['cn', 'sn']});
 # Identify users imported from LDAP with this group
 Set($LDAPGroupName, 'LDAPUsers');
 # Always overwrite RT data with LDAP data
