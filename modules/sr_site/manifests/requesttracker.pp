@@ -66,6 +66,20 @@ class sr_site::requesttracker ( ) {
     notify => Service['httpd'],
   }
 
+  # Install general where-are-the-files configuration for RT. These are
+  # distributed by Fedora -- and are wrong. My single modification is to
+  # populate the LocalPluginPath variable with something not empty. Without
+  # this, files end up in /. There appears to be no way to override: the RTx
+  # extension installer doesn't appear to include the RT configuration itself.
+  # (Which makes sense seeing how there can be multiple RT sites).
+  file  { '/usr/share/perl5/vendor_perl/RT/Generated.pm':
+    ensure => present,
+    owner => root,
+    group => root,
+    mode => '0644',
+    source => 'puppet:///modules/sr_site/rt_config_Generated.pm',
+  }
+
   # In a massively vicious sequence of events, we need an external module for
   # the RT <=> LDAP bridging software. We have to install from CPAN; there are
   # puppet modules for this, but they don't support fedora (quel suprise). So..
@@ -77,7 +91,8 @@ class sr_site::requesttracker ( ) {
     command => 'yes | cpan -i RT::Extension::LDAPImport && touch /usr/local/var/sr/cpan_ldap_installed',
     provider => shell,
     creates  => '/usr/local/var/sr/cpan_ldap_installed',
-    require => Package['cpan'],
+    require => [Package['cpan'],
+                File['/usr/share/perl5/vendor_perl/RT/Generated.pm']],
   }
 
 ###############################################################################
