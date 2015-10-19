@@ -81,6 +81,10 @@ Set($LDAPMapping, {Name         => 'uid',
 Set($LDAPGroupName, 'LDAPUsers');
 # Always overwrite RT data with LDAP data
 Set($LDAPUpdateUsers, 1);
+# All created users should be privileged; in RT, it appears that this is the
+# distinction between system users ("employees" as it were) and requestors.
+# People can't be assigned rights otherwise.
+Set($LDAPCreatePrivileged, 1);
 
 # Sync groups from LDAP into RT
 
