@@ -55,9 +55,6 @@ Set($CanonicalizeRedirectURLs, "https://<%= @www_canonical_hostname %>");
 Set($WebRemoteUserAuth, 1);
 # Check it for every request
 Set($WebRemoteUserContinuous, 1);
-# AUTOMAGICALLY import users who we haven't seen before, but who have been
-# authenticated
-Set($WebRemoteUserAutocreate, 1);
 
 # LDAP configuration -- group data sync
 
