@@ -72,6 +72,10 @@ class sr_site::requesttracker ( ) {
   # this, files end up in /. There appears to be no way to override: the RTx
   # extension installer doesn't appear to include the RT configuration itself.
   # (Which makes sense seeing how there can be multiple RT sites).
+  #
+  # XXX: Turns out this has to be specified in the site config _too_. This
+  # raises the possibility that this is a bug in RT, in that it doesn't load
+  # config it should? Anyway, ship with both configs for now.
   file  { '/usr/share/perl5/vendor_perl/RT/Generated.pm':
     ensure => present,
     owner => root,
