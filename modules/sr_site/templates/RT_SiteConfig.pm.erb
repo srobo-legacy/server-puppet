@@ -73,7 +73,7 @@ Set($LDAPUser, '<%= @anon_account %>');
 Set($LDAPPassword, '<%= @anonpw %>');
 Set($LDAPBase, 'o=sr');
 # Unclear what varaibles go in this filter...
-Set($LDAPFilter, '(&(uid = users))');
+Set($LDAPFilter, '(&(objectClass=posixAccount)(!(uid=*_*)))');
 
 # Map username to be the uid, emails, and for the real person name to be
 # their firstname then surname.
