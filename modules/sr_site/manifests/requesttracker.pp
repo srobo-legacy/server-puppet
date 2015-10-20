@@ -156,6 +156,16 @@ class sr_site::requesttracker ( ) {
     content => template('sr_site/rt_fetchmail.erb'),
   }
 
+  # Install a procmail configuration for delivering RT mail
+  file { '/home/rt/.procmailrc':
+    ensure => present,
+    owner => 'rt',
+    group => 'users',
+    mode => '600',
+    content => template('sr_site/rt_procmail.erb'),
+  }
+
+
   #############################################################################
 
   # Outbound mail configuration. The summary for this is: "Sendmail. Not even
