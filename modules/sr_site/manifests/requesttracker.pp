@@ -154,6 +154,7 @@ class sr_site::requesttracker ( ) {
     group => 'users',
     mode => '600',
     content => template('sr_site/rt_fetchmail.erb'),
+    require => Package['fetchmail'],
   }
 
   # Install a procmail configuration for delivering RT mail
@@ -163,8 +164,16 @@ class sr_site::requesttracker ( ) {
     group => 'users',
     mode => '600',
     content => template('sr_site/rt_procmail.erb'),
+    require => Package['procmail'],
   }
 
+  # Fetch fritter/rt email every 5 mins
+  cron { 'fetch-rt-mail':
+    command => 'fetchmail',
+    user => 'rt',
+    minute => '*/5',
+    require => [File['/home/rt/.procmailrc'],File['/home/rt/.fetchmailrc']],
+  }
 
   #############################################################################
 
