@@ -178,6 +178,41 @@ WSGISocketPrefix /var/run/wsgi
             Require all granted
         </Directory>
 
+        # Request tracker: configure options for it's static html, perl
+        # handling, authn/authz.
+        Alias /rt "/usr/share/rt/html"
+
+        # Really, perl.
+        <Location /rt>
+            SetHandler modperl
+            PerlResponseHandler Plack::Handler::Apache2
+            PerlSetVar psgi_app /usr/sbin/rt-server
+
+            Options FollowSymLinks
+
+            # Copy+pasta auth block
+            AuthType basic
+            AuthName "Student Robotics RT"
+            AuthBasicProvider ldap
+
+            AuthLDAPURL ldap://localhost:389/ou=users,o=sr?uid?base?(objectClass=*)
+            AuthLDAPBindDN "uid=anon,ou=users,o=sr"
+            AuthLDAPBindPassword "<%= @anonpw %>"
+
+            AuthLDAPGroupAttribute memberUid
+            AuthLDAPGroupAttributeIsDN off
+
+            # Allow unrestricted access from localhost (i.e. the mailgate
+            # script) but require auth for everything else.
+            <RequireAny>
+                    Require host localhost
+                    <RequireAll>
+                            Require ldap-group cn=mentors,ou=groups,o=sr
+                            Require valid-user
+                    </RequireAll>
+            </RequireAny>
+        </Location>
+
         ########## SSL stuff below
 
         # Force users to use HTTPS again in the future
