@@ -202,10 +202,15 @@ WSGISocketPrefix /var/run/wsgi
             AuthLDAPGroupAttribute memberUid
             AuthLDAPGroupAttributeIsDN off
 
-            <RequireAll>
-                    Require ldap-group cn=mentors,ou=groups,o=sr
-                    Require valid-user
-            </RequireAll>
+            # Allow unrestricted access from localhost (i.e. the mailgate
+            # script) but require auth for everything else.
+            <RequireAny>
+                    Require host localhost
+                    <RequireAll>
+                            Require ldap-group cn=mentors,ou=groups,o=sr
+                            Require valid-user
+                    </RequireAll>
+            </RequireAny>
         </Location>
 
         ########## SSL stuff below
