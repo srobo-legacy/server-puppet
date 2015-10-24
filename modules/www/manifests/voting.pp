@@ -13,7 +13,7 @@ class www::voting ($git_root, $web_root_dir) {
   file { '/home/voting':
     ensure  => directory,
     owner   => 'voting',
-    group   => 'users',
+    group   => 'voting',
     mode    => '0711',
     require => User['voting'],
   }
@@ -21,16 +21,23 @@ class www::voting ($git_root, $web_root_dir) {
   file { '/home/voting/public_html':
     ensure  => directory,
     owner   => 'voting',
-    group   => 'users',
+    group   => 'voting',
     mode    => '0711',
     require => [User['voting'], File['/home/voting']],
+  }
+
+  # Need a separate group so that
+  group { 'voting':
+    ensure  => present,
+    gid     => 1050,
+    system  => false,
   }
 
   user { 'voting':
     ensure  => present,
     comment => 'Owner of voting record files',
     shell   => '/sbin/nologin',
-    gid     => 'users',
+    gid     => 'voting',
     home    => '/home/voting',
   }
 
@@ -42,14 +49,14 @@ class www::voting ($git_root, $web_root_dir) {
     revision => 'origin/master',
     require  => [Package['PyYAML'], User['voting']],
     owner    => 'voting',
-    group    => 'users',
+    group    => 'voting',
   }
 
   # Directory for storing votes in. Only accessible by the voting user itself.
   file { '/home/voting/public_html/voting/votes':
     ensure  => directory,
     owner   => 'voting',
-    group   => 'users',
+    group   => 'voting',
     mode    => '0700', # Prohibit people from seeing who voted.
     require => Vcsrepo['/home/voting/public_html/voting'],
   }
