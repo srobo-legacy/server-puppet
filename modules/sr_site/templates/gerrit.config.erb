@@ -53,11 +53,11 @@
 	link = https://<%= @www_canonical_hostname %>/trac/ticket/$1
 
 [commentlink "git-revision"]
-	match = "([^\\s]+).git@([^\\s]+)"
+	match = "([^\\s]+)\\.git@([^\\s]+)"
 	link = https://<%= @www_canonical_hostname %>/cgit/$1.git/commit/?id=$2
 
 [commentlink "git"]
-	match = "([^\\s]+).git"
+	match = "([^\\s]+)\\.git"
 	link = https://<%= @www_canonical_hostname %>/cgit/$1.git
 
 [commentlink "cgit"]
