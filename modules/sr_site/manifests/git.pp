@@ -90,8 +90,8 @@ class sr_site::git($git_root) {
       provider => git,
       source => "${git_root}/scripts",
       revision => 'origin/master',
-      owner => 'root',
-      group => 'root',
+      owner => 'gerrit',
+      group => 'users',
       require => [File['/srv/git'], Exec['ldap-groups-flushed']],
     }
   }
