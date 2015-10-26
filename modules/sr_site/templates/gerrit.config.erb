@@ -49,7 +49,7 @@
 	username = gerrit
 
 [commentlink "ticket"]
-	match = "#(\\d+)"
+	match = "[^&]#(\\d+)"
 	link = https://<%= @www_canonical_hostname %>/trac/ticket/$1
 
 [commentlink "git-revision"]
