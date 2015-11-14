@@ -35,8 +35,9 @@ class sr_site::willie ($git_root) {
     require  => Package['willie'],
   }
 
-  # Install the service, only if the live instance
-  if !$devmode {
+  # Install the service, only if requested (usually only on the live instance)
+  $srbot_enabled = hiera('srbot_enabled')
+  if $srbot_enabled {
     # Configure the willie instance
     $config_path = "${home_dir}/willie.cfg"
     $srbot_nick = hiera('srbot_nick')

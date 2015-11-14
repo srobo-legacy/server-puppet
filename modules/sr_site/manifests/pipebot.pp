@@ -42,7 +42,9 @@ class sr_site::pipebot ( $git_root ) {
     require => Vcsrepo[$root_dir],
   }
 
-  if !$devmode {
+  # Install the service, only if requested (usually only on the live instance)
+  $pipebot_enabled = hiera('pipebot_enabled')
+  if $pipebot_enabled {
     # Also, some systemd goo to install the service.
     file { '/etc/systemd/system/pipebot.service':
       ensure => present,
