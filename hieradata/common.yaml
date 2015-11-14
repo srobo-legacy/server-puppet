@@ -96,6 +96,11 @@ pipebot_nick: srpipebot-dev
 pipebot_ident: srpipebot-dev
 
 
+# SRbot
+
+srbot_nick: srbot-dev
+
+
 # Gerrit
 
 # Password for Gerrit's MySQL account. Plaintext.
