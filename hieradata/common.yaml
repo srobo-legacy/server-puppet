@@ -1,7 +1,4 @@
 ---
-pipebot_nick: srpipebot-dev
-pipebot_ident: srpipebot-dev
-
 # Base DNS name for the site being hosted, for example 'studentrobotics.org' or 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or git.) are based on this name.
 www_base_hostname: "%{::fqdn}"
 
