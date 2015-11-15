@@ -7,6 +7,7 @@ Group=users
 ExecStart=/home/pipebot/pipebot/pipebot
 Type=simple
 Restart=on-failure
+PrivateTmp=False
 
 [Install]
 WantedBy=multi-user.target
