@@ -168,12 +168,13 @@ class sr_site::requesttracker ( ) {
   }
 
   # Fetch fritter/rt email every 5 mins
-  cron { 'fetch-rt-mail':
-    command => 'fetchmail',
-    user => 'rt',
-    minute => '*/5',
-    require => [File['/home/rt/.procmailrc'],File['/home/rt/.fetchmailrc']],
-  }
+  # Disabled because RT deployment stalled.
+#  cron { 'fetch-rt-mail':
+#    command => 'fetchmail',
+#    user => 'rt',
+#    minute => '*/5',
+#    require => [File['/home/rt/.procmailrc'],File['/home/rt/.fetchmailrc']],
+#  }
 
   #############################################################################
 
