@@ -39,6 +39,7 @@ class sr_site::willie ($git_root) {
   if !$devmode {
     # Configure the willie instance
     $config_path = "${home_dir}/willie.cfg"
+    $srbot_nick = hiera('srbot_nick')
     file { $config_path:
       ensure  => present,
       content => template('sr_site/willie.cfg.erb'),
