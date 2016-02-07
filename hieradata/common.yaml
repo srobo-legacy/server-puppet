@@ -92,12 +92,14 @@ piwik_admin_email: 'info@studentrobotics.org'
 
 # Pipebot
 
+pipebot_enabled: false
 pipebot_nick: srpipebot-dev
 pipebot_ident: srpipebot-dev
 
 
 # SRbot
 
+srbot_enabled: false
 srbot_nick: srbot-dev
 
 
