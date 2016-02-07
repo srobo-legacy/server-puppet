@@ -17,14 +17,14 @@ max_diff_files = 0
 wiki_format_messages = true
 
 [components]
+tracrpc.* = enabled
+tracvote.* = enabled
 webadmin.basics.* = enabled
 webadmin.logging.* = enabled
 webadmin.perm.* = enabled
 webadmin.plugin.* = enabled
 webadmin.ticket.* = enabled
 webadmin.web_ui.* = enabled
-tracrpc.* = enabled
-tracvote.* = enabled
 
 [header_logo]
 alt =
@@ -91,6 +91,10 @@ preserve_newlines = no
 accept = new -> assigned
 accept.operations = set_owner_to_self
 accept.permissions = TICKET_MODIFY
+fix_committed = new,assigned,reopened -> release_pending
+fix_committed.operations = set_resolution
+fix_committed.permissions = TICKET_MODIFY
+fix_committed.set_resolution = fixed
 leave = * -> *
 leave.default = 1
 leave.operations = leave_status
@@ -103,10 +107,6 @@ reopen.permissions = TICKET_CREATE
 resolve = new,assigned,reopened,release_pending -> closed
 resolve.operations = set_resolution
 resolve.permissions = TICKET_MODIFY
-fix_committed = new,assigned,reopened -> release_pending
-fix_committed.operations = set_resolution
-fix_committed.set_resolution = fixed
-fix_committed.permissions = TICKET_MODIFY
 
 [timeline]
 changeset_long_messages = false
@@ -132,9 +132,10 @@ permission_store = DefaultPermissionStore
 #repository_type = svn
 timeout = 20
 
+[vote]
+paths = /ticket/*
+
 [wiki]
 ignore_missing_pages = true
 split_page_names = false
 
-[vote]
-paths = /ticket/*
