@@ -52,7 +52,7 @@ http {
         # These two paths are hard-coded in SRs config files everywhere
         ssl_certificate     /etc/pki/tls/certs/server-nginx.crt;
         ssl_certificate_key /etc/pki/tls/private/server.key;
-        # NB: doesn't feature SSL3. Is the nginx default.
+        # NB: doesn't feature SSL3 which is in the nginx default.
         ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
         # Default aside from disabling RC4
         ssl_ciphers         HIGH:!aNULL:!MD5:!RC4:!EXPORT;
