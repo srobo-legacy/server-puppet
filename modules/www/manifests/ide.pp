@@ -162,6 +162,12 @@ class www::ide ( $git_root, $root_dir ) {
     ensure => absent,
   }
 
+  # Team activity script
+  file { "${ide_repos_root}/team-activity.py":
+    ensure  => link,
+    target  => "${root_dir}/scripts/team-activity.py",
+  }
+
   define repos_admin_script($dir, $command) {
     file { "${dir}/${name}":
       ensure  => present,
