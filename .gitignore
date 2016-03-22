@@ -2,3 +2,6 @@
 vendor
 Gemfile.lock
 .vagrant
+
+# Dev machine local config
+/hieradata/nodes/sr-vm.local.yaml
