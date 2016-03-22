@@ -33,23 +33,6 @@ WSGISocketPrefix /var/run/wsgi
                 AllowOverride All
         </Directory>
 
-        # Block various parts of the IDE being accessed externally
-        <LocationMatch "/ide/(config|notifications|repos|settings|uploads)">
-                Require all denied
-        </LocationMatch>
-
-        # Deny listing the zips
-        <Directory "<%= @web_root_dir %>/ide/zips">
-                Options -Indexes
-
-                # Copied from IDE cyanide.git/resources/zips-htaccess commit c501109cc8b50.
-                # This is a hack to work around certain cases where IE8 is misconfigured.
-                # Apparently in some cases IE8 will die if not told to cache when connecting over ssl.
-                ExpiresDefault "access plus 6 seconds"
-                # Ensures the files are opened as a download
-                Header set Content-Disposition attachment
-        </Directory>
-
         # Deny everyone userdirs, except explicitly configured accounts
         UserDir disabled
         # Voting user requires a public_html dir
