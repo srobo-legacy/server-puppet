@@ -108,7 +108,7 @@ class sr_site::srcomp($git_root,
   vcsrepo { $ref_compstate:
     ensure    => bare,
     provider  => git,
-    source    => "${git_root}/comp/sr2015-comp.git",
+    source    => "${git_root}/comp/sr2016-comp.git",
     user      => 'srcomp',
     require   => [User['srcomp'],File[$srcomp_home_dir]],
   }
