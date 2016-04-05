@@ -143,9 +143,9 @@ class sr_site::requesttracker ( ) {
   }
 
   # Load credentials and address for the RT mailbox. Right now it's fritter.
-  $rt_mail_addr = hiera('fritter_mail_user')
-  $rt_mail_pw = hiera('fritter_mail_pw')
-  $rt_mail_imap = hiera('fritter_mail_imap')
+  $rt_mail_addr = hiera('rt_mail_user')
+  $rt_mail_pw = hiera('rt_mail_pw')
+  $rt_mail_imap = hiera('rt_mail_imap')
 
   # Install a fetchmail configuration for getting RT mail
   file { '/home/rt/.fetchmailrc':
@@ -185,7 +185,7 @@ class sr_site::requesttracker ( ) {
     ensure => present,
   }
 
-  $rt_mail_smtp = hiera('fritter_mail_smtp')
+  $rt_mail_smtp = hiera('rt_mail_smtp')
 
   # Install postfix main config file.
   file { '/etc/postfix/main.cf':

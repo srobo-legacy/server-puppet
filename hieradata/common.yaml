@@ -165,3 +165,8 @@ rt_admin_address: root@localhost
 
 # Default address for RT emails to be sent from
 default_rt_address: schools@localhost
+
+rt_mail_user: rt@localhost
+rt_mail_pw: 123456
+rt_mail_imap: imap.example.com
+rt_mail_smtp: smtp.example.com
