@@ -142,7 +142,7 @@ class sr_site::requesttracker ( ) {
     require => File['/home/rt'],
   }
 
-  # Load credentials and address for the RT mailbox. Right now it's fritter.
+  # Load credentials and address for the RT mailbox.
   $rt_mail_addr = hiera('rt_mail_user')
   $rt_mail_pw = hiera('rt_mail_pw')
   $rt_mail_imap = hiera('rt_mail_imap')
@@ -167,7 +167,7 @@ class sr_site::requesttracker ( ) {
     require => Package['procmail'],
   }
 
-  # Fetch fritter/rt email every 5 mins
+  # Fetch rt email every 5 mins
   cron { 'fetch-rt-mail':
     command => 'fetchmail',
     user => 'rt',
