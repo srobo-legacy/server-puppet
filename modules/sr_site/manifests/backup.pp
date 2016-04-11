@@ -22,6 +22,7 @@ class sr_site::backup ( $git_root ) {
     $www::piwik::piwik_db_name,
     $sr_site::trac::trac_db_name,
     $sr_site::gerrit::gerrit_db_name,
+    $sr_site::requesttracker::rt_db_name,
   ]
   $list_of_dbs = join($all_dbs, ',')
   $ide_loc = $www::ide::root_dir
