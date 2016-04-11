@@ -9,8 +9,13 @@ LOGABSTRACT=no
 SHELL=/bin/sh
 
 :0:
+* ^To.*mediaconsent@studentrobotics.org.*$
+| /usr/bin/rt-mailgate --action correspond --queue mediaconsent --url http://localhost:8000/rt/
+
+:0:
 # No filters: send all mail to mailgate. Localhost url does not need to be
-# parameterised by puppet.
+# parameterised by puppet. Default to general queue.
 | /usr/bin/rt-mailgate --action correspond --url http://localhost:8000/rt/
+
 
 # end of .procmailrc
