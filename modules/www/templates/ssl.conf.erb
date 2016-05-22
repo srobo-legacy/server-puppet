@@ -192,7 +192,7 @@ WSGISocketPrefix /var/run/wsgi
             </RequireAll>
         </Location>
 
-	<Location /rt/REST/1.0/NoAuth>
+        <Location /rt/REST/1.0/NoAuth>
                 <RequireAll>
                         Require host localhost
                 </RequireAll>
@@ -202,8 +202,8 @@ WSGISocketPrefix /var/run/wsgi
         ########## SSL stuff below
 
         # Force users to use HTTPS again in the future
-	# Use regardless of whether we're serving over SSL: whatever parses
-	# these headers should be getting it over SSL, no excuses.
+        # Use regardless of whether we're serving over SSL: whatever parses
+        # these headers should be getting it over SSL, no excuses.
         Header add Strict-Transport-Security "max-age=15768000"
 
         # Separate log files
