@@ -57,7 +57,7 @@ WSGISocketPrefix /var/run/wsgi
         UserDir enabled voting
 
         # Force users to use HTTPS again in the future
-        Header add Strict-Transport-Security "max-age=15768000; includeSubDomains"
+        Header add Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
 
         # Separate log files
         ErrorLog logs/ide_ssl_error_log

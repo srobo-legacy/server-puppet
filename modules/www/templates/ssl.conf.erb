@@ -204,7 +204,7 @@ WSGISocketPrefix /var/run/wsgi
         # Force users to use HTTPS again in the future
         # Use regardless of whether we're serving over SSL: whatever parses
         # these headers should be getting it over SSL, no excuses.
-        Header add Strict-Transport-Security "max-age=15768000; includeSubDomains"
+        Header add Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
 
         # Separate log files
         ErrorLog logs/main_error_log
