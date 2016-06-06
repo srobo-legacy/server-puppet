@@ -57,7 +57,7 @@
 	link = https://<%= @www_canonical_hostname %>/cgit/$1.git/commit/?id=$2
 
 [commentlink "git"]
-	match = "([^\\s\\(]+)\\.git"
+	match = "([^\\s\\(]+)\\.git\\b"
 	link = https://<%= @www_canonical_hostname %>/cgit/$1.git
 
 [commentlink "cgit"]
