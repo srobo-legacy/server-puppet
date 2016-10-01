@@ -90,10 +90,6 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'sr_site::backup':
-    git_root => $git_root,
-  }
-
   class { 'sr_site::pipebot':
     git_root => $git_root,
   }
@@ -107,6 +103,12 @@ class sr_site( $git_root ) {
   }
 
   class { 'sr_site::requesttracker':
+  }
+
+  # Backups must be last as it relies on things in the above classes
+  # having already been evaluated (mostly database names).
+  class { 'sr_site::backup':
+    git_root => $git_root,
   }
 
   # Sanity stuff
