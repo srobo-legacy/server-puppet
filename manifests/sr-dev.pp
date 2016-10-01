@@ -3,5 +3,5 @@ $extlookup_precedence = [ 'common' ]
 $devmode = true
 
 class { 'sr_site':
-  git_root => 'git://srobo.org',
+  git_root => 'git://git.srobo.org',
 }
