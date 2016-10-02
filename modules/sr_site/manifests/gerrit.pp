@@ -218,7 +218,7 @@ class sr_site::gerrit {
 
   # Load the contents of the Gerrit database from backup.
   exec { 'pop_gerrit_db':
-    command => "mysql -u gerrit --password='${gerrit_db_pw}' reviewdb < /srv/secrets/mysql/${gerrit_db_name}.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/gerrit_installed",
+    command => "mysql -u gerrit --password='${gerrit_db_pw}' reviewdb < /srv/secrets/mysql/${gerrit_db_name}.db && touch /usr/local/var/sr/gerrit_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/gerrit_installed',
     require => Mysql::Db['reviewdb'],
@@ -229,7 +229,7 @@ class sr_site::gerrit {
   # its SSHD service. Once more, making this use gerrit's own installation
   # process would be a hell of a lot better than this.
   exec { 'install-gerrit-ssh-goo':
-    command => 'curl -L http://www.bouncycastle.org/download/bcprov-jdk16-144.jar > /home/gerrit/srdata/lib/tmpbcdownload; echo "76e37f4f7910c5759be87302f7c4d067  /home/gerrit/srdata/lib/tmpbcdownload" | md5sum -c; if test $? = 1; then exit 1; fi; mv /home/gerrit/srdata/lib/tmpbcdownload /home/gerrit/srdata/lib/bcprov-jdk16-144.jar',
+    command => 'curl -L http://www.bouncycastle.org/download/bcprov-jdk16-144.jar > /home/gerrit/srdata/lib/tmpbcdownload; echo "76e37f4f7910c5759be87302f7c4d067  /home/gerrit/srdata/lib/tmpbcdownload" | md5sum -c && mv /home/gerrit/srdata/lib/tmpbcdownload /home/gerrit/srdata/lib/bcprov-jdk16-144.jar',
     creates => '/home/gerrit/srdata/lib/bcprov-jdk16-144.jar',
     user => 'gerrit',
     require => Exec['install-gerrit'],

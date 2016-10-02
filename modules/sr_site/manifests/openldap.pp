@@ -263,7 +263,7 @@ class sr_site::openldap {
 
   # Load the initial LDAP db if one hasn't been yet.
   exec { 'pop_ldap':
-    command => 'ldapadd -D cn=Manager,o=sr -y /etc/ldap.secret -x -h localhost -f /srv/secrets/ldap/ldap_backup; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/ldap_installed',
+    command => 'ldapadd -D cn=Manager,o=sr -y /etc/ldap.secret -x -h localhost -f /srv/secrets/ldap/ldap_backup && touch /usr/local/var/sr/ldap_installed',
     provider => 'shell',
     creates => '/usr/local/var/sr/ldap_installed',
 
