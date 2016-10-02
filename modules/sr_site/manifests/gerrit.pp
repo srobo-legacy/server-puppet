@@ -218,7 +218,7 @@ class sr_site::gerrit {
 
   # Load the contents of the Gerrit database from backup.
   exec { 'pop_gerrit_db':
-    command => "mysql -u gerrit --password='${gerrit_db_pw}' reviewdb < /srv/secrets/mysql/${gerrit_db_name}.db; if test $? != 0; then exit 1; fi; touch /usr/local/var/sr/gerrit_installed",
+    command => "mysql -u gerrit --password='${gerrit_db_pw}' reviewdb < /srv/secrets/mysql/${gerrit_db_name}.db && touch /usr/local/var/sr/gerrit_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/gerrit_installed',
     require => Mysql::Db['reviewdb'],
