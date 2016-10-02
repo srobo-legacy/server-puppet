@@ -203,15 +203,12 @@ class www::ide ( $git_root, $root_dir ) {
   # on the assumption that all IDE data is in {config/settings/notifications}.
   exec { 'ide_copy':
     command =>
-         "cp -r /srv/secrets/ide/notifications/* ${root_dir}/notifications;\
-          if test $? != 0; then exit 1; fi;\
-          cp -r /srv/secrets/ide/repos/* ${ide_repos_root};\
-          if test $? != 0; then exit 1; fi;\
-          cp -r /srv/secrets/ide/settings/* ${root_dir}/settings;\
-          if test $? != 0; then exit 1; fi;\
-          chown -R apache.apache ${ide_repos_root}/*;\
-          chown -R apache.apache ${root_dir}/notifications/*;\
-          chown -R apache.apache ${root_dir}/settings/*;\
+         "cp -r /srv/secrets/ide/notifications/* ${root_dir}/notifications && \
+          cp -r /srv/secrets/ide/repos/* ${ide_repos_root} && \
+          cp -r /srv/secrets/ide/settings/* ${root_dir}/settings && \
+          chown -R apache.apache ${ide_repos_root}/* && \
+          chown -R apache.apache ${root_dir}/notifications/* && \
+          chown -R apache.apache ${root_dir}/settings/* && \
           touch /usr/local/var/sr/ide_installed",
     provider => 'shell',
     creates => '/usr/local/var/sr/ide_installed',
