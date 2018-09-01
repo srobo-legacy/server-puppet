@@ -2,9 +2,7 @@
 
 class www::ide ( $git_root, $root_dir ) {
   # Numerous packages are required; the IDE is written in php, binds to ldap,
-  # runs pylint to syntax check things. In the past it used a java web browser
-  # plugin which is why there are java dependancies, but it's not been deployed
-  # this year (sr2013). Everyone I spoke to didn't want it to exist any more.
+  # runs pylint to syntax check things.
   package { ['pylint', 'php-cli', 'php-ldap',
 
               #### Packages required for packaging robot.zip:
