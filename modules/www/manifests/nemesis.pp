@@ -9,6 +9,10 @@ class www::nemesis ( $git_root, $root_dir ) {
 
   $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
 
+  package { 'sqlite':
+    ensure  => present,
+  }
+
   package { ['python-sqlite3dbm',
              'python-ldap',
              'python-unidecode',
@@ -37,7 +41,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     creates => $nemesis_db,
     path => ['/usr/bin'],
     user => 'wwwcontent',
-    require => Vcsrepo[$root_dir],
+    require => [Vcsrepo[$root_dir], Package['sqlite']],
   }
 
   # Maintain permissions of the sqlite DB. SQLite determines what user to create
