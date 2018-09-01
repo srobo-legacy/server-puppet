@@ -10,7 +10,6 @@ class www::phpbb ( $git_root, $root_dir ) {
   package { 'php-mysqlnd':
     ensure => present,
     notify => Service['httpd'],
-    alias  => 'php-mysql',
   }
 
   # Checkout of the phpbb sources
@@ -20,7 +19,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
     revision => 'release-3.1.6',
-    require => Package[ 'php', 'php-mysql' ],
+    require => Package[ 'php', 'php-mysqlnd' ],
   }
 
   # Create the MySQL db for the forum
