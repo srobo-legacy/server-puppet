@@ -42,8 +42,8 @@ class www::ide_httpd ($git_root, $root_dir) {
 
   # File to enable php in the ide specific httpd
   file { "/etc/httpd/conf.ide.d/php.conf":
-    ensure => present,
-    content => template('www/php.conf.erb'),
+    ensure => link,
+    target => '/etc/httpd/conf.d/php.conf',
   }
 
   # File to enable php in the ide specific httpd
