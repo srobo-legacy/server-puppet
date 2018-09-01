@@ -27,7 +27,6 @@ class sr_site::backup ( $git_root ) {
   $ide_loc = $www::ide::root_dir
   $team_status_images_loc = $www::ide::team_status_imgs_live_dir
   $forum_attachments_loc = $www::phpbb::attachments_dir
-  $fritter_db_loc = $sr_site::fritter::fritter_sqlite_db
   $nemesis_db_loc = $www::nemesis::nemesis_db
 
   # A list of users permitted to use backups. This list doesn't actually allow

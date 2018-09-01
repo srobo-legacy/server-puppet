@@ -57,7 +57,6 @@ class www::ide_httpd ($git_root, $root_dir) {
     notify => Exec['httpd-ide-systemd-load'],
   }
 
-  # Lifted from fritter,
   # systemd has to be reloaded before picking this up,
   exec { 'httpd-ide-systemd-load':
     provider  => 'shell',

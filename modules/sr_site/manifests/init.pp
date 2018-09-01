@@ -73,11 +73,6 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  # Sends emails to LDAP groups
-  class { 'sr_site::fritter':
-    git_root => $git_root,
-  }
-
   class { 'sr_site::srcomp':
     git_root => $git_root,
     src_dir  => '/usr/local/src/srcomp',

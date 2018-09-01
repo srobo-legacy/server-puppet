@@ -137,27 +137,3 @@ nemesis_mail_smtp: ponies
 nemesis_mail_user: ponies
 nemesis_mail_pw: ponies
 nemesis_mail_from: ponies
-
-
-# Fritter
-
-# SMTP server for fritter to send emails by
-fritter_mail_smtp: ponies
-
-# IMAP server to read fritter mail from
-fritter_mail_imap: imap.example.com
-
-# Username for fritter to auth with (for gmail based systems, username@domain)
-fritter_mail_user: ponies
-
-# Plaintext emaili account password
-fritter_mail_pw: ponies
-
-# Email address for fritter mail to have the 'From:' field set to. The format is: 'Some Name <mail@addr>', as you'll find in most popular email clients
-fritter_mail_from: 'Student Robotics Example <info@example.com>'
-
-# Plaintext password for fritter ldap account
-fritter_ldap_user_pw: '123456'
-
-# Fritter ldap user password, encoded as SSHA
-fritter_ldap_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
