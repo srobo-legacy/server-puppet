@@ -103,6 +103,18 @@ srbot_enabled: false
 srbot_nick: srbot-dev
 
 
+# Trac
+
+# SMTP server for Trac to send emails by
+trac_email_smtp: ponies
+
+# Full (name@domain) email address for Trac to send emails as.
+trac_email_user: ponies
+
+# Password for Trac's email account. Plaintext.
+trac_email_pw: ponies
+
+
 # Gerrit
 
 # Password for Gerrit's MySQL account. Plaintext.

@@ -68,10 +68,9 @@ class sr_site::trac ( $git_root ) {
 
   # Install the trac config file
   $www_canonical_hostname = hiera('www_canonical_hostname')
-  # Yes, it really does re-use the gerrit email credential
-  $trac_email_pw = hiera('gerrit_email_pw')
-  $trac_email_user = hiera('gerrit_email_user')
-  $trac_email_smtp = hiera('gerrit_email_smtp')
+  $trac_email_pw = hiera('trac_email_pw')
+  $trac_email_user = hiera('trac_email_user')
+  $trac_email_smtp = hiera('trac_email_smtp')
   $trac_db_string = "mysql://${trac_db_user}:${mysql_trac_pw}@${trac_db_host}/${trac_db_name}"
   $trac_env_conf = "${trac_env_root}/conf"
   file { $trac_env_conf:
