@@ -106,9 +106,6 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'sr_site::requesttracker':
-  }
-
   # Sanity stuff
   package { "rsyslog":
     ensure => latest,
