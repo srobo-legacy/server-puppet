@@ -61,10 +61,6 @@ class sr_site( $git_root ) {
 		Class['www']],
   }
 
-  class { 'sr_site::gerrit':
-    require => File['/usr/local/var/sr'],
-  }
-
   include sr_site::subversion
   include sr_site::login
   include sr_site::meta

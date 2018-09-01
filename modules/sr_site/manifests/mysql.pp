@@ -1,4 +1,4 @@
-# Various things need mysql: PHPBB forums, Piwik, Gerrit, etc.
+# Various things need mysql: PHPBB forums, Piwik, etc.
 
 class sr_site::mysql {
   $root_password = hiera('mysql_rootpw')

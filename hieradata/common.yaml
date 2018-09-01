@@ -112,24 +112,6 @@ trac_email_user: ponies
 trac_email_pw: ponies
 
 
-# Gerrit
-
-# Password for Gerrit's MySQL account. Plaintext.
-gerrit_db_pw: '123456'
-
-# Secret key used by gerrit to authenticate email confirmations. I'm uncertain of the format, but in deployment it appears to be 26 bytes of entropy encoded in base64.
-gerrit_email_key: ponies
-
-# SMTP server for Gerrit to send emails by
-gerrit_email_smtp: ponies
-
-# Full (name@domain) email address for Gerrit to send emails as.
-gerrit_email_user: ponies
-
-# Password for Gerrit's email account. Plaintext.
-gerrit_email_pw: ponies
-
-
 # Nemesis
 
 # Curiously undocumented, but guessable

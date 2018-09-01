@@ -871,12 +871,6 @@ NameVirtualHost *:80
         RedirectPermanent / https://<%= @www_canonical_hostname %>/ide/
 </VirtualHost>
 
-<VirtualHost *:80>
-        ServerName gerrit.<%= @www_base_hostname %>
-        ServerAlias gerrit.srobo.org
-        RedirectPermanent / https://<%= @www_canonical_hostname %>/gerrit/
-</VirtualHost>
-
 # Serve SVN over port 80. This is how it was on optimus to keep old checkouts
 # working, it can probably be retired to SSL-only nowdays.
 <VirtualHost *:80>

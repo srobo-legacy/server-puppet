@@ -1,5 +1,5 @@
 # NB: a lot of configuration here is related to the old lumps of code SR used
-# to generate RSS feeds for pushes/commits, which were replaced by Gerrit, and
+# to generate RSS feeds for pushes/commits, which were replaced by git, and
 # are thus commented out.
 
 class sr_site::git($git_root) {
@@ -66,16 +66,16 @@ class sr_site::git($git_root) {
   $git_dir = '/srv/git'
   file { $git_dir:
     ensure => directory,
-    owner => 'gerrit',
+    owner => 'git',
     group => 'users',
     mode => '0755',
-    require => User['gerrit'],
+    require => User['git'],
   }
 
   # Our custom cgit logo
   file { "${git_dir}/srgit.png":
     ensure => 'file',
-    owner => 'gerrit',
+    owner => 'git',
     group => 'users',
     mode => '0644',
     source => 'puppet:///modules/sr_site/srgit.png',
@@ -90,7 +90,7 @@ class sr_site::git($git_root) {
       provider => git,
       source => "${git_root}/scripts",
       revision => 'origin/master',
-      owner => 'gerrit',
+      owner => 'git',
       group => 'users',
       require => [File['/srv/git'], Exec['ldap-groups-flushed']],
     }
