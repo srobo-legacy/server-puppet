@@ -3,15 +3,7 @@
 class www::ide ( $git_root, $root_dir ) {
   # Numerous packages are required; the IDE is written in php, binds to ldap,
   # runs pylint to syntax check things.
-  package { ['pylint', 'php-cli', 'php-ldap',
-
-              #### Packages required for packaging robot.zip:
-              # These contain the various *-strip utils required:
-              'msp430-binutils', 'binutils-arm-linux-gnu',
-              # Contains readelf:
-              'binutils',
-            ]:
-
+  package { ['pylint', 'php-cli', 'php-ldap']:
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo[$root_dir],
