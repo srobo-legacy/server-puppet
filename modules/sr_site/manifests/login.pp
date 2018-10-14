@@ -8,30 +8,6 @@ class sr_site::login {
     ensure => present,
   }
 
-  # PAM configuration for SSHD, just passes control to the sr-auth stack.
-  file { '/etc/pam.d/sshd':
-    ensure => present,
-    source => 'puppet:///modules/sr_site/sshd',
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    notify => Service['nscd'],
-    require => File['/etc/pam_ldap.conf'],
-  }
-
-  # sr-auth PAM stack; our primary PAM config goo. Allows authentication and
-  # account-info from LDAP, subject to the pam_ldap configuration. Also the same
-  # operations for local users.
-  file { '/etc/pam.d/sr-auth':
-    ensure => present,
-    source => 'puppet:///modules/sr_site/sr-auth',
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    notify => Service['nscd'],
-    require => File['/etc/pam_ldap.conf'],
-  }
-
   # Configurate who can run what using sudo.
   file { '/etc/sudoers':
     ensure => present,
