@@ -10,6 +10,14 @@ class www::httpd( $web_root_dir ) {
   # anon user + password to do that.
   $anonpw = hiera('ldap_anon_user_pw')
 
+  selinux::port { 'allow-httpd-port':
+    ensure    => 'present',
+    seltype   => 'http_port_t',
+    protocol  => 'tcp',
+    port      => $service_port_no,
+    before    => [Service['httpd-ide']],
+  }
+
   # Use apache + mod_ssl to serve, wsgi for python services
   package { [ 'httpd', 'mod_ssl', 'mod_wsgi', 'mod_ldap' ]:
     ensure => latest,
