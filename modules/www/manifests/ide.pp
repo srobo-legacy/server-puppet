@@ -3,7 +3,7 @@
 class www::ide ( $git_root, $root_dir ) {
   # Numerous packages are required; the IDE is written in php, binds to ldap,
   # runs pylint to syntax check things.
-  package { ['pylint', 'php-cli', 'php-ldap']:
+  package { ['pylint', 'php-cli', 'php-json', 'php-ldap']:
     ensure => present,
     notify => Service['httpd'],
     before => Vcsrepo[$root_dir],
