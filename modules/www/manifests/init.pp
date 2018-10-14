@@ -4,9 +4,6 @@
 class www( $git_root ) {
   $web_root_dir = '/var/www/html'
 
-  # SELinux support so we can allow ourselves access to our custom ports
-  include selinux
-
   class { 'www::httpd':
     web_root_dir => $web_root_dir,
   }

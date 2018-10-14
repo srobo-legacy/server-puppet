@@ -37,6 +37,11 @@ class sr_site( $git_root ) {
     ensure => latest,
   }
 
+  augeas { 'disable selinux':
+    context => '/files/etc/selinux/config',
+    changes => ['set SELINUX disabled'],
+  }
+
   # Anonymous git access
   include gitdaemon
 

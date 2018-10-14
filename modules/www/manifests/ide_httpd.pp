@@ -9,14 +9,6 @@ class www::ide_httpd ($git_root, $root_dir) {
   $serve_over_ssl = false
   $service_port_no = 8001
 
-  selinux::port { 'allow-ide_httpd-port':
-    ensure    => 'present',
-    seltype   => 'http_port_t',
-    protocol  => 'tcp',
-    port      => $service_port_no,
-    before    => [Service['httpd-ide']],
-  }
-
   # No additional packages are required
 
   # Pull in relevant variables

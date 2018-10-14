@@ -34,6 +34,3 @@
 [submodule "modules/translate"]
 	path = modules/translate
 	url = https://github.com/puppetlabs/puppetlabs-translate
-[submodule "modules/selinux"]
-	path = modules/selinux
-	url = https://github.com/voxpupuli/puppet-selinux
