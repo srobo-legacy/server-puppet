@@ -32,6 +32,11 @@ class sr_site( $git_root ) {
     ensure => latest,
   }
 
+  # Fedora no longer ships with a cron installed by default, I chose one at random
+  package { 'cronie':
+    ensure => latest,
+  }
+
   # Anonymous git access
   include gitdaemon
 
