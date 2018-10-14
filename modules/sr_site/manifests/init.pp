@@ -61,7 +61,8 @@ class sr_site( $git_root ) {
 		Class['www']],
   }
 
-  include sr_site::subversion
+  # include sr_site::subversion
+
   include sr_site::login
   include sr_site::meta
 
