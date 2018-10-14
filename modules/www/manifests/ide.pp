@@ -5,7 +5,7 @@ class www::ide ( $git_root, $root_dir ) {
   # runs pylint to syntax check things.
   package { ['pylint', 'php-cli', 'php-json', 'php-ldap']:
     ensure => present,
-    notify => Service['httpd'],
+    notify => Service['httpd-ide'],
     before => Vcsrepo[$root_dir],
   }
 
