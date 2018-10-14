@@ -93,10 +93,6 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'sr_site::willie':
-    git_root => $git_root,
-  }
-
   # Sanity stuff
   package { "rsyslog":
     ensure => latest,
