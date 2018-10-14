@@ -56,7 +56,7 @@ passwordf = open('/etc/ldap.secret')
 pw = passwordf.readlines()[0]
 
 # Connect and bind to ldap
-l = ldap.open("localhost", 389)
+l = ldap.initialize('ldap://localhost:389')
 l.bind('cn=Manager,o=sr', pw)
 
 # Find the list of teams
