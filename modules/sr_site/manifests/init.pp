@@ -109,6 +109,10 @@ class sr_site( $git_root ) {
     ensure => latest,
   }
 
+  package { ['htop', 'nano']:
+    ensure => latest,
+  }
+
   file {'/etc/systemd/journald.conf':
     ensure => present,
     owner => 'root',
