@@ -62,9 +62,6 @@ http {
 
         #access_log  /var/log/nginx/host.access.log  main;
 
-        # Load configuration files for the default server block.
-        include /etc/nginx/default.d/*.conf;
-
         # Send all traffic to the local apache httpd servers.
         location / {
             proxy_pass http://127.0.0.1:8000/;
