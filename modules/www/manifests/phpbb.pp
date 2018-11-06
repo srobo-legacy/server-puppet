@@ -18,7 +18,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     user => 'wwwcontent',
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
-    revision => 'release-3.1.6',
+    revision => 'release-3.2.3',
     require => Package[ 'php', 'php-mysqlnd' ],
   }
 
