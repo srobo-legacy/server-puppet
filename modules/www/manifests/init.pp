@@ -4,6 +4,11 @@
 class www( $git_root ) {
   $web_root_dir = '/var/www/html'
 
+  # many things rely on PHP
+  package { [ 'php' ]:
+    ensure => latest,
+  }
+
   class { 'www::httpd':
     web_root_dir => $web_root_dir,
   }

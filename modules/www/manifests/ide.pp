@@ -18,7 +18,8 @@ class www::ide ( $git_root, $root_dir ) {
     source => "${git_root}/cyanide.git",
     revision => 'origin/master',
     user =>'wwwcontent',
-    require => Class['www::srweb'],
+    # Depend explicitly on PHP here since it's declared at the level above
+    require => [Class['www::srweb'], Package['php']],
   }
 
   # Secret key for encrypting IDE cookies, protecting against users twiddling
