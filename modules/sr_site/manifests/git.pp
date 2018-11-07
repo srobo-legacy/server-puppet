@@ -65,7 +65,7 @@ class sr_site::git($git_root) {
       revision => 'origin/master',
       owner => 'git',
       group => 'users',
-      require => [File['/srv/git'], Exec['ldap-groups-flushed']],
+      require => File['/srv/git'],
     }
   }
 
@@ -85,6 +85,6 @@ class sr_site::git($git_root) {
     owner => 'git',
     group => 'root',
     mode => '0644',
-    require => [Package['cgit'], Exec['ldap-groups-flushed']],
+    require => Package['cgit'],
   }
 }
