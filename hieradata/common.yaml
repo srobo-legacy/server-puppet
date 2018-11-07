@@ -55,7 +55,7 @@ ldap_mediaconsent_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
 # PhpBB
 
 # Name for phpBB's MySQL account
-phpbb_sql_user: phpbb_sr2013
+phpbb_sql_user: phpbb_user
 
 # Password for phpBB's MySQL account. Plaintext.
 phpbb_sql_pw: '123456'
