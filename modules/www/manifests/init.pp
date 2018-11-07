@@ -84,6 +84,7 @@ class www( $git_root ) {
   class { 'www::ide':
     git_root => $git_root,
     root_dir => "${web_root_dir}/ide",
+    team_status_imgs_live_dir => "${web_root_dir}/team-images",
     require => [User['wwwcontent'], Class['www::srweb']],
   }
 

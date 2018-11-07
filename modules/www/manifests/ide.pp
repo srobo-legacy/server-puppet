@@ -1,6 +1,6 @@
 # The IDE. Here be dragons.
 
-class www::ide ( $git_root, $root_dir ) {
+class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   # Numerous packages are required; the IDE is written in php, binds to ldap,
   # runs pylint to syntax check things.
   package { ['pylint', 'php-cli', 'php-json', 'php-ldap']:
@@ -38,7 +38,6 @@ class www::ide ( $git_root, $root_dir ) {
   $ide_key_file = "${root_dir}/config/ide-key.key"
   $team_status_dir = "${root_dir}/settings/team-status"
   $team_status_imgs_dir = "${root_dir}/uploads/team-status"
-  $team_status_imgs_live_dir = "${root_dir}/../images/teams"
   $ide_ldap_pw = hiera('ide_ldap_user_pw')
   file { "${root_dir}/config/local.ini":
     ensure => present,
@@ -107,8 +106,7 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # Team Status dir. Contains post-reviewed team-status images
-  # Warning: This folder is actually outside the IDE tree!
-  #          It should already exist -- we're just setting permissions here
+  # Warning: This folder may be outside the IDE tree!
   file { $team_status_imgs_live_dir :
     ensure => directory,
     owner => 'wwwcontent',
