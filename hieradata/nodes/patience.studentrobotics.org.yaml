@@ -1,0 +1,12 @@
+---
+devmode: false
+
+# Patience _only_ runs the competitor services
+competition_services: false
+competitor_services: true
+volunteer_services: false
+
+# Not sure if Patience will actually need these given how much proxying happens
+# in front of it, but it seems safer to have them the same as saffron.
+www_base_hostname: studentrobotics.org
+www_canonical_hostname: www.studentrobotics.org
