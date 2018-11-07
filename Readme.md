@@ -1,4 +1,4 @@
-#SRobo Server puppet
+# SRobo Server puppet
 
 This is the puppet config for our server.
 
@@ -6,7 +6,7 @@ High level documentation and how to get started with this all lies at:
 
 https://www.studentrobotics.org/trac/wiki/ServerConfig
 
-##Linting
+## Linting
 
 `puppet-lint` can be used to lint the puppet. To use it do these things:
 
@@ -14,7 +14,7 @@ https://www.studentrobotics.org/trac/wiki/ServerConfig
 1. `bundle install`
 2. `bundle exec rake lint`
 
-##Vagrant Setup
+## Vagrant Setup
 
 1. Initialise the submodules (`git submodule update --init --recursive`)
 2. Clone the dummy-secrets alongside this repo (`git clone git://srobo.org/server/dummy-secrets.git ../dummy-secrets`)
