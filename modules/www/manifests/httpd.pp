@@ -96,5 +96,6 @@ class www::httpd( $web_root_dir ) {
                   File['ssl.conf'],
                   File['server.key'],
                 ],
+    require => File[$web_root_dir],
   }
 }
