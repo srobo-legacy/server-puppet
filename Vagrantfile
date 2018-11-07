@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
         puppet.hiera_config_path    = "hiera.yaml"
         puppet.environment_path     = "."
         puppet.manifests_path       = "manifests"
-        puppet.manifest_file        = "sr-dev.pp"
+        puppet.manifest_file        = "main.pp"
         puppet.module_path          = "modules"
     end
 end

@@ -1,4 +1,6 @@
 ---
+devmode: false
+git_root: /srv/git
 
 pipebot_enabled: true
 pipebot_nick: srpipebot
