@@ -114,6 +114,11 @@ class sr_site( $git_root ) {
     ensure => latest,
   }
 
+  service { 'rsyslog':
+    ensure  => running,
+    require => Package['rsyslog'],
+  }
+
   package { ['htop', 'nano']:
     ensure => latest,
   }
