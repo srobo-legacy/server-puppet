@@ -100,15 +100,4 @@ class www::srweb ( $git_root, $web_root_dir ) {
     mode => '0664',
     require => Vcsrepo[$web_root_dir],
   }
-
-  # Create subscribed_people. No need for extended acls because we don't need
-  # the group to be www-admin any more. People filling out the joining form
-  # will have an entry written to this file (and a pipebot notification)
-  file { "${web_root_dir}/subscribed_people.csv":
-    ensure => present,
-    owner => 'wwwcontent',
-    group => 'apache',
-    mode => '0660',
-    require => Vcsrepo[$web_root_dir],
-  }
 }
