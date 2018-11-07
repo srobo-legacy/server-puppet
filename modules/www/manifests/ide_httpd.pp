@@ -71,7 +71,7 @@ class www::ide_httpd ($git_root, $root_dir) {
     ensure  => running,
     enable => true,
     require => Exec['httpd-ide-systemd-load'],
-    subscribe => [Package['httpd'],
+    subscribe => [Package['httpd', 'php', 'php-json', 'php-ldap'],
                   File['/etc/httpd/conf/ide.conf'],
                   File['/etc/httpd/conf.ide.d/ssl.conf']],
   }
