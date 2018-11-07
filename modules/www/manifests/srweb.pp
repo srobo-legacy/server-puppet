@@ -101,15 +101,6 @@ class www::srweb ( $git_root, $web_root_dir ) {
     require => Vcsrepo[$web_root_dir],
   }
 
-  # Configure php
-  file { '/etc/php.ini':
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0644',
-    source => 'puppet:///modules/www/php.ini',
-  }
-
   # Create subscribed_people. No need for extended acls because we don't need
   # the group to be www-admin any more. People filling out the joining form
   # will have an entry written to this file (and a pipebot notification)
