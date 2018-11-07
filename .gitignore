@@ -3,5 +3,8 @@ vendor
 Gemfile.lock
 .vagrant
 
+# Per machine configs with potentially sensitive data in them
+/hieradata/secrets
+
 # Dev machine local config
 /hieradata/nodes/sr-vm.local.yaml

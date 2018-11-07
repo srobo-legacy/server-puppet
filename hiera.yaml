@@ -5,7 +5,7 @@
   :datadir: /etc/puppet/hieradata
 :hierarchy:
   # Per machine overrides where the content needs to be kept secret
-  - "nodes/secret/%{::fqdn}"
+  - "secrets/%{::fqdn}"
   # Per machine overrides which are under version control
   - "nodes/%{::fqdn}"
   # Shared default configuration
