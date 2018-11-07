@@ -16,7 +16,7 @@ class www::comp_display( $git_root, $web_root_dir ) {
     revision  => 'origin/master',
     owner     => 'wwwcontent',
     group     => 'apache',
-    require   => Vcsrepo[$web_root_dir],
+    require   => File[$web_root_dir],
   }
 
 }

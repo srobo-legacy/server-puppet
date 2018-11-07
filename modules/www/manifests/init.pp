@@ -37,19 +37,27 @@ class www( $git_root ) {
     require => User['wwwcontent'],
   }
 
-  # Primary website served at https://studentrobotics.org. Other applications
-  # exist either as subdirectories or aliases.
-  class { 'www::srweb':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
+  file { $web_root_dir:
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '644',
     require => [User['wwwcontent'], File['/var/www']],
+  }
+
+  file { "$web_root_dir/index.html":
+    ensure  => present,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    mode    => '644',
+    content => "<h2>${::hostname}</h2>",
   }
 
   # Python 2.7.5 docs -- version match the python on the BBs
   class { 'www::python_docs':
     web_root_dir => $web_root_dir,
     version => '2.7.5',
-    require => [User['wwwcontent'], Class['www::srweb']],
+    require => [User['wwwcontent'], File[$web_root_dir]],
   }
 
   # Voting scripts, at srobo.org/~voting/voting
@@ -63,14 +71,14 @@ class www( $git_root ) {
   class { 'www::community_guidelines':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => [User['wwwcontent'], Class['www::srweb']],
+    require => [User['wwwcontent'], File[$web_root_dir]],
   }
 
   # Volunteer Handbook
   class { 'www::volunteer_handbook':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => [User['wwwcontent'], Class['www::srweb']],
+    require => [User['wwwcontent'], File[$web_root_dir]],
   }
 
   # phpBB forum, at srobo.org/forum
@@ -85,21 +93,21 @@ class www( $git_root ) {
     git_root => $git_root,
     root_dir => "${web_root_dir}/ide",
     team_status_imgs_live_dir => "${web_root_dir}/team-images",
-    require => [User['wwwcontent'], Class['www::srweb']],
+    require => [User['wwwcontent'], File[$web_root_dir]],
   }
 
   # A httpd server specifically for the IDE
   class { 'www::ide_httpd':
     git_root => $git_root,
     root_dir => "${web_root_dir}/ide",
-    require => [User['wwwcontent'], Class['www::srweb']],
+    require => [User['wwwcontent'], File[$web_root_dir]],
   }
 
   # Piwik, for getting information about visitors, srobo.org/piwik
   class { 'www::piwik':
     git_root => $git_root,
     root_dir => "${web_root_dir}/piwik",
-    require => [User['wwwcontent'], Class['www::srweb']],
+    require => [User['wwwcontent'], File[$web_root_dir]],
   }
 
   # Web facing user managment interface, srobo.org/userman
@@ -131,14 +139,14 @@ class www( $git_root ) {
   class { 'www::tickets':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => [Class['www::srweb'], Class['sr_site::Openldap']],
+    require => [File[$web_root_dir], Class['sr_site::Openldap']],
   }
 
   # Media Consent System
   class { 'www::mediaconsent':
     git_root => $git_root,
     web_root_dir => $web_root_dir,
-    require => [Class['www::srweb'], Class['sr_site::Openldap'], Class['www::tickets']],
+    require => [File[$web_root_dir], Class['sr_site::Openldap'], Class['www::tickets']],
   }
 
 

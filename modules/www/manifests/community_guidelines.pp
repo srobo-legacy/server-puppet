@@ -12,7 +12,7 @@ class www::community_guidelines( $git_root, $web_root_dir ) {
     revision  => '8d351d565751ca9e36cc701cfece5ec025d335b5',
     owner     => 'wwwcontent',
     group     => 'apache',
-    require   => Vcsrepo[$web_root_dir],
+    require   => File[$web_root_dir],
   }
 
 }

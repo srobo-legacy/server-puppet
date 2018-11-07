@@ -10,7 +10,7 @@ class www::tickets( $git_root, $web_root_dir ) {
     revision  => '32d89746e8c00b7ae10fd566fcd28eef5e1112df',
     owner     => 'wwwcontent',
     group     => 'apache',
-    require   => Vcsrepo[$web_root_dir],
+    require   => File[$web_root_dir],
   }
 
   $tickets_root = "${web_root_dir}/tickets/tickets"
@@ -48,7 +48,7 @@ class www::tickets( $git_root, $web_root_dir ) {
     owner   => 'wwwcontent',
     group   => 'apache',
     target  => "${tickets_root}/webapi",
-    require => VCSRepo[$web_root_dir],
+    require => File[$web_root_dir],
   }
 
   $tickets_keyfile = "${tickets_root}/ticket.key"
