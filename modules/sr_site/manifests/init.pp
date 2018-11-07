@@ -3,6 +3,9 @@
 
 # git_root: The root URL to access the SR git repositories
 class sr_site( $git_root ) {
+  $competition_services = hiera('competition_services')
+  $competitor_services = hiera('competitor_services')
+  $volunteer_services = hiera('volunteer_services')
 
   # Default PATH
   Exec {
@@ -42,9 +45,6 @@ class sr_site( $git_root ) {
     changes => ['set SELINUX disabled'],
   }
 
-  # Anonymous git access
-  include gitdaemon
-
   # The bee
   include bee
 
@@ -62,33 +62,48 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var/sr'],
   }
 
+  include sr_site::login
+  include sr_site::meta
+
   class { 'sr_site::mysql':
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'sr_site::openldap':
-    require => File['/usr/local/var/sr'],
+  if $competitor_services {
+    class { 'sr_site::openldap':
+      require => File['/usr/local/var/sr'],
+    }
+
+    # Installs a userman instance into /root. Technically for sysadmins
+    # (volunteers), but only useful on boxes which have the LDAP on them.
+    class { 'sr_site::userman':
+      git_root => $git_root,
+    }
   }
 
-  class { 'sr_site::trac':
-    git_root => $git_root,
-    require => [File['/usr/local/var/sr'],
-		Class['www']],
+  if $volunteer_services {
+    # Anonymous git access
+    include gitdaemon
+
+    class { 'sr_site::trac':
+      git_root => $git_root,
+      require => [File['/usr/local/var/sr'],
+      Class['www']],
+    }
+
+    # include sr_site::subversion
+
+    class { 'sr_site::git':
+      git_root => $git_root,
+    }
   }
 
-  # include sr_site::subversion
-
-  include sr_site::login
-  include sr_site::meta
-
-  class { 'sr_site::git':
-    git_root => $git_root,
-  }
-
-  class { 'sr_site::srcomp':
-    git_root => $git_root,
-    src_dir  => '/usr/local/src/srcomp',
-    venv_dir => '/var/lib/srcomp-venv'
+  if $competition_services {
+    class { 'sr_site::srcomp':
+      git_root => $git_root,
+      src_dir  => '/usr/local/src/srcomp',
+      venv_dir => '/var/lib/srcomp-venv'
+    }
   }
 
   # Web stuff
@@ -102,10 +117,6 @@ class sr_site( $git_root ) {
   }
 
   class { 'sr_site::pipebot':
-    git_root => $git_root,
-  }
-
-  class { 'sr_site::userman':
     git_root => $git_root,
   }
 

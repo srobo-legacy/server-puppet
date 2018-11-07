@@ -2,6 +2,9 @@
 # to configure portions of the website.
 
 class www( $git_root ) {
+  $competition_services = hiera('competition_services')
+  $competitor_services = hiera('competitor_services')
+  $volunteer_services = hiera('volunteer_services')
   $web_root_dir = '/var/www/html'
 
   # many things rely on PHP
@@ -54,102 +57,105 @@ class www( $git_root ) {
     content => "<h2>${::hostname}</h2>",
   }
 
-  # Python 2.7.5 docs -- version match the python on the BBs
-  class { 'www::python_docs':
-    web_root_dir => $web_root_dir,
-    version => '2.7.5',
-    require => [User['wwwcontent'], File[$web_root_dir]],
+  if $competition_services {
+    # Web facing user competition state interface, srobo.org/comp-api
+    class { 'www::comp_api':
+      root_dir => '/srv/comp-api',
+      require => User['wwwcontent'],
+    }
+
+    # Competition state vending for shepherds
+    class { 'www::comp_display':
+      git_root => $git_root,
+      web_root_dir => $web_root_dir,
+      require => User['wwwcontent'],
+    }
   }
 
-  # Voting scripts, at srobo.org/~voting/voting
-  class { 'www::voting':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
-    require => User['wwwcontent'],
+  if $competitor_services {
+    # Python 2.7.5 docs -- version match the python on the BBs
+    class { 'www::python_docs':
+      web_root_dir => $web_root_dir,
+      version => '2.7.5',
+      require => [User['wwwcontent'], File[$web_root_dir]],
+    }
+
+    # phpBB forum, at srobo.org/forum
+    class { 'www::phpbb':
+      git_root => $git_root,
+      root_dir => '/var/www/phpbb',
+      require => User['wwwcontent'],
+    }
+
+    # The IDE, srobo.org/ide
+    class { 'www::ide':
+      git_root => $git_root,
+      root_dir => "${web_root_dir}/ide",
+      team_status_imgs_live_dir => "${web_root_dir}/team-images",
+      require => [User['wwwcontent'], File[$web_root_dir]],
+    }
+
+    # A httpd server specifically for the IDE
+    class { 'www::ide_httpd':
+      git_root => $git_root,
+      root_dir => "${web_root_dir}/ide",
+      require => [User['wwwcontent'], File[$web_root_dir]],
+    }
+
+    # Web facing user managment interface, srobo.org/userman
+    class { 'www::nemesis':
+      git_root => $git_root,
+      root_dir => '/srv/nemesis',
+      require => User['wwwcontent'],
+    }
+
+    class { 'www::teamgit':
+      ide_root_dir => "${web_root_dir}/ide",
+      require => Class['www::ide'],
+    }
+
+    # Ticket System
+    class { 'www::tickets':
+      git_root => $git_root,
+      web_root_dir => $web_root_dir,
+      require => [File[$web_root_dir], Class['sr_site::Openldap']],
+    }
+
+    # Media Consent System
+    class { 'www::mediaconsent':
+      git_root => $git_root,
+      web_root_dir => $web_root_dir,
+      require => [File[$web_root_dir], Class['sr_site::Openldap'], Class['www::tickets']],
+    }
   }
 
-  # Community guidelines
-  class { 'www::community_guidelines':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
-    require => [User['wwwcontent'], File[$web_root_dir]],
+  if $volunteer_services {
+    # Voting scripts, at srobo.org/~voting/voting
+    class { 'www::voting':
+      git_root => $git_root,
+      web_root_dir => $web_root_dir,
+      require => User['wwwcontent'],
+    }
+
+    # Community guidelines
+    class { 'www::community_guidelines':
+      git_root => $git_root,
+      web_root_dir => $web_root_dir,
+      require => [User['wwwcontent'], File[$web_root_dir]],
+    }
+
+    # Volunteer Handbook
+    class { 'www::volunteer_handbook':
+      git_root => $git_root,
+      web_root_dir => $web_root_dir,
+      require => [User['wwwcontent'], File[$web_root_dir]],
+    }
+
+    # Piwik, for getting information about visitors, srobo.org/piwik
+    class { 'www::piwik':
+      git_root => $git_root,
+      root_dir => "${web_root_dir}/piwik",
+      require => [User['wwwcontent'], File[$web_root_dir]],
+    }
   }
-
-  # Volunteer Handbook
-  class { 'www::volunteer_handbook':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
-    require => [User['wwwcontent'], File[$web_root_dir]],
-  }
-
-  # phpBB forum, at srobo.org/forum
-  class { 'www::phpbb':
-    git_root => $git_root,
-    root_dir => '/var/www/phpbb',
-    require => User['wwwcontent'],
-  }
-
-  # The IDE, srobo.org/ide
-  class { 'www::ide':
-    git_root => $git_root,
-    root_dir => "${web_root_dir}/ide",
-    team_status_imgs_live_dir => "${web_root_dir}/team-images",
-    require => [User['wwwcontent'], File[$web_root_dir]],
-  }
-
-  # A httpd server specifically for the IDE
-  class { 'www::ide_httpd':
-    git_root => $git_root,
-    root_dir => "${web_root_dir}/ide",
-    require => [User['wwwcontent'], File[$web_root_dir]],
-  }
-
-  # Piwik, for getting information about visitors, srobo.org/piwik
-  class { 'www::piwik':
-    git_root => $git_root,
-    root_dir => "${web_root_dir}/piwik",
-    require => [User['wwwcontent'], File[$web_root_dir]],
-  }
-
-  # Web facing user managment interface, srobo.org/userman
-  class { 'www::nemesis':
-    git_root => $git_root,
-    root_dir => '/srv/nemesis',
-    require => User['wwwcontent'],
-  }
-
-  # Web facing user competition state interface, srobo.org/comp-api
-  class { 'www::comp_api':
-    root_dir => '/srv/comp-api',
-    require => User['wwwcontent'],
-  }
-
-  # Competition state vending for shepherds
-  class { 'www::comp_display':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
-    require => User['wwwcontent'],
-  }
-
-  class { 'www::teamgit':
-    ide_root_dir => "${web_root_dir}/ide",
-    require => Class['www::ide'],
-  }
-
-  # Ticket System
-  class { 'www::tickets':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
-    require => [File[$web_root_dir], Class['sr_site::Openldap']],
-  }
-
-  # Media Consent System
-  class { 'www::mediaconsent':
-    git_root => $git_root,
-    web_root_dir => $web_root_dir,
-    require => [File[$web_root_dir], Class['sr_site::Openldap'], Class['www::tickets']],
-  }
-
-
-
 }

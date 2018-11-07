@@ -57,7 +57,9 @@ class www::nginx_rproxy ()
     ensure => running,
     enable => true,
     subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf'],
-                  Service['httpd'], Service['httpd-ide'],
-                  Exec['nginx-mangle-cert']],
+                  Service['httpd'], Exec['nginx-mangle-cert']],
+  }
+  if hiera('competitor_services') {
+    Service['nginx'] ~> Service['httpd-ide']
   }
 }
