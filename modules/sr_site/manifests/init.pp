@@ -48,6 +48,11 @@ class sr_site( $git_root ) {
   # The bee
   include bee
 
+  # Various common dependencies
+  package { 'PyYAML':
+    ensure => present,
+  }
+
   # Monitoring
   class { 'monitoring':
     git_root => $git_root,

@@ -3,11 +3,6 @@
 # votes are only accessible by the voting user.
 
 class www::voting ($git_root, $web_root_dir) {
-  # The voting scripts use pyyaml,
-  package { 'PyYAML':
-    ensure => present,
-  }
-
   # Directories and user for 'voting' user; all with only traverse permission
   # for other users.
   file { '/home/voting':
