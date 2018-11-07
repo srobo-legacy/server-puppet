@@ -5,8 +5,9 @@ class www( $git_root ) {
   $web_root_dir = '/var/www/html'
 
   # many things rely on PHP
-  package { [ 'php' ]:
+  package { ['php', 'php-mysqlnd']:
     ensure => latest,
+    notify => Service['httpd'],
   }
 
   class { 'www::httpd':

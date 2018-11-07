@@ -6,12 +6,6 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
-  # We require the bindings between php and mysql to work
-  package { 'php-mysqlnd':
-    ensure => present,
-    notify => Service['httpd'],
-  }
-
   # Checkout of the phpbb sources
   vcsrepo { $root_dir:
     ensure => present,
@@ -19,6 +13,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
     revision => 'release-3.2.3',
+    # We require the bindings between php and mysql to work
     require => Package[ 'php', 'php-mysqlnd' ],
   }
 
