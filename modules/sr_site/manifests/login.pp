@@ -30,39 +30,39 @@ class sr_site::login {
     }
   }
 
-  file { '/etc/ssh/ssh_host_dsa_key':
+  file { '/etc/ssh/ssh_host_ecdsa_key':
     ensure  => 'file',
     owner   => 'root',
     group   => 'ssh_keys',
     mode    => '0640',
-    source  => '/srv/secrets/login/ssh_host_dsa_key',
+    source  => '/srv/secrets/login/ssh_host_ecdsa_key',
     notify  => Service['sshd'],
   }
 
-  file { '/etc/ssh/ssh_host_dsa_key.pub':
+  file { '/etc/ssh/ssh_host_ecdsa_key.pub':
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => '/srv/secrets/login/ssh_host_dsa_key.pub',
+    source  => '/srv/secrets/login/ssh_host_ecdsa_key.pub',
     notify  => Service['sshd'],
   }
 
-  file { '/etc/ssh/ssh_host_key':
+  file { '/etc/ssh/ssh_host_ed25519_key':
     ensure  => 'file',
     owner   => 'root',
     group   => 'ssh_keys',
     mode    => '0640',
-    source  => '/srv/secrets/login/ssh_host_key',
+    source  => '/srv/secrets/login/ssh_host_ed25519_key',
     notify  => Service['sshd'],
   }
 
-  file { '/etc/ssh/ssh_host_key.pub':
+  file { '/etc/ssh/ssh_host_ed25519_key.pub':
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => '/srv/secrets/login/ssh_host_key.pub',
+    source  => '/srv/secrets/login/ssh_host_ed25519_key.pub',
     notify  => Service['sshd'],
   }
 
