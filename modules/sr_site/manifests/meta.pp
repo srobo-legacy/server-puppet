@@ -8,4 +8,8 @@ class sr_site::meta{
     user => 'root',
   }
 
+  file { '/root/puppet_apply':
+    ensure  => link,
+    target  => '/etc/puppet/scripts/apply',
+  }
 }
