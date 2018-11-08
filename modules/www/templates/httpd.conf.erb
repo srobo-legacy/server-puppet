@@ -849,6 +849,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 NameVirtualHost *:80
 
+<% if @volunteer_services %>
 # Serve SVN over port 80. This is how it was on optimus to keep old checkouts
 # working, it can probably be retired to SSL-only nowdays.
 <VirtualHost *:80>
@@ -872,3 +873,4 @@ NameVirtualHost *:80
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 </VirtualHost>
+<% end %>

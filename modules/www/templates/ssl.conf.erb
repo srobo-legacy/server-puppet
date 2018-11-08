@@ -33,6 +33,8 @@ WSGISocketPrefix /var/run/wsgi
                 AllowOverride All
         </Directory>
 
+        <% if @volunteer_services %>
+
         # Deny everyone userdirs, except explicitly configured accounts
         UserDir disabled
         # Voting user requires a public_html dir
@@ -137,12 +139,27 @@ WSGISocketPrefix /var/run/wsgi
         RewriteEngine On
         RewriteRule ^/git/$ /cgit [PT]
 
+        <% end %>
+
+        <% if @competitor_services %>
+
         # Forums
         Redirect permanent /forums /forum
         Alias /forum /var/www/phpbb/phpBB
         <Directory /var/www/phpbb/phpBB>
                 AllowOverride All
         </Directory>
+
+        # Pass accesses to /userman over to nemesis in WSGI
+        WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
+        WSGIPassAuthorization on
+        <Directory /srv/nemesis/nemesis>
+            Require all granted
+        </Directory>
+
+        <% end %>
+
+        <% if @competition_services %>
 
         # Pass accesses to /comp-api over to the Competition API in WSGI
         WSGIDaemonProcess srcomp user=apache group=apache threads=1 processes=8 maximum-requests=1000 \
@@ -154,13 +171,7 @@ WSGISocketPrefix /var/run/wsgi
             Require all granted
         </Directory>
 
-        # Pass accesses to /userman over to nemesis in WSGI
-        WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
-        WSGIPassAuthorization on
-        <Directory /srv/nemesis/nemesis>
-            Require all granted
-        </Directory>
-
+        <% end %>
 
         ########## SSL stuff below
 
