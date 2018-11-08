@@ -17,15 +17,17 @@ class sr_site::login {
     source => 'puppet:///modules/sr_site/sudoers',
   }
 
-  # Our SSH configuration; mostly the default, with the difference that root
-  # logins are disabled on the production machine.
-  file { '/etc/ssh/sshd_config':
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    content => template('sr_site/sshd_config.erb'),
-    notify => Service['sshd'],
+  if !$devmode {
+    augeas { 'sshd_config':
+        context => '/files/etc/ssh/sshd_config',
+        changes => [
+            # deny root logins
+            'set PermitRootLogin no',
+            # deny logins using passwords
+            'set PasswordAuthentication no',
+        ],
+        notify  => Service['sshd'],
+    }
   }
 
   file { '/etc/ssh/ssh_host_dsa_key':
