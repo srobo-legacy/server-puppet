@@ -26,6 +26,8 @@ class www::httpd( $web_root_dir ) {
 
   # Load some configuration for httpd.conf. Sets up the general web server
   # operation, number of processes, etc
+  $competition_services = hiera('competition_services')
+  $competitor_services = hiera('competitor_services')
   $volunteer_services = hiera('volunteer_services')
   $www_canonical_hostname = hiera('www_canonical_hostname')
   $www_base_hostname = hiera('www_base_hostname')
