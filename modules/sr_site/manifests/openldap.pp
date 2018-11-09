@@ -106,7 +106,8 @@ class sr_site::openldap {
   }
 
   # Ensure the mentors group exists; identifies blueshirts.
-  ldapres { "cn=mentors,${groupdn}":
+  ldapres { 'mentors':
+    dn => "cn=mentors,${groupdn}",
     ensure => present,
     cn => 'mentors',
     objectclass => 'posixGroup',
@@ -151,6 +152,43 @@ class sr_site::openldap {
     cn => 'media-consent-admin',
     objectclass => 'posixGroup',
     gidnumber => '2004',
+    # Don't enable memberuid, or puppet will try to manage it.
+    # memberuid => blah
+    notify => Exec['ldap-groups-flushed'],
+    require => Ldapres[$groupdn],
+  }
+
+  # Ensure the 'ide-admin' group exists
+  ldapres { 'ide-admin':
+    dn => "cn=ide-admin,${groupdn}",
+    ensure => present,
+    cn => 'ide-admin',
+    objectclass => 'posixGroup',
+    gidnumber => '2005',
+    # Don't enable memberuid, or puppet will try to manage it.
+    # memberuid => blah
+    notify => Exec['ldap-groups-flushed'],
+    require => Ldapres[$groupdn],
+  }
+
+  # Ensure the 'students' group exists
+  ldapres { "cn=students,${groupdn}":
+    ensure => present,
+    cn => 'students',
+    objectclass => 'posixGroup',
+    gidnumber => '2006',
+    # Don't enable memberuid, or puppet will try to manage it.
+    # memberuid => blah
+    notify => Exec['ldap-groups-flushed'],
+    require => Ldapres[$groupdn],
+  }
+
+  # Ensure the 'teachers' group exists
+  ldapres { "cn=teachers,${groupdn}":
+    ensure => present,
+    cn => 'teachers',
+    objectclass => 'posixGroup',
+    gidnumber => '2007',
     # Don't enable memberuid, or puppet will try to manage it.
     # memberuid => blah
     notify => Exec['ldap-groups-flushed'],

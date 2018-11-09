@@ -45,7 +45,11 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     group => 'apache',
     mode => '0640',
     content => template('www/ide_config.ini.erb'),
-    require => Vcsrepo[$root_dir],
+    require => [
+      Vcsrepo[$root_dir],
+      Ldapres['mentors'],
+      Ldapres['ide-admin'],
+    ],
   }
 
   # IDE ldap user has general read access to ou=groups,o=sr.
