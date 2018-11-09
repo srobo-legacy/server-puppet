@@ -130,7 +130,7 @@ class www::nemesis ( $git_root, $root_dir ) {
 
   cron { 'nemesis-email-cron':
     command => "${root_dir}/nemesis/scripts/send-emails.py",
-    minute => '*/5',
+    minute => '*/3',
     user => 'wwwcontent',
     require => Vcsrepo[$root_dir],
   }
