@@ -78,9 +78,9 @@ class www::phpbb ( $git_root, $root_dir ) {
   # The style we want
   archive { 'phpbb-prosilver_se-style':
     ensure        => present,
-    url           => 'https://www.phpbb.com/customise/db/download/119406',
+    url           => 'https://www.phpbb.com/customise/db/download/160251',
     extension     => 'zip',
-    digest_string => 'c2743e19b5e98261a301e107fecedd8c',
+    digest_string => 'bd17b840431d12ef335d73755be787f0',
     digest_type   => 'md5',
     user          => 'wwwcontent',
     target        => "${root_dir}/phpBB/styles",
