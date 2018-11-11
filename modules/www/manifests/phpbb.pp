@@ -6,6 +6,11 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
+  package { ['php-mbstring', 'php-pdo', 'php-xml']:
+    ensure => latest,
+    notify => Service['httpd'],
+  }
+
   # Checkout of the phpbb sources
   vcsrepo { $root_dir:
     ensure => present,
@@ -13,8 +18,8 @@ class www::phpbb ( $git_root, $root_dir ) {
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
     revision => 'release-3.2.3',
-    # We require the bindings between php and mysql to work
-    require => Package[ 'php', 'php-mysqlnd' ],
+    # Direct dependencies of PHPBB
+    require => Package[ 'php', 'php-ldap', 'php-mysqlnd' ],
   }
 
   # Create the MySQL db for the forum
@@ -53,7 +58,13 @@ class www::phpbb ( $git_root, $root_dir ) {
     environment => [ 'HOME=/home/wwwcontent', ],
     refreshonly => true,
     subscribe   => Vcsrepo[$root_dir],
-    require     => File['/home/wwwcontent'],
+    require     => [
+      File['/home/wwwcontent'],
+      # Dependencies needed for this command to even run
+      Package['php-cli', 'php-json'],
+      # Dependencies needed by the things which this installs
+      Package['php-mbstring', 'php-pdo', 'php-xml'],
+    ],
   }
 
   # Remove the install directory since we're restoring from a database
