@@ -128,9 +128,14 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
+  # Note: we need to ensure we stay within the limits of our mail transport
+  # provider. Since it's not entirely clear what those are (and they apply over
+  # large time ranges - some at 10 minute windows, some at 24 hour windows), we
+  # need to balance the latency of email sending we're happy with against the
+  # overall number of emails we can send.
   cron { 'nemesis-email-cron':
-    command => "${root_dir}/nemesis/scripts/send-emails.py",
-    minute => '*/3',
+    command => "${root_dir}/nemesis/scripts/send-emails.py --limit 5",
+    minute => '*/2',
     user => 'wwwcontent',
     require => Vcsrepo[$root_dir],
   }
