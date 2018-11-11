@@ -3,7 +3,7 @@
 class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   # Numerous packages are required; the IDE is written in php, binds to ldap,
   # runs pylint to syntax check things.
-  package { ['pylint', 'php-cli', 'php-json', 'php-ldap']:
+  package { ['pylint']:
     ensure => present,
     notify => Service['httpd-ide'],
     before => Vcsrepo[$root_dir],
@@ -19,7 +19,7 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     revision => 'origin/master',
     user =>'wwwcontent',
     # Depend explicitly on PHP here since it's declared at the level above
-    require => Package['php'],
+    require => Package['php', 'php-json', 'php-ldap'],
   }
 
   # Secret key for encrypting IDE cookies, protecting against users twiddling
