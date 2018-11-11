@@ -151,9 +151,13 @@ WSGISocketPrefix /var/run/wsgi
         </Directory>
 
         # Pass accesses to /userman over to nemesis in WSGI
+        WSGIDaemonProcess nemesis user=apache group=apache threads=1 processes=8 maximum-requests=1000 \
+                          python-path=/bin/python2.7
         WSGIScriptAlias /userman /srv/nemesis/nemesis/nemesis.wsgi
         WSGIPassAuthorization on
         <Directory /srv/nemesis/nemesis>
+            WSGIProcessGroup nemesis
+            WSGIApplicationGroup %{GLOBAL}
             Require all granted
         </Directory>
 
