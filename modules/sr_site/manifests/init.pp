@@ -65,8 +65,10 @@ class sr_site( $git_root ) {
   include sr_site::login
   include sr_site::meta
 
-  class { 'sr_site::mysql':
-    require => File['/usr/local/var/sr'],
+  if $competitor_services or $volunteer_services {
+    class { 'sr_site::mysql':
+      require => File['/usr/local/var/sr'],
+    }
   }
 
   if $competitor_services {
