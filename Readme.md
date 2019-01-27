@@ -27,3 +27,30 @@ https://www.studentrobotics.org/trac/wiki/ServerConfig
 8. Configure a hosts entry (add the following line to `/etc/hosts` on the
    *host* machine): `192.168.42.42 sr-vm sr-vm.local`
 9. Point your browser at <https://sr-vm> to see the website the VM is hosting.
+
+## Structure
+
+The services configured are broken into roughly three parts, based on their
+uses:
+
+ - Competition Services: things needed only at the competition, mostly
+   [SRComp][srcomp] related things. Note: these things may soon be removed in
+   favour of just deploying a separate public-facing "[compbox][compbox]" during
+   competition events.
+ - Competitor Services: things needed so that the competitors can compete -- the
+   IDE & forums, plus various dependencies of theirs -- LDAP, nemesis, etc.
+ - Volunteer Services: things exclusively for volunteers -- trac, git hosting
+   etc.
+
+Each of these can be enabled independently and the configuration is expected to
+work under all combinations of them.
+
+[srcomp]: https://github.com/PeterJCLaw/srcomp
+[compbox]: https://github.com/PeterJCLaw/srcomp-puppet
+
+## Enabling specific things
+
+Configuration of each service as well as of each of the service groups mentioned
+above is handled through `hiera`. You can configure overrides for your local VM
+by creating a file at `hieradata/nodes/sr-vm.local.yaml`. You probably want to
+copy one of the existing "nodes" level files and modify it.
