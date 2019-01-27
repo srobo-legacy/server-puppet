@@ -40,6 +40,12 @@ class sr_site( $git_root ) {
     ensure => latest,
   }
 
+  exec { 'setenforce 0':
+    path      => '/usr/sbin:/usr/bin',
+    onlyif    => 'test $(getenforce) = "Enforcing"',
+    provider  => shell,
+  }
+
   augeas { 'disable selinux':
     context => '/files/etc/selinux/config',
     changes => ['set SELINUX disabled'],
