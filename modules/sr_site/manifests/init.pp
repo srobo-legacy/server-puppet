@@ -72,6 +72,10 @@ class sr_site( $git_root ) {
   }
 
   if $competitor_services {
+    package { ['python-ldap', 'python-unidecode']:
+      ensure => present,
+    }
+
     class { 'sr_site::openldap':
       require => File['/usr/local/var/sr'],
     }

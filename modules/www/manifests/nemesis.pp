@@ -14,12 +14,9 @@ class www::nemesis ( $git_root, $root_dir ) {
   }
 
   package { ['python-sqlite3dbm',
-             'python-ldap',
-             'python-unidecode',
              'python-flask']:
     ensure  => present,
     notify  => Service['httpd'],
-    before  => Vcsrepo[$root_dir],
   }
 
   # Main checkout of the Nemesis codebase
@@ -30,7 +27,10 @@ class www::nemesis ( $git_root, $root_dir ) {
     revision => 'origin/master',
     owner => 'wwwcontent',
     group => 'apache',
-    require => Package['python-flask'],
+    require => Package['python-flask',
+                       'python-ldap',
+                       'python-sqlite3dbm',
+                       'python-unidecode'],
     notify => Service['httpd'],
   }
 
