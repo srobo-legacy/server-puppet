@@ -16,6 +16,8 @@ Vagrant.configure("2") do |config|
     config.vm.provider "virtualbox" do |v|
         # The box defaults to 512, things are smoother if we have more
         v.memory = 1024
+        # The box defaults to one, things are smoother if we have more
+        v.cpus = 2
     end
 
     config.vm.network "private_network", ip: "192.168.42.42"
