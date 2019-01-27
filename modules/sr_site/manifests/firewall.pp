@@ -24,7 +24,7 @@ class sr_site::firewall {
   # This will clear any existing rules, and make sure that only rules
   # defined in puppet exist on the machine
   resources { 'firewall':
-    purge => true
+    purge => true,
   }
 
   class { 'sr_site::fw_pre':
