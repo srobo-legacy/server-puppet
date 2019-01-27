@@ -77,6 +77,7 @@ WSGISocketPrefix /var/run/wsgi
                 </RequireAll>
         </Location>
 
+        <% if @subversion_enabled %>
         # Legacy SVN goo
         <Location /svn>
                 DAV svn
@@ -99,6 +100,7 @@ WSGISocketPrefix /var/run/wsgi
 
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
+        <% end %>
 
         # Voting scripts are run out of the voting users's public_html directory
         Redirect /voting /~voting/voting/

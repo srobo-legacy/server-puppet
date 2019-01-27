@@ -6,6 +6,8 @@ competition_services: true
 competitor_services: true
 volunteer_services: true
 
+subversion_enabled: false
+
 # Base DNS name for the site being hosted, for example 'studentrobotics.org' or 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or git.) are based on this name.
 www_base_hostname: "%{::fqdn}"
 

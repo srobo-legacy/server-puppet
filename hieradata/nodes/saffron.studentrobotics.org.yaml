@@ -2,6 +2,8 @@
 devmode: false
 git_root: /srv/git
 
+subversion_enabled: true
+
 pipebot_enabled: true
 pipebot_nick: srpipebot
 pipebot_ident: srpipebot

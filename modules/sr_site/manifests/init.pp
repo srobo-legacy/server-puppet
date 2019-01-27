@@ -97,7 +97,9 @@ class sr_site( $git_root ) {
       Class['www']],
     }
 
-    # include sr_site::subversion
+    if $subversion_enabled {
+      include sr_site::subversion
+    }
 
     class { 'sr_site::git':
       git_root => $git_root,
