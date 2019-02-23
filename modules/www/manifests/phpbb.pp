@@ -117,6 +117,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     require   => File[$extensions_dir],
   }
 
+  # Extension for slack integration
   file { "${root_dir}/phpBB/ext/sr/TheH":
     ensure  => directory,
     owner   => 'wwwcontent',
