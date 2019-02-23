@@ -117,6 +117,14 @@ class www::phpbb ( $git_root, $root_dir ) {
     require   => File[$extensions_dir],
   }
 
+  vcsrepo { "${root_dir}/phpBB/ext/sr/TheH/entropy":
+    ensure    => present,
+    user      => 'wwwcontent',
+    provider  => git,
+    source    => "https://github.com/haivala/phpBB-Entropy-Extension",
+    revision  => 'ae18e1912931a8b7a8ecbe5a2701787764ffed10', # pin so upgrades are explicit
+  }
+
   # Directory for storing forum attachments.
   $attachments_dir = "${root_dir}/phpBB/files"
   file { $attachments_dir:
