@@ -847,6 +847,13 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 ### Section 3: Virtual Hosts
 
+# For all websites on port 80, immediately redirect to https.
+<VirtualHost *:80 _default_:80>
+   ServerName <%= @www_canonical_hostname %>
+   Redirect / https://<%= @www_canonical_hostname %>/
+</VirtualHost>
+
+
 <% if @volunteer_services and @subversion_enabled %>
 # Serve SVN over port 80. This is how it was on optimus to keep old checkouts
 # working, it can probably be retired to SSL-only nowdays.
