@@ -118,7 +118,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   }
 
   # Extension for slack integration
-  file { "${root_dir}/phpBB/ext/sr/TheH":
+  file { "${root_dir}/phpBB/ext/TheH":
     ensure  => directory,
     owner   => 'wwwcontent',
     group   => 'apache',
@@ -126,13 +126,13 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
-  vcsrepo { "${root_dir}/phpBB/ext/sr/TheH/entropy":
+  vcsrepo { "${root_dir}/phpBB/ext/TheH/entropy":
     ensure    => present,
     user      => 'wwwcontent',
     provider  => git,
     source    => 'https://github.com/haivala/phpBB-Entropy-Extension',
     revision  => 'ae18e1912931a8b7a8ecbe5a2701787764ffed10', # pin so upgrades are explicit
-    require   => File["${root_dir}/phpBB/ext/sr/TheH"],
+    require   => File["${root_dir}/phpBB/ext/TheH"],
   }
 
   # Directory for storing forum attachments.
