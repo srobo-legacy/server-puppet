@@ -1,2 +1,2 @@
 #!/bin/sh
-puppet apply /etc/puppet/manifests/main.pp
+puppet apply /etc/puppet/manifests/main.pp "$@"
