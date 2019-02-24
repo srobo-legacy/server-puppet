@@ -131,7 +131,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     user      => 'wwwcontent',
     provider  => git,
     source    => 'https://github.com/haivala/phpBB-Entropy-Extension',
-    revision  => 'ae18e1912931a8b7a8ecbe5a2701787764ffed10', # pin so upgrades are explicit
+    revision  => '61390529da8e49a7aa306dcf33046659e1bbc0f6', # pin so upgrades are explicit
     require   => File["${root_dir}/phpBB/ext/TheH"],
   }
 
