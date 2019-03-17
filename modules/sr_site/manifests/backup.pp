@@ -12,8 +12,8 @@ class sr_site::backup ( $git_root ) {
     group => 'root',
     provider => 'git',
     source => "${git_root}/server/backup.git",
-    revision => 'master', # Deliberately no auto update, the scripts here will
-                          # end up be run as root
+    # Deliberately no auto update, the scripts here will end up being run as root
+    revision => 'patience',
   }
 
   # FIXME: find a way of extracting all mysql dbs from puppet?
