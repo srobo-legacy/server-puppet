@@ -30,10 +30,10 @@ class sr_site::backup ( $git_root ) {
 
   # A list of users permitted to use backups. This list doesn't actually allow
   # them to do anything, instead it's used as the list of email IDs that GPG
-  # should encrypt backups for. In common.csv, this should be a single entry
+  # should encrypt backups for. In common.yaml, this should be a single entry
   # enclosed in quotes, with commas seperating email IDs within, for example:
   #
-  # backup_keys,"bees@example.com,marvin@example.com"
+  #   backup_keys: "bees@example.com,marvin@example.com"
   #
   # Note that all backup keys must also be (locally) signed by the root user.
   # Failure to do this will make backup fail.
