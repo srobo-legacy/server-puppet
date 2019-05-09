@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import with_statement
+from __future__ import print_function
 
 import sys
 import string
@@ -8,7 +8,7 @@ import os
 import ldap
 
 if len(sys.argv) != 2:
-	print >>sys.stderr, "Usage: team_repo_conf_builder.py outputfile"
+	print("Usage: team_repo_conf_builder.py outputfile", file=sys.stderr)
 	sys.exit(1)
 
 TEMPLATE_FILE = 'team_repos_conf_template.conf'
@@ -37,10 +37,10 @@ for line in content:
 	line_no += 1
 
 if start_line == -1:
-	print >> sys.stderr, "Failed to find teams' start marker"
+	print("Failed to find teams' start marker", file=sys.stderr)
 
 if end_line == -1:
-	print >> sys.stderr, "Failed to find teams' end marker"
+	print("Failed to find teams' end marker", file=sys.stderr)
 	exit(1)
 
 template_lines = content[ start_line + 1 : end_line ]
@@ -80,7 +80,7 @@ new_content += replaced_content
 new_content += ''.join(content[end_line:])
 
 # Ensure the following open file operation creates a file with mode 600
-os.umask(0177)
+os.umask(0o177)
 
 with open(OUTPUT_FILE, 'w') as f:
 	f.write(new_content)
