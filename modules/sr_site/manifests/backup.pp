@@ -1,6 +1,9 @@
 # Backups make sure that we have all the datas, even if we don't have the server
 
 class sr_site::backup ( $git_root ) {
+  package { 'python3-ldap':
+    ensure  => present,
+  }
 
   # A checkout of the server backup git repo. The backup script has to exist at
   # a known location on the server so that we can configure sudo, so that the
@@ -14,6 +17,7 @@ class sr_site::backup ( $git_root ) {
     source => "${git_root}/server/backup.git",
     # Deliberately no auto update, the scripts here will end up being run as root
     revision => 'patience',
+    require => Package['python3-ldap'],
   }
 
   # FIXME: find a way of extracting all mysql dbs from puppet?
