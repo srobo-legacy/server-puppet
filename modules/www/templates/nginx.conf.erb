@@ -52,8 +52,10 @@ http {
         # These two paths are hard-coded in SRs config files everywhere
         ssl_certificate     /etc/pki/tls/certs/server-nginx.crt;
         ssl_certificate_key /etc/pki/tls/private/server.key;
-        # NB: doesn't feature SSL3 which is in the nginx default.
-        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+        # Note: once TLSv1.3 is available in our builds, we should enable that.
+        # Note: no need for TLSv1 here as this configuration sits behind a proxy
+        # which does the user-facing TLS termination.
+        ssl_protocols       TLSv1.1 TLSv1.2;
         # Default aside from disabling RC4
         ssl_ciphers         HIGH:!aNULL:!MD5:!RC4:!EXPORT;
         # Use a unique DH key
