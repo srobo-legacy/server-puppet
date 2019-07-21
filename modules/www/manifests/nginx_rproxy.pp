@@ -51,8 +51,6 @@ class www::nginx_rproxy ()
     }
   }
 
-  # Configure service. Keep initially stopped until deployment situation
-  # confirmed
   service { 'nginx':
     ensure => running,
     enable => true,
