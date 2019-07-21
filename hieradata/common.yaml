@@ -8,6 +8,10 @@ volunteer_services: true
 
 subversion_enabled: false
 
+# Use a static TLS cert from the secrets (rather than using Let's Encrypt).
+# Defaults to true in development as we assume development instances don't have real DNS enties.
+static_tls_certificate: "%{devmode}"
+
 # Base DNS name for the site being hosted, for example 'studentrobotics.org' or 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or git.) are based on this name.
 www_base_hostname: "%{::fqdn}"
 
