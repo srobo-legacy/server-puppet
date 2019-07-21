@@ -849,8 +849,8 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 # For all websites on port 80, immediately redirect to https.
 <VirtualHost *:80 _default_:80>
-   ServerName <%= @www_canonical_hostname %>
-   Redirect / https://<%= @www_canonical_hostname %>/
+   ServerName <%= @fqdn %>
+   Redirect / https://<%= @fqdn %>/
 </VirtualHost>
 
 
