@@ -81,10 +81,10 @@ class www::httpd( $web_root_dir ) {
       plugin        => webroot,
       webroot_paths => [$web_root_dir],
       require       => [
-        Package['httpd'],
+        Service['httpd'],
         File['ssl.conf', "${web_root_dir}/.well-known/acme-challenge"],
       ],
-      notify        => Service['nginx', 'httpd'],
+      notify        => Service['nginx'],
     } -> File['server.crt', 'server.key']
 
     file { 'server.crt':
