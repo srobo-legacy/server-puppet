@@ -70,9 +70,9 @@ class www::httpd( $web_root_dir ) {
       # Note: if setting up a server for testing, you may want to un-comment
       # these lines to avoid polling the live letsencrypt API too much and
       # getting rate limited.
-      config => {
-          server  => 'https://acme-staging.api.letsencrypt.org/directory',
-      },
+      # config => {
+      #     server  => 'https://acme-staging.api.letsencrypt.org/directory',
+      # },
       # TODO: make this safe
       unsafe_registration => true,
     }
