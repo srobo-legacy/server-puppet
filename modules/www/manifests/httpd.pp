@@ -145,8 +145,11 @@ class www::httpd( $web_root_dir ) {
                   Package['mod_ssl'],
                   File['httpd.conf'],
                   File['ssl.conf'],
-                  File['server.key'],
                 ],
     require => File[$web_root_dir],
+  }
+
+  if $serve_over_ssl {
+    File['server.key'] ~> Service['httpd']
   }
 }
