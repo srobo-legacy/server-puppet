@@ -33,7 +33,7 @@ class www::nginx_rproxy ()
 
   # Remash server certificate file into a format that nginx likes
   # In devmode, just don't cat in the bundle file
-  if !$devmode {
+  if hiera('static_tls_certificate') and !$devmode {
     exec { 'nginx-mangle-cert':
       command => 'cat server.crt comodo_bundle.crt > server-nginx.crt',
       provider => 'shell',
@@ -42,22 +42,19 @@ class www::nginx_rproxy ()
       subscribe => [File['server.crt'], File['cert_chain']],
     }
   } else {
-    exec { 'nginx-mangle-cert':
-      command => 'cat server.crt > server-nginx.crt',
-      provider => 'shell',
-      creates => '/etc/pki/tls/certs/server-nginx.crt',
-      cwd => '/etc/pki/tls/certs',
-      subscribe => File['server.crt'],
+    file { '/etc/pki/tls/certs/server-nginx.crt':
+      ensure  => link,
+      target  => '/etc/pki/tls/certs/server.crt',
+      require => File['server.crt'],
+      notify  => Service['nginx'],
     }
   }
 
-  # Configure service. Keep initially stopped until deployment situation
-  # confirmed
   service { 'nginx':
     ensure => running,
     enable => true,
     subscribe => [Package['nginx'], File['/etc/nginx/nginx.conf'],
-                  Service['httpd'], Exec['nginx-mangle-cert']],
+                  Service['httpd']],
   }
   if hiera('competitor_services') {
     Service['nginx'] ~> Service['httpd-ide']

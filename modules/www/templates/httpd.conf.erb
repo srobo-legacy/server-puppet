@@ -849,8 +849,13 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 # For all websites on port 80, immediately redirect to https.
 <VirtualHost *:80 _default_:80>
-   ServerName <%= @fqdn %>
-   Redirect / https://<%= @fqdn %>/
+    DocumentRoot <%= @web_root_dir %>
+    ServerName <%= @fqdn %>
+
+    # For everything other than domain acme challenges, redirect to HTTPS
+    <If "%{REQUEST_URI} !~ m#^/\.well-known/acme-challenge/#">
+        Redirect / https://<%= @fqdn %>/
+    </If>
 </VirtualHost>
 
 
