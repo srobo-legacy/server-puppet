@@ -121,21 +121,21 @@ class www::httpd( $web_root_dir ) {
       source => '/srv/secrets/https/server.key',
       require => Package[ 'mod_ssl' ],
     }
-  }
 
-  # On the production machine, we need to present some intermediate certificates
-  # to users as there's an intermediate CA between the root cert and our
-  # cerfificate. Not necessary on the dummy config.
-  if !$devmode {
-    file { 'cert_chain':
-      path => '/etc/pki/tls/certs/comodo_bundle.crt',
-      owner => 'root',
-      group => 'root',
-      mode => '0400',
-      source => '/srv/secrets/https/comodo_bundle.crt',
-      require => Package[ 'mod_ssl' ],
+    # On the production machine, we need to present some intermediate certificates
+    # to users as there's an intermediate CA between the root cert and our
+    # cerfificate. Not necessary on the dummy config.
+    if !$devmode {
+      file { 'cert_chain':
+        path => '/etc/pki/tls/certs/comodo_bundle.crt',
+        owner => 'root',
+        group => 'root',
+        mode => '0400',
+        source => '/srv/secrets/https/comodo_bundle.crt',
+        require => Package[ 'mod_ssl' ],
+      }
     }
-  }
+}
 
   # The webserver process itself; restart on updates to some important files.
   service { 'httpd':
