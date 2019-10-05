@@ -2,15 +2,13 @@
 
 class www::phpbb ( $git_root, $root_dir ) {
   # MySQL database configuration
-  $forum_db_name = 'phpbb_sr2016'
+  $forum_db_name = 'phpbb_sr2019'
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
-  # We require the bindings between php and mysql to work
-  package { 'php-mysqlnd':
-    ensure => present,
+  package { ['php-mbstring', 'php-pdo', 'php-xml']:
+    ensure => latest,
     notify => Service['httpd'],
-    alias  => 'php-mysql',
   }
 
   # Checkout of the phpbb sources
@@ -19,8 +17,9 @@ class www::phpbb ( $git_root, $root_dir ) {
     user => 'wwwcontent',
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
-    revision => 'release-3.1.6',
-    require => Package[ 'php', 'php-mysql' ],
+    revision => 'release-3.2.3',
+    # Direct dependencies of PHPBB
+    require => Package[ 'php', 'php-ldap', 'php-mysqlnd' ],
   }
 
   # Create the MySQL db for the forum
@@ -59,7 +58,13 @@ class www::phpbb ( $git_root, $root_dir ) {
     environment => [ 'HOME=/home/wwwcontent', ],
     refreshonly => true,
     subscribe   => Vcsrepo[$root_dir],
-    require     => File['/home/wwwcontent'],
+    require     => [
+      File['/home/wwwcontent'],
+      # Dependencies needed for this command to even run
+      Package['php-cli', 'php-json'],
+      # Dependencies needed by the things which this installs
+      Package['php-mbstring', 'php-pdo', 'php-xml'],
+    ],
   }
 
   # Remove the install directory since we're restoring from a database
@@ -73,9 +78,9 @@ class www::phpbb ( $git_root, $root_dir ) {
   # The style we want
   archive { 'phpbb-prosilver_se-style':
     ensure        => present,
-    url           => 'https://www.phpbb.com/customise/db/download/119406',
+    url           => 'https://www.phpbb.com/customise/db/download/160251',
     extension     => 'zip',
-    digest_string => 'c2743e19b5e98261a301e107fecedd8c',
+    digest_string => 'bd17b840431d12ef335d73755be787f0',
     digest_type   => 'md5',
     user          => 'wwwcontent',
     target        => "${root_dir}/phpBB/styles",
@@ -110,6 +115,24 @@ class www::phpbb ( $git_root, $root_dir ) {
     source    => "${git_root}/phpbb-ext-sr-etc.git",
     revision  => 'origin/master',
     require   => File[$extensions_dir],
+  }
+
+  # Extension for slack integration
+  file { "${root_dir}/phpBB/ext/TheH":
+    ensure  => directory,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    mode    => '0755',
+    require => Vcsrepo[$root_dir],
+  }
+
+  vcsrepo { "${root_dir}/phpBB/ext/TheH/entropy":
+    ensure    => present,
+    user      => 'wwwcontent',
+    provider  => git,
+    source    => 'https://github.com/haivala/phpBB-Entropy-Extension',
+    revision  => '61390529da8e49a7aa306dcf33046659e1bbc0f6', # pin so upgrades are explicit
+    require   => File["${root_dir}/phpBB/ext/TheH"],
   }
 
   # Directory for storing forum attachments.

@@ -42,8 +42,8 @@ class www::ide_httpd ($git_root, $root_dir) {
 
   # File to enable php in the ide specific httpd
   file { "/etc/httpd/conf.ide.d/php.conf":
-    ensure => present,
-    content => template('www/php.conf.erb'),
+    ensure => link,
+    target => '/etc/httpd/conf.d/php.conf',
   }
 
   # File to enable php in the ide specific httpd
@@ -57,7 +57,6 @@ class www::ide_httpd ($git_root, $root_dir) {
     notify => Exec['httpd-ide-systemd-load'],
   }
 
-  # Lifted from fritter,
   # systemd has to be reloaded before picking this up,
   exec { 'httpd-ide-systemd-load':
     provider  => 'shell',
@@ -72,7 +71,7 @@ class www::ide_httpd ($git_root, $root_dir) {
     ensure  => running,
     enable => true,
     require => Exec['httpd-ide-systemd-load'],
-    subscribe => [Package['httpd'],
+    subscribe => [Package['httpd', 'php', 'php-json', 'php-ldap'],
                   File['/etc/httpd/conf/ide.conf'],
                   File['/etc/httpd/conf.ide.d/ssl.conf']],
   }

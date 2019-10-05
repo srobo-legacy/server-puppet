@@ -47,20 +47,4 @@ class sr_site::fw_pre {
     dport => 443,
     action => 'accept',
   }
-
-  # Open gerrit's HTTP service to be reverse-proxy'd by apache. It's not
-  # acceptable to have passwords flying over non-SSL connections.
-  firewall { '006 gerrit-http':
-    proto => 'tcp',
-    dport => '8081',
-    action => 'accept',
-    source => '127.0.0.1', # Limit to only apache reverse-proxying.
-  }
-
-  # Open gerrit's SSHD service to everyone
-  firewall { '007 gerrit-sshd':
-    proto => 'tcp',
-    dport => '29418',
-    action => 'accept',
-  }
 }

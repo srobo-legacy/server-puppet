@@ -847,36 +847,19 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 
 ### Section 3: Virtual Hosts
 
-NameVirtualHost *:80
-
 # For all websites on port 80, immediately redirect to https.
 <VirtualHost *:80 _default_:80>
-	ServerName <%= @www_canonical_hostname %>
-	Redirect / https://<%= @www_canonical_hostname %>/
+    DocumentRoot <%= @web_root_dir %>
+    ServerName <%= @fqdn %>
+
+    # For everything other than domain acme challenges, redirect to HTTPS
+    <If "%{REQUEST_URI} !~ m#^/\.well-known/acme-challenge/#">
+        Redirect / https://<%= @fqdn %>/
+    </If>
 </VirtualHost>
 
-# A series of redirects, pointing anyone using trac.{srobo,studentrobotics}.org
-# or a similar service-based hostname to the relevant dir on the main website.
-# This only applies on port 80; if you attempt to access a service vhost over
-# SSL you'll only get a certificate error, so we don't bother supporting that.
-<VirtualHost *:80>
-        ServerName trac.<%= @www_base_hostname %>
-        ServerAlias trac.srobo.org
-        RedirectPermanent / https://<%= @www_canonical_hostname %>/trac/
-</VirtualHost>
 
-<VirtualHost *:80>
-        ServerName ide.<%= @www_base_hostname %>
-        ServerAlias ide.srobo.org
-        RedirectPermanent / https://<%= @www_canonical_hostname %>/ide/
-</VirtualHost>
-
-<VirtualHost *:80>
-        ServerName gerrit.<%= @www_base_hostname %>
-        ServerAlias gerrit.srobo.org
-        RedirectPermanent / https://<%= @www_canonical_hostname %>/gerrit/
-</VirtualHost>
-
+<% if @volunteer_services and @subversion_enabled %>
 # Serve SVN over port 80. This is how it was on optimus to keep old checkouts
 # working, it can probably be retired to SSL-only nowdays.
 <VirtualHost *:80>
@@ -900,19 +883,4 @@ NameVirtualHost *:80
                 AuthzSVNAccessFile /srv/svn/sr/authfile
         </Location>
 </VirtualHost>
-
-<VirtualHost *:80>
-        DocumentRoot /srv/git
-        ServerName git.<%= @www_base_hostname %>
-        ServerAlias git.srobo.org
-
-        RedirectPermanent / https://<%= @www_canonical_hostname %>/git/
-</VirtualHost>
-
-<VirtualHost *:80>
-        DocumentRoot /srv/git
-        ServerName ide.<%= @www_base_hostname %>
-        ServerAlias ide.srobo.org
-
-        RedirectPermanent / https://<%= @www_canonical_hostname %>/ide/
-</VirtualHost>
+<% end %>

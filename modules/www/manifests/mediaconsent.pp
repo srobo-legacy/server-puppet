@@ -7,13 +7,12 @@ class www::mediaconsent( $git_root, $web_root_dir ) {
   vcsrepo { $mcf_root:
     ensure    => latest,
     provider  => git,
-    force     => true,
     source    => "${git_root}/media-consent-access.git",
     # TODO: change to origin/master once a maintainer situation is in place
     revision  => 'origin/master',
     owner     => 'wwwcontent',
     group     => 'apache',
-    require   => Vcsrepo[$web_root_dir],
+    require   => File[$web_root_dir],
   }
 
   # Dependencies are identical to the ticket system, which we should depend on

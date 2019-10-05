@@ -26,6 +26,9 @@ class www::httpd( $web_root_dir ) {
 
   # Load some configuration for httpd.conf. Sets up the general web server
   # operation, number of processes, etc
+  $competition_services = hiera('competition_services')
+  $competitor_services = hiera('competitor_services')
+  $volunteer_services = hiera('volunteer_services')
   $www_canonical_hostname = hiera('www_canonical_hostname')
   $www_base_hostname = hiera('www_base_hostname')
   file { 'httpd.conf':
@@ -48,43 +51,91 @@ class www::httpd( $web_root_dir ) {
     notify => Service['httpd'],
   }
 
-  # Public certificate for the website, presented to all users. In dev mode,
-  # a generic self-signed certificate is used. For production we have one from
-  # GoDaddy
-  file { 'server.crt':
-    path => '/etc/pki/tls/certs/server.crt',
-    owner => root,
-    group => root,
-    mode => '0400',
-    source => '/srv/secrets/https/server.crt',
-    require => Package[ 'mod_ssl' ],
-  }
+  if !hiera('static_tls_certificate') {
+    file { "${web_root_dir}/.well-known":
+      ensure  => directory,
+      owner   => 'wwwcontent',
+      group   => 'apache',
+      mode    => '0755',
+      require => File[$web_root_dir],
+    } ->
+    file { "${web_root_dir}/.well-known/acme-challenge":
+      ensure  => directory,
+      owner   => 'wwwcontent',
+      group   => 'apache',
+      mode    => '0755',
+    }
 
-  # Private key for negotiating SSL connections with clients, corresponding
-  # to server.crt's public key. A generic (and published publically) key for
-  # dev mode.
-  file { 'server.key':
-    path => '/etc/pki/tls/private/server.key',
-    owner => root,
-    group => root,
-    mode => '0400',
-    source => '/srv/secrets/https/server.key',
-    require => Package[ 'mod_ssl' ],
-  }
+    class { letsencrypt:
+      # Note: if setting up a server for testing, you may want to un-comment
+      # these lines to avoid polling the live letsencrypt API too much and
+      # getting rate limited.
+      # config => {
+      #     server  => 'https://acme-staging.api.letsencrypt.org/directory',
+      # },
+      # TODO: make this safe
+      unsafe_registration => true,
+    }
 
-  # On the production machine, we need to present some intermediate certificates
-  # to users as there's an intermediate CA between the root cert and our
-  # cerfificate. Not necessary on the dummy config.
-  if !$devmode {
-    file { 'cert_chain':
-      path => '/etc/pki/tls/certs/comodo_bundle.crt',
-      owner => 'root',
-      group => 'root',
+    letsencrypt::certonly { $::fqdn:
+      plugin        => webroot,
+      webroot_paths => [$web_root_dir],
+      require       => [
+        Service['httpd'],
+        File['ssl.conf', "${web_root_dir}/.well-known/acme-challenge"],
+      ],
+      notify        => Service['nginx'],
+    } -> File['server.crt', 'server.key']
+
+    file { 'server.crt':
+      path    => '/etc/pki/tls/certs/server.crt',
+      ensure  => link,
+      target  => "/etc/letsencrypt/live/${::fqdn}/fullchain.pem",
+    }
+    file { 'server.key':
+      path    => '/etc/pki/tls/private/server.key',
+      ensure  => link,
+      target  => "/etc/letsencrypt/live/${::fqdn}/privkey.pem",
+    }
+  } else {
+    # Public certificate for the website, presented to all users. In dev mode,
+    # a generic self-signed certificate is used. For production we have one from
+    # GoDaddy
+    file { 'server.crt':
+      path => '/etc/pki/tls/certs/server.crt',
+      owner => root,
+      group => root,
       mode => '0400',
-      source => '/srv/secrets/https/comodo_bundle.crt',
+      source => '/srv/secrets/https/server.crt',
       require => Package[ 'mod_ssl' ],
     }
-  }
+
+    # Private key for negotiating SSL connections with clients, corresponding
+    # to server.crt's public key. A generic (and published publically) key for
+    # dev mode.
+    file { 'server.key':
+      path => '/etc/pki/tls/private/server.key',
+      owner => root,
+      group => root,
+      mode => '0400',
+      source => '/srv/secrets/https/server.key',
+      require => Package[ 'mod_ssl' ],
+    }
+
+    # On the production machine, we need to present some intermediate certificates
+    # to users as there's an intermediate CA between the root cert and our
+    # cerfificate. Not necessary on the dummy config.
+    if !$devmode {
+      file { 'cert_chain':
+        path => '/etc/pki/tls/certs/comodo_bundle.crt',
+        owner => 'root',
+        group => 'root',
+        mode => '0400',
+        source => '/srv/secrets/https/comodo_bundle.crt',
+        require => Package[ 'mod_ssl' ],
+      }
+    }
+}
 
   # The webserver process itself; restart on updates to some important files.
   service { 'httpd':
@@ -94,7 +145,11 @@ class www::httpd( $web_root_dir ) {
                   Package['mod_ssl'],
                   File['httpd.conf'],
                   File['ssl.conf'],
-                  File['server.key'],
                 ],
+    require => File[$web_root_dir],
+  }
+
+  if $serve_over_ssl {
+    File['server.key'] ~> Service['httpd']
   }
 }

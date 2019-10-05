@@ -23,12 +23,15 @@ usage_tracking = <% if !@devmode then lestring="true" else lestring="false" end%
 combine_statics = true
 
 ; Show the ticket link
-gui.ticket_link = true
+gui.ticket_link = false
 
 ; Show link to the /comp/team page
 gui.comp_team_info_link = false
 
+; Show the team status ui
+gui.team_status_enabled = false
+
 announce.enabled = true
 
-pylint.path = /usr/bin/pylint
+pylint.path = /usr/bin/pylint-2
 python.path = /usr/bin/python

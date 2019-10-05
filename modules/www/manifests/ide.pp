@@ -1,11 +1,11 @@
 # The IDE. Here be dragons.
 
-class www::ide ( $git_root, $root_dir ) {
+class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   # Numerous packages are required; the IDE is written in php, binds to ldap,
   # runs pylint to syntax check things.
-  package { ['pylint', 'php-cli', 'php-ldap']:
+  package { ['python2-pylint']:
     ensure => present,
-    notify => Service['httpd'],
+    notify => Service['httpd-ide'],
     before => Vcsrepo[$root_dir],
   }
 
@@ -18,7 +18,8 @@ class www::ide ( $git_root, $root_dir ) {
     source => "${git_root}/cyanide.git",
     revision => 'origin/master',
     user =>'wwwcontent',
-    require => Class['www::srweb'],
+    # Depend explicitly on PHP here since it's declared at the level above
+    require => Package['php', 'php-json', 'php-ldap'],
   }
 
   # Secret key for encrypting IDE cookies, protecting against users twiddling
@@ -37,7 +38,6 @@ class www::ide ( $git_root, $root_dir ) {
   $ide_key_file = "${root_dir}/config/ide-key.key"
   $team_status_dir = "${root_dir}/settings/team-status"
   $team_status_imgs_dir = "${root_dir}/uploads/team-status"
-  $team_status_imgs_live_dir = "${root_dir}/../images/teams"
   $ide_ldap_pw = hiera('ide_ldap_user_pw')
   file { "${root_dir}/config/local.ini":
     ensure => present,
@@ -45,7 +45,11 @@ class www::ide ( $git_root, $root_dir ) {
     group => 'apache',
     mode => '0640',
     content => template('www/ide_config.ini.erb'),
-    require => Vcsrepo[$root_dir],
+    require => [
+      Vcsrepo[$root_dir],
+      Ldapres['mentors'],
+      Ldapres['ide-admin'],
+    ],
   }
 
   # IDE ldap user has general read access to ou=groups,o=sr.
@@ -106,14 +110,12 @@ class www::ide ( $git_root, $root_dir ) {
   }
 
   # Team Status dir. Contains post-reviewed team-status images
-  # Warning: This folder is actually outside the IDE tree!
-  #          It should already exist -- we're just setting permissions here
+  # Warning: This folder may be outside the IDE tree!
   file { $team_status_imgs_live_dir :
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '2777',
-    require => Class['www::srweb'],
   }
 
   # Install team status images from backup.

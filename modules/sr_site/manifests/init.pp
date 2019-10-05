@@ -3,6 +3,9 @@
 
 # git_root: The root URL to access the SR git repositories
 class sr_site( $git_root ) {
+  $competition_services = hiera('competition_services')
+  $competitor_services = hiera('competitor_services')
+  $volunteer_services = hiera('volunteer_services')
 
   # Default PATH
   Exec {
@@ -32,11 +35,29 @@ class sr_site( $git_root ) {
     ensure => latest,
   }
 
-  # Anonymous git access
-  include gitdaemon
+  # Fedora no longer ships with a cron installed by default, I chose one at random
+  package { 'cronie':
+    ensure => latest,
+  }
+
+  exec { 'setenforce 0':
+    path      => '/usr/sbin:/usr/bin',
+    onlyif    => 'test $(getenforce) = "Enforcing"',
+    provider  => shell,
+  }
+
+  augeas { 'disable selinux':
+    context => '/files/etc/selinux/config',
+    changes => ['set SELINUX disabled'],
+  }
 
   # The bee
   include bee
+
+  # Various common dependencies
+  package { 'PyYAML':
+    ensure => present,
+  }
 
   # Monitoring
   class { 'monitoring':
@@ -47,41 +68,56 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var/sr'],
   }
 
-  class { 'sr_site::mysql':
-    require => File['/usr/local/var/sr'],
-  }
-
-  class { 'sr_site::openldap':
-    require => File['/usr/local/var/sr'],
-  }
-
-  class { 'sr_site::trac':
-    git_root => $git_root,
-    require => [File['/usr/local/var/sr'],
-		Class['www']],
-  }
-
-  class { 'sr_site::gerrit':
-    require => File['/usr/local/var/sr'],
-  }
-
-  include sr_site::subversion
   include sr_site::login
   include sr_site::meta
 
-  class { 'sr_site::git':
-    git_root => $git_root,
+  if $competitor_services or $volunteer_services {
+    class { 'sr_site::mysql':
+      require => File['/usr/local/var/sr'],
+    }
   }
 
-  # Sends emails to LDAP groups
-  class { 'sr_site::fritter':
-    git_root => $git_root,
+  if $competitor_services {
+    package { ['python-ldap', 'python-unidecode']:
+      ensure => present,
+    }
+
+    class { 'sr_site::openldap':
+      require => File['/usr/local/var/sr'],
+    }
+
+    # Installs a userman instance into /root. Technically for sysadmins
+    # (volunteers), but only useful on boxes which have the LDAP on them.
+    class { 'sr_site::userman':
+      git_root => $git_root,
+    }
   }
 
-  class { 'sr_site::srcomp':
-    git_root => $git_root,
-    src_dir  => '/usr/local/src/srcomp',
-    venv_dir => '/var/lib/srcomp-venv'
+  if $volunteer_services {
+    # Anonymous git access
+    include gitdaemon
+
+    class { 'sr_site::trac':
+      git_root => $git_root,
+      require => [File['/usr/local/var/sr'],
+      Class['www']],
+    }
+
+    if $subversion_enabled {
+      include sr_site::subversion
+    }
+
+    class { 'sr_site::git':
+      git_root => $git_root,
+    }
+  }
+
+  if $competition_services {
+    class { 'sr_site::srcomp':
+      git_root => $git_root,
+      src_dir  => '/usr/local/src/srcomp',
+      venv_dir => '/var/lib/srcomp-venv'
+    }
   }
 
   # Web stuff
@@ -98,19 +134,17 @@ class sr_site( $git_root ) {
     git_root => $git_root,
   }
 
-  class { 'sr_site::userman':
-    git_root => $git_root,
-  }
-
-  class { 'sr_site::willie':
-    git_root => $git_root,
-  }
-
-  class { 'sr_site::requesttracker':
-  }
-
   # Sanity stuff
   package { "rsyslog":
+    ensure => latest,
+  }
+
+  service { 'rsyslog':
+    ensure  => running,
+    require => Package['rsyslog'],
+  }
+
+  package { ['htop', 'nano']:
     ensure => latest,
   }
 

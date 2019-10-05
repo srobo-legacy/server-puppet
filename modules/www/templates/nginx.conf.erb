@@ -52,18 +52,17 @@ http {
         # These two paths are hard-coded in SRs config files everywhere
         ssl_certificate     /etc/pki/tls/certs/server-nginx.crt;
         ssl_certificate_key /etc/pki/tls/private/server.key;
-        # NB: doesn't feature SSL3 which is in the nginx default.
-        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+        # Note: once TLSv1.3 is available in our builds, we should enable that.
+        # Note: no need for TLSv1 here as this configuration sits behind a proxy
+        # which does the user-facing TLS termination.
+        ssl_protocols       TLSv1.1 TLSv1.2;
         # Default aside from disabling RC4
         ssl_ciphers         HIGH:!aNULL:!MD5:!RC4:!EXPORT;
-	# Use a unique DH key
+        # Use a unique DH key
         ssl_dhparam         /etc/pki/tls/dhparams.pem;
         #charset koi8-r;
 
         #access_log  /var/log/nginx/host.access.log  main;
-
-        # Load configuration files for the default server block.
-        include /etc/nginx/default.d/*.conf;
 
         # Send all traffic to the local apache httpd servers.
         location / {
@@ -80,16 +79,6 @@ http {
             proxy_pass http://127.0.0.1:8001/;
             proxy_pass_request_headers on;
             proxy_redirect http://<%= @www_canonical_hostname %>:8001/ /;
-            proxy_set_header X-Real-IP          $remote_addr;
-            proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto  https;
-            proxy_set_header Host               $host;
-        }
-
-        location /gerrit {
-            proxy_pass http://127.0.0.1:8081$request_uri;
-            proxy_pass_request_headers on;
-            proxy_redirect http://<%= @www_canonical_hostname %>:8081/ /;
             proxy_set_header X-Real-IP          $remote_addr;
             proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto  https;

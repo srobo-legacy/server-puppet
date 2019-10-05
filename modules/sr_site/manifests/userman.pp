@@ -12,7 +12,7 @@ class sr_site::userman ( $git_root ) {
     revision  => 'origin/master',
     owner     => 'root',
     group     => 'root',
-    require   => Package['PyYAML', 'python-ldap'],
+    require   => Package['PyYAML', 'python-ldap', 'python-unidecode'],
   }
 
   # local configuration is stored in local.ini

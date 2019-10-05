@@ -15,7 +15,7 @@ class www::piwik ( $git_root, $root_dir ) {
     provider => git,
     source => 'git://github.com/piwik/piwik.git',
     revision => '1.12',
-    require => Package['php-gd', 'php-mysql'],
+    require => Package['php-gd', 'php-mysqlnd'],
   }
 
   # Database for storing piwiks end user data.

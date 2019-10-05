@@ -1,4 +1,17 @@
 ---
+devmode: true
+git_root: https://studentrobotics.org/gerrit/p
+
+competition_services: true
+competitor_services: true
+volunteer_services: true
+
+subversion_enabled: false
+
+# Use a static TLS cert from the secrets (rather than using Let's Encrypt).
+# Defaults to true in development as we assume development instances don't have real DNS enties.
+static_tls_certificate: "%{devmode}"
+
 # Base DNS name for the site being hosted, for example 'studentrobotics.org' or 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or git.) are based on this name.
 www_base_hostname: "%{::fqdn}"
 
@@ -20,9 +33,6 @@ mysql_rootpw: '123456'
 
 # MySQL password for trac's account. Plaintext.
 mysql_trac_pw: '123456'
-
-# MySQL password for rt's account. Plaintext.
-mysql_rt_pw: '123456'
 
 # LDAP
 
@@ -115,24 +125,6 @@ trac_email_user: ponies
 trac_email_pw: ponies
 
 
-# Gerrit
-
-# Password for Gerrit's MySQL account. Plaintext.
-gerrit_db_pw: '123456'
-
-# Secret key used by gerrit to authenticate email confirmations. I'm uncertain of the format, but in deployment it appears to be 26 bytes of entropy encoded in base64.
-gerrit_email_key: ponies
-
-# SMTP server for Gerrit to send emails by
-gerrit_email_smtp: ponies
-
-# Full (name@domain) email address for Gerrit to send emails as.
-gerrit_email_user: ponies
-
-# Password for Gerrit's email account. Plaintext.
-gerrit_email_pw: ponies
-
-
 # Nemesis
 
 # Curiously undocumented, but guessable
@@ -140,45 +132,3 @@ nemesis_mail_smtp: ponies
 nemesis_mail_user: ponies
 nemesis_mail_pw: ponies
 nemesis_mail_from: ponies
-
-
-# Fritter
-
-# SMTP server for fritter to send emails by
-fritter_mail_smtp: ponies
-
-# IMAP server to read fritter mail from
-fritter_mail_imap: imap.example.com
-
-# Username for fritter to auth with (for gmail based systems, username@domain)
-fritter_mail_user: ponies
-
-# Plaintext emaili account password
-fritter_mail_pw: ponies
-
-# Email address for fritter mail to have the 'From:' field set to. The format is: 'Some Name <mail@addr>', as you'll find in most popular email clients
-fritter_mail_from: 'Student Robotics Example <info@example.com>'
-
-# Plaintext password for fritter ldap account
-fritter_ldap_user_pw: '123456'
-
-# Fritter ldap user password, encoded as SSHA
-fritter_ldap_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
-
-
-# RequestTracker
-# Most of the configuration for this is sucked out of fritter's configuration,
-# as to avoid many many email user accounts, the fritter@ addresss shares
-# purpose. For SR at least.
-
-# Administrative email address for RT errors to go to, and for publishing
-# status messages.
-rt_admin_address: root@localhost
-
-# Default address for RT emails to be sent from
-default_rt_address: schools@localhost
-
-rt_mail_user: rt@localhost
-rt_mail_pw: 123456
-rt_mail_imap: imap.example.com
-rt_mail_smtp: smtp.example.com

@@ -14,12 +14,9 @@ class www::nemesis ( $git_root, $root_dir ) {
   }
 
   package { ['python-sqlite3dbm',
-             'python-ldap',
-             'python-unidecode',
              'python-flask']:
     ensure  => present,
     notify  => Service['httpd'],
-    before  => Vcsrepo[$root_dir],
   }
 
   # Main checkout of the Nemesis codebase
@@ -30,7 +27,10 @@ class www::nemesis ( $git_root, $root_dir ) {
     revision => 'origin/master',
     owner => 'wwwcontent',
     group => 'apache',
-    require => Package['python-flask'],
+    require => Package['python-flask',
+                       'python-ldap',
+                       'python-sqlite3dbm',
+                       'python-unidecode'],
     notify => Service['httpd'],
   }
 
@@ -81,10 +81,6 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
-  service { 'rsyslog':
-    ensure => running,
-  }
-
   # Syslog configuration, using local0
   file { '/etc/rsyslog.d/nemesis.conf':
     ensure => present,
@@ -132,9 +128,14 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
+  # Note: we need to ensure we stay within the limits of our mail transport
+  # provider. Since it's not entirely clear what those are (and they apply over
+  # large time ranges - some at 10 minute windows, some at 24 hour windows), we
+  # need to balance the latency of email sending we're happy with against the
+  # overall number of emails we can send.
   cron { 'nemesis-email-cron':
-    command => "${root_dir}/nemesis/scripts/send-emails.py",
-    minute => '*/5',
+    command => "${root_dir}/nemesis/scripts/send-emails.py --limit 5",
+    minute => '*/2',
     user => 'wwwcontent',
     require => Vcsrepo[$root_dir],
   }

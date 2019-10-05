@@ -1,6 +1,9 @@
 # Backups make sure that we have all the datas, even if we don't have the server
 
 class sr_site::backup ( $git_root ) {
+  package { 'python3-ldap':
+    ensure  => present,
+  }
 
   # A checkout of the server backup git repo. The backup script has to exist at
   # a known location on the server so that we can configure sudo, so that the
@@ -12,31 +15,29 @@ class sr_site::backup ( $git_root ) {
     group => 'root',
     provider => 'git',
     source => "${git_root}/server/backup.git",
-    revision => 'master', # Deliberately no auto update, the scripts here will
-                          # end up be run as root
+    # Deliberately no auto update, the scripts here will end up being run as root
+    revision => 'patience',
+    require => Package['python3-ldap'],
   }
 
   # FIXME: find a way of extracting all mysql dbs from puppet?
-  $all_dbs = [
+  $all_dbs = delete_undef_values([
     $www::phpbb::forum_db_name,
     $www::piwik::piwik_db_name,
     $sr_site::trac::trac_db_name,
-    $sr_site::gerrit::gerrit_db_name,
-    $sr_site::requesttracker::rt_db_name,
-  ]
+  ])
   $list_of_dbs = join($all_dbs, ',')
   $ide_loc = $www::ide::root_dir
   $team_status_images_loc = $www::ide::team_status_imgs_live_dir
   $forum_attachments_loc = $www::phpbb::attachments_dir
-  $fritter_db_loc = $sr_site::fritter::fritter_sqlite_db
   $nemesis_db_loc = $www::nemesis::nemesis_db
 
   # A list of users permitted to use backups. This list doesn't actually allow
   # them to do anything, instead it's used as the list of email IDs that GPG
-  # should encrypt backups for. In common.csv, this should be a single entry
+  # should encrypt backups for. In common.yaml, this should be a single entry
   # enclosed in quotes, with commas seperating email IDs within, for example:
   #
-  # backup_keys,"bees@example.com,marvin@example.com"
+  #   backup_keys: "bees@example.com,marvin@example.com"
   #
   # Note that all backup keys must also be (locally) signed by the root user.
   # Failure to do this will make backup fail.

@@ -8,30 +8,6 @@ class sr_site::login {
     ensure => present,
   }
 
-  # PAM configuration for SSHD, just passes control to the sr-auth stack.
-  file { '/etc/pam.d/sshd':
-    ensure => present,
-    source => 'puppet:///modules/sr_site/sshd',
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    notify => Service['nscd'],
-    require => File['/etc/pam_ldap.conf'],
-  }
-
-  # sr-auth PAM stack; our primary PAM config goo. Allows authentication and
-  # account-info from LDAP, subject to the pam_ldap configuration. Also the same
-  # operations for local users.
-  file { '/etc/pam.d/sr-auth':
-    ensure => present,
-    source => 'puppet:///modules/sr_site/sr-auth',
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    notify => Service['nscd'],
-    require => File['/etc/pam_ldap.conf'],
-  }
-
   # Configurate who can run what using sudo.
   file { '/etc/sudoers':
     ensure => present,
@@ -41,50 +17,52 @@ class sr_site::login {
     source => 'puppet:///modules/sr_site/sudoers',
   }
 
-  # Our SSH configuration; mostly the default, with the difference that root
-  # logins are disabled on the production machine.
-  file { '/etc/ssh/sshd_config':
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '0600',
-    content => template('sr_site/sshd_config.erb'),
-    notify => Service['sshd'],
+  if !$devmode {
+    augeas { 'sshd_config':
+        context => '/files/etc/ssh/sshd_config',
+        changes => [
+            # deny root logins
+            'set PermitRootLogin no',
+            # deny logins using passwords
+            'set PasswordAuthentication no',
+        ],
+        notify  => Service['sshd'],
+    }
   }
 
-  file { '/etc/ssh/ssh_host_dsa_key':
+  file { '/etc/ssh/ssh_host_ecdsa_key':
     ensure  => 'file',
     owner   => 'root',
     group   => 'ssh_keys',
     mode    => '0640',
-    source  => '/srv/secrets/login/ssh_host_dsa_key',
+    source  => '/srv/secrets/login/ssh_host_ecdsa_key',
     notify  => Service['sshd'],
   }
 
-  file { '/etc/ssh/ssh_host_dsa_key.pub':
+  file { '/etc/ssh/ssh_host_ecdsa_key.pub':
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => '/srv/secrets/login/ssh_host_dsa_key.pub',
+    source  => '/srv/secrets/login/ssh_host_ecdsa_key.pub',
     notify  => Service['sshd'],
   }
 
-  file { '/etc/ssh/ssh_host_key':
+  file { '/etc/ssh/ssh_host_ed25519_key':
     ensure  => 'file',
     owner   => 'root',
     group   => 'ssh_keys',
     mode    => '0640',
-    source  => '/srv/secrets/login/ssh_host_key',
+    source  => '/srv/secrets/login/ssh_host_ed25519_key',
     notify  => Service['sshd'],
   }
 
-  file { '/etc/ssh/ssh_host_key.pub':
+  file { '/etc/ssh/ssh_host_ed25519_key.pub':
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => '/srv/secrets/login/ssh_host_key.pub',
+    source  => '/srv/secrets/login/ssh_host_ed25519_key.pub',
     notify  => Service['sshd'],
   }
 
