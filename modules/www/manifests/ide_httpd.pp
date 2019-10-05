@@ -33,8 +33,7 @@ class www::ide_httpd ($git_root, $root_dir) {
     mode => '0755',
   }
 
-  # IDE service configuration file: listens on port 8443, using SSL, serves
-  # srcomp and the underlying IDE situation.
+  # IDE service configuration file: listens on port 8443, using SSL
   file { "/etc/httpd/conf.ide.d/ssl.conf":
     ensure => present,
     content => template('www/ide-ssl.conf.erb'),

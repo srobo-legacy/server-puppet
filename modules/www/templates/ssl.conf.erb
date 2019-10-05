@@ -165,20 +165,6 @@ WSGISocketPrefix /var/run/wsgi
 
         <% end %>
 
-        <% if @competition_services %>
-
-        # Pass accesses to /comp-api over to the Competition API in WSGI
-        WSGIDaemonProcess srcomp user=apache group=apache threads=1 processes=8 maximum-requests=1000 \
-                          python-path=/var/lib/srcomp-venv/lib/python2.7/site-packages
-        WSGIScriptAlias /comp-api /srv/comp-api/comp-api.wsgi
-        <Directory /srv/comp-api>
-            WSGIProcessGroup srcomp
-            WSGIApplicationGroup %{GLOBAL}
-            Require all granted
-        </Directory>
-
-        <% end %>
-
         ########## SSL stuff below
 
         # Force users to use HTTPS again in the future

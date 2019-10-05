@@ -2,7 +2,6 @@
 devmode: false
 
 # Patience _only_ runs the competitor services
-competition_services: false
 competitor_services: true
 volunteer_services: false
 

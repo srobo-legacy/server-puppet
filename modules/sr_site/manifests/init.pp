@@ -3,7 +3,6 @@
 
 # git_root: The root URL to access the SR git repositories
 class sr_site( $git_root ) {
-  $competition_services = hiera('competition_services')
   $competitor_services = hiera('competitor_services')
   $volunteer_services = hiera('volunteer_services')
 
@@ -109,14 +108,6 @@ class sr_site( $git_root ) {
 
     class { 'sr_site::git':
       git_root => $git_root,
-    }
-  }
-
-  if $competition_services {
-    class { 'sr_site::srcomp':
-      git_root => $git_root,
-      src_dir  => '/usr/local/src/srcomp',
-      venv_dir => '/var/lib/srcomp-venv'
     }
   }
 

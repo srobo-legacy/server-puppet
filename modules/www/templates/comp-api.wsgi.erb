@@ -1,6 +1,0 @@
-
-from sr.comp.http import config, app as application
-
-config.configure_logging_relative("logging-syslog.ini")
-
-application.config["COMPSTATE"] = "<%= @compstate_dir %>"

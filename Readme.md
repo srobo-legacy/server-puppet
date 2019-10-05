@@ -33,20 +33,20 @@ https://www.studentrobotics.org/trac/wiki/ServerConfig
 The services configured are broken into roughly three parts, based on their
 uses:
 
- - Competition Services: things needed only at the competition, mostly
-   [SRComp][srcomp] related things. Note: these things may soon be removed in
-   favour of just deploying a separate public-facing "[compbox][compbox]" during
-   competition events.
  - Competitor Services: things needed so that the competitors can compete -- the
    IDE & forums, plus various dependencies of theirs -- LDAP, nemesis, etc.
  - Volunteer Services: things exclusively for volunteers -- trac, git hosting
    etc.
 
+Note: historically this config also include competition services ([SRComp][srcomp]
+etc.), however as SRComp now has its own [deployment configuration][srcomp-puppet]
+that is used instead.
+
 Each of these can be enabled independently and the configuration is expected to
 work under all combinations of them.
 
 [srcomp]: https://github.com/PeterJCLaw/srcomp
-[compbox]: https://github.com/PeterJCLaw/srcomp-puppet
+[srcomp-puppet]: https://github.com/PeterJCLaw/srcomp-puppet
 
 ## Enabling specific things
 
