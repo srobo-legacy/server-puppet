@@ -1,15 +1,8 @@
 # The IDE. Here be dragons.
 
 class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
-  # Numerous packages are required; the IDE is written in php, binds to ldap,
-  # runs pylint to syntax check things.
-  package { ['python2-pylint']:
-    ensure => present,
-    notify => Service['httpd-ide'],
-    before => Vcsrepo[$root_dir],
-  }
-
   $ide_repos_root = "${root_dir}/repos"
+  $venv_dir = "${root_dir}/venv"
 
   # Checkout of cyanide, acts as backend and serves the frontend of the IDE.
   vcsrepo { $root_dir:
@@ -107,6 +100,30 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     group => 'apache',
     mode => '2777',
     require => Vcsrepo[$root_dir],
+  }
+
+  # Virtual environment for the syntax checker
+  class { 'python':
+    virtualenv  => present,
+  }
+  file { $venv_dir:
+    ensure  => directory,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    require => Vcsrepo[$root_dir],
+  } ->
+  file { "${venv_dir}/lint-requirements.txt":
+    ensure  => file,
+    source  => 'puppet:///modules/www/ide-lint-requirements.txt',
+  } ~>
+  python::virtualenv { $venv_dir:
+    ensure          => present,
+    ensure_venv_dir => false,
+    owner           => 'wwwcontent',
+    group           => 'apache',
+    requirements    => "${venv_dir}/lint-requirements.txt",
+    require         => Class['python'],
+    virtualenv      => 'python -m virtualenv',
   }
 
   # Team Status dir. Contains post-reviewed team-status images
